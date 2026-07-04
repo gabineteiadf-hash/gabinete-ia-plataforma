@@ -1,0 +1,6 @@
+{
+  "name": "Gabinete IA",
+  "description": "Plataforma de monitoramento político-eleitoral e análise financeira dos deputados distritais da CLDF.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

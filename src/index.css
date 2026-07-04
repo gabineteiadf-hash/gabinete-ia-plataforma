@@ -1,0 +1,604 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Base Body Styles for Netflix-Style Premium Dark Mode */
+body {
+  background-color: #0c0c0e !important;
+  color: #ffffff !important;
+  font-family: "Inter", sans-serif;
+}
+
+/* Custom scroll hide helper */
+.scroll-hide::-webkit-scrollbar {
+  display: none;
+}
+.scroll-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Root Cabinet Container Overrides */
+#gabinete-root {
+  background-color: #0c0c0e !important;
+  color: #ffffff !important;
+}
+
+/* 1. Centered Header Restyling */
+#header-gabinete h1 {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 2.25rem !important; /* Larger display heading */
+  letter-spacing: -0.03em !important;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+#header-gabinete p {
+  color: #b3b3b3 !important;
+  font-size: 1rem !important; /* Larger text for readability */
+}
+
+/* 2. Top Bento Cards (Horizontal Cards) */
+#top-bento-cards {
+  gap: 20px !important;
+}
+
+#card-anatomia-gastos, #card-engenharia-geoeleitoral, #card-benchmark-reputacao {
+  background-color: #1a1a1e !important;
+  border: 1px solid #2a2a32 !important;
+  border-radius: 18px !important;
+  color: #ffffff !important;
+  padding: 24px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  min-height: 110px !important;
+}
+
+#card-anatomia-gastos:hover, #card-engenharia-geoeleitoral:hover, #card-benchmark-reputacao:hover {
+  transform: translateY(-4px) !important;
+  background-color: #222228 !important;
+  border-color: #e50914 !important; /* Premium Netflix Red Accent */
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Bento Card Active State (when selected) */
+#top-bento-cards .border-blue-500 {
+  border-color: #e50914 !important;
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.35), 0 16px 32px rgba(0, 0, 0, 0.7) !important;
+  background-color: #222228 !important;
+}
+
+#top-bento-cards .bg-blue-50, 
+#top-bento-cards .bg-purple-50, 
+#top-bento-cards .bg-pink-50 {
+  background-color: #2a2a32 !important;
+  color: #e50914 !important; /* Vibrant Red Icon */
+  border-radius: 14px !important;
+}
+
+#top-bento-cards h3 {
+  color: #ffffff !important;
+  font-size: 1.15rem !important; /* Larger */
+  font-weight: 800 !important;
+}
+#top-bento-cards p {
+  color: #b3b3b3 !important;
+  font-size: 0.88rem !important; /* Larger for better readability */
+  line-height: 1.5 !important;
+}
+
+/* 3. Workspace Layout Grid on Desktop & Mobile */
+.workspace-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (min-width: 993px) {
+  .workspace-layout {
+    flex-direction: row !important;
+    align-items: flex-start !important;
+  }
+  
+  #matrix-panel {
+    flex: 1.45 !important;
+    min-width: 0 !important;
+  }
+  
+  #assistant-panel {
+    flex: 1 !important;
+    min-width: 0 !important;
+    position: sticky !important;
+    top: 24px !important;
+    max-height: calc(100vh - 48px) !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .workspace-layout {
+    flex-direction: column !important;
+  }
+  
+  #matrix-panel {
+    width: 100% !important;
+  }
+  
+  #assistant-panel {
+    width: 100% !important;
+  }
+}
+
+/* 4. Matrix Panel & Assistant Panel Containers */
+#matrix-panel {
+  background-color: #141417 !important;
+  border: 1px solid #25252a !important;
+  border-radius: 20px !important;
+  color: #ffffff !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+  padding: 28px !important;
+}
+
+#assistant-panel {
+  background-color: #141417 !important;
+  border: 1px solid #25252a !important;
+  border-radius: 20px !important;
+  color: #ffffff !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 5. Year Switcher (controles-ano) and accessibility styling */
+#controles-ano {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  gap: 16px !important;
+  border-bottom: 1px solid #25252a !important;
+  padding-bottom: 24px !important;
+  margin-bottom: 28px !important;
+}
+
+#controles-ano h2 {
+  color: #ffffff !important;
+  font-size: 1.5rem !important; /* Larger and extremely clear */
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+/* Controls grouping for year switcher buttons */
+#controles-ano .bg-slate-100 {
+  background-color: #1e1e24 !important;
+  border: 1px solid #2d2d35 !important;
+  border-radius: 14px !important;
+  padding: 6px !important;
+  display: flex !important;
+  gap: 6px !important;
+}
+
+/* Year buttons with min-height 48px */
+#controles-ano button {
+  min-height: 48px !important;
+  padding: 0 24px !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Active Year Button */
+#controles-ano button.bg-[#1e293b] {
+  background-color: #e50914 !important; /* Red */
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3) !important;
+}
+
+#controles-ano button:not(.bg-[#1e293b]) {
+  color: #b3b3b3 !important;
+}
+
+#controles-ano button:not(.bg-[#1e293b]):hover {
+  background-color: #2b2b35 !important;
+  color: #ffffff !important;
+}
+
+/* 6. Sub-tabs Switcher (inside Geoeleitoral & Benchmark) */
+.workspace-layout .bg-slate-50, 
+.workspace-layout .bg-slate-50\/50,
+.workspace-layout .bg-slate-100\/50 {
+  background-color: #1e1e24 !important;
+  border-color: #2d2d35 !important;
+}
+
+/* Tab button targeting */
+.workspace-layout button[id^="tab-"] {
+  min-height: 48px !important; /* comfortable touch target */
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  padding: 0 20px !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Purple & Pink active tab styling overridden to red/dark highlights */
+.workspace-layout .bg-purple-600, 
+.workspace-layout .bg-pink-600, 
+.workspace-layout .bg-blue-600 {
+  background-color: #e50914 !important; /* Netflix Crimson red */
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.25) !important;
+}
+
+.workspace-layout .text-slate-600,
+.workspace-layout .text-purple-600,
+.workspace-layout .text-pink-600 {
+  color: #b3b3b3 !important;
+}
+
+.workspace-layout button[id^="tab-"]:not(.bg-purple-600):not(.bg-pink-600):hover {
+  background-color: #2b2b35 !important;
+  color: #ffffff !important;
+}
+
+/* 7. Beautiful Lists and Cards for Candidates (Matrix) */
+.container-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)) !important;
+  gap: 18px !important;
+  width: 100% !important;
+}
+
+/* Candidate list cards */
+.workspace-layout .border-slate-150 {
+  border-color: #25252a !important;
+}
+
+.workspace-layout .bg-white {
+  background-color: #1e1e24 !important;
+  border: 1px solid #2d2d35 !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  transition: all 0.25s ease !important;
+}
+
+.workspace-layout .bg-white:hover {
+  background-color: #25252f !important;
+  border-color: #e50914 !important; /* Netflix red accent */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* List Item elements size & contrast */
+.workspace-layout .text-slate-800, 
+.workspace-layout .text-slate-900,
+.workspace-layout .text-slate-950,
+.workspace-layout .text-neutral-800 {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.workspace-layout .text-slate-500, 
+.workspace-layout .text-slate-400,
+.workspace-layout .text-neutral-500 {
+  color: #b3b3b3 !important;
+}
+
+/* 8. Large Metrics Highlighting (Custo/Voto, Receitas etc.) */
+.workspace-layout .text-xl, 
+.workspace-layout .text-2xl, 
+.workspace-layout .text-3xl {
+  font-weight: 900 !important;
+  color: #ffffff !important;
+}
+
+/* Focus highlighting for election money metrics */
+.metric-highlight,
+.workspace-layout .text-purple-700,
+.workspace-layout .text-pink-700,
+.workspace-layout .text-emerald-600 {
+  color: #ff2e3b !important; /* Glowing Red metric instead of pink/purple */
+  font-weight: 900 !important;
+  font-family: "JetBrains Mono", monospace !important;
+  letter-spacing: -0.03em !important;
+}
+
+/* Info notification banners */
+.workspace-layout .bg-purple-50\/50,
+.workspace-layout .bg-pink-50\/50,
+.workspace-layout .bg-purple-50,
+.workspace-layout .bg-pink-50,
+.workspace-layout .bg-blue-50,
+.workspace-layout .bg-amber-500\/10,
+.workspace-layout .bg-amber-50,
+.workspace-layout .bg-emerald-50 {
+  background-color: #1e1e24 !important;
+  border: 1px solid #32323d !important;
+  border-radius: 14px !important;
+  color: #ffffff !important;
+}
+
+.workspace-layout .text-purple-900,
+.workspace-layout .text-pink-900,
+.workspace-layout .text-amber-800,
+.workspace-layout .text-blue-900 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* 9. Inputs & Forms (Search and fields) */
+.workspace-layout input, 
+#assistant-panel input {
+  background-color: #222228 !important;
+  border: 1px solid #32323c !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  font-size: 0.95rem !important; /* Larger text for accessibility */
+  font-weight: 500 !important;
+  min-height: 48px !important; /* 48px minimal hit height */
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.workspace-layout input:focus, 
+#assistant-panel input:focus {
+  border-color: #e50914 !important;
+  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.2) !important;
+  background-color: #282832 !important;
+}
+
+.workspace-layout input::placeholder, 
+#assistant-panel input::placeholder {
+  color: #7a7a85 !important;
+}
+
+/* 10. Exit / Return Profile Button ("Sair do Perfil") */
+#btn-sair-perfil {
+  background-color: #2d2d35 !important;
+  color: #ffffff !important;
+  border: 1px solid #42424f !important;
+  min-height: 48px !important;
+  padding: 0 24px !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+#btn-sair-perfil:hover {
+  background-color: #3b3b45 !important;
+  border-color: #555566 !important;
+}
+
+/* 11. Assistant Panel tabs and chat elements */
+#assistant-panel .p-4 {
+  padding: 20px !important;
+}
+
+#assistant-panel .bg-slate-50\/50,
+#assistant-panel .bg-slate-50 {
+  background-color: #1e1e24 !important;
+  border-color: #2d2d35 !important;
+}
+
+/* Assistant Sub-Tabs */
+#assistant-panel .bg-white {
+  background-color: #1e1e24 !important;
+  border-color: #2d2d35 !important;
+  border-radius: 12px !important;
+}
+
+#assistant-panel button[id^="tab-btn-"] {
+  min-height: 48px !important; /* 48px target area */
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Active tab inside Assistant */
+#assistant-panel button.bg-blue-600 {
+  background-color: #e50914 !important; /* Netflix Crimson red */
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3) !important;
+}
+
+#assistant-panel button:not(.bg-blue-600) {
+  color: #b3b3b3 !important;
+}
+
+#assistant-panel button:not(.bg-blue-600):hover {
+  background-color: #2b2b35 !important;
+  color: #ffffff !important;
+}
+
+/* Chat Messages */
+#assistant-panel .bg-slate-100 {
+  background-color: #1e1e24 !important;
+  border: 1px solid #2d2d35 !important;
+  color: #ffffff !important;
+  font-size: 0.95rem !important; /* Larger text for reading */
+  line-height: 1.6 !important;
+  padding: 14px 18px !important;
+  border-radius: 18px !important;
+}
+
+/* User Message Bubble */
+#assistant-panel .bg-blue-600 {
+  background-color: #e50914 !important; /* Red */
+  color: #ffffff !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  padding: 14px 18px !important;
+  border-radius: 18px !important;
+}
+
+/* Suggestions/Oráculo helpers buttons */
+#assistant-panel button.bg-slate-50 {
+  background-color: #1e1e24 !important;
+  border: 1px solid #2d2d35 !important;
+  color: #ffffff !important;
+  min-height: 48px !important; /* touch target size */
+  padding: 12px 18px !important;
+  font-size: 0.9rem !important;
+  border-radius: 12px !important;
+  text-align: left !important;
+}
+
+#assistant-panel button.bg-slate-50:hover {
+  background-color: #25252e !important;
+  border-color: #e50914 !important;
+}
+
+#assistant-panel button.bg-slate-50 .text-slate-700 {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Chat Input Send Button */
+#btn-send-oraculo {
+  background-color: #e50914 !important;
+  border-radius: 12px !important;
+  min-height: 48px !important;
+  min-width: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+#btn-send-oraculo:hover {
+  background-color: #b80710 !important;
+}
+
+/* 12. Run Audit Button */
+#btn-run-audit {
+  background-color: #e50914 !important;
+  color: #ffffff !important;
+  min-height: 48px !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.25) !important;
+  transition: all 0.2s ease !important;
+}
+#btn-run-audit:hover {
+  background-color: #b80710 !important;
+}
+
+/* 13. Integrations Google Drive & GitHub panel styling */
+#btn-google-auth,
+#btn-google-logout,
+#btn-github-save-token,
+#btn-github-export,
+#btn-github-logout {
+  min-height: 48px !important;
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+}
+
+#btn-google-auth,
+#btn-github-save-token,
+#btn-github-export {
+  background-color: #e50914 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+#btn-google-auth:hover,
+#btn-github-save-token:hover,
+#btn-github-export:hover {
+  background-color: #b80710 !important;
+}
+
+#btn-google-logout,
+#btn-github-logout {
+  background-color: #2d2d35 !important;
+  color: #ff453a !important;
+  border: 1px solid #42424f !important;
+}
+
+#btn-google-logout:hover,
+#btn-github-logout:hover {
+  background-color: #3b3b45 !important;
+}
+
+#sheet-tabs-select, 
+#github-repo-select {
+  min-height: 48px !important;
+  font-size: 0.9rem !important;
+  background-color: #222228 !important;
+  border: 1px solid #32323c !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+}
+
+/* Process & Import buttons */
+#btn-import-sheet, 
+#btn-import-sheet-geo {
+  min-height: 48px !important;
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  background-color: #10b981 !important; /* Emerald green for positive action */
+  color: #ffffff !important;
+  border: none !important;
+}
+
+#btn-import-sheet:hover, 
+#btn-import-sheet-geo:hover {
+  background-color: #059669 !important;
+}
+
+/* 14. Responsive Layout Controls & Fixes */
+.foto-lista {
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+.foto-perfil-grande {
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+/* Chart.js responsive canvas container */
+.canvas-container {
+  position: relative !important;
+  width: 100% !important;
+  height: 300px !important;
+  max-height: 350px !important;
+}
+
+@media (max-width: 768px) {
+  .canvas-container {
+    height: 240px !important;
+  }
+}
+
+/* Footer Section */
+#footer-gabinete {
+  background-color: #0c0c0e !important;
+  border-top: 1px solid #1e1e24 !important;
+  color: #737373 !important;
+  padding: 36px 0 !important;
+}
+
+#footer-gabinete p, 
+#footer-gabinete span {
+  color: #737373 !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+}
