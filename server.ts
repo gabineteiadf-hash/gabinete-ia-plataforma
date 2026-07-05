@@ -18,7 +18,7 @@ const PORT = 3000;
 
 // Setup SQLite Database
 const dbPath = path.join(process.cwd(), "eleicoes.db");
-const db = new sqlite3.Database(dbPath);
+let db = new sqlite3.Database(dbPath);
 
 // Prevent database locked errors under concurrent requests
 db.run("PRAGMA busy_timeout = 10000;");
@@ -302,22 +302,144 @@ app.get("/api/fotos/:candidatoId", async (req, res) => {
 
 // ...
 
+async function forceResetDatabaseFile() {
+  console.log("Performing force reset of the database file...");
+  try {
+    await new Promise<void>((resolve) => {
+      db.close((err) => {
+        if (err) {
+          console.error("Error closing SQLite connection before deletion:", err);
+        }
+        resolve();
+      });
+    });
+  } catch (e: any) {
+    console.error("Failed to close db cleanly:", e.message || e);
+  }
+
+  const dbPath = path.join(process.cwd(), "eleicoes.db");
+  const backupPath = path.join(process.cwd(), "eleicoes.db.bak");
+
+  if (fs.existsSync(dbPath)) {
+    try {
+      fs.unlinkSync(dbPath);
+      console.log("Deleted database file: eleicoes.db");
+    } catch (e: any) {
+      console.error(`Failed to delete ${dbPath}:`, e.message);
+    }
+  }
+
+  if (fs.existsSync(backupPath)) {
+    try {
+      fs.unlinkSync(backupPath);
+      console.log("Deleted database backup file: eleicoes.db.bak");
+    } catch (e: any) {
+      console.error(`Failed to delete ${backupPath}:`, e.message);
+    }
+  }
+
+  db = new sqlite3.Database(dbPath);
+  db.run("PRAGMA busy_timeout = 10000;");
+  console.log("Brand new SQLite connection opened on fresh eleicoes.db");
+}
+
+async function rebuildDatabase() {
+  console.log("Rebuilding database from scratch...");
+  try {
+    // 1. Initialize tables and seed candidate list
+    await initDatabase();
+    console.log("Database tables and candidates seeded successfully.");
+    
+    // 2. Load historical voting geoelectoral records from the spreadsheet/migration
+    await seedHistoricalData(dbPath);
+    console.log("Geoelectoral votes loaded and synchronized successfully.");
+    
+    // 3. Update 2026 campaigns
+    await atualizarCampanhas2026(dbPath);
+    console.log("2026 campaign data updated successfully.");
+    
+    console.log("Database rebuild completed perfectly!");
+  } catch (err: any) {
+    console.error("Critical error during database rebuild:", err.message || err);
+  }
+}
+
 async function ensureDatabaseInitialized() {
   console.log("Initializing database and campaign data...");
+  let isCorrupted = false;
+
   try {
+    const isCorrupt = await new Promise<boolean>((resolve) => {
+      db.get("SELECT name FROM sqlite_master LIMIT 1", (err) => {
+        if (err) {
+          const msg = String(err.message || err);
+          console.error(`Pre-check SQLite Master failed: ${msg}`);
+          if (msg.toUpperCase().includes("CORRUPT") || msg.toUpperCase().includes("MALFORMED") || msg.toUpperCase().includes("DISK I/O")) {
+            resolve(true);
+            return;
+          }
+        }
+        db.get("SELECT COUNT(*) FROM Candidatos", (err2) => {
+          if (err2) {
+            const msg2 = String(err2.message || err2);
+            console.error(`Pre-check Candidatos failed: ${msg2}`);
+            if (msg2.toUpperCase().includes("CORRUPT") || msg2.toUpperCase().includes("MALFORMED") || msg2.toUpperCase().includes("DISK I/O")) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          } else {
+            resolve(false);
+          }
+        });
+      });
+    });
+
+    if (isCorrupt) {
+      isCorrupted = true;
+    }
+  } catch (err: any) {
+    console.error("Checking database for corruption failed:", err);
+    isCorrupted = true;
+  }
+
+  if (isCorrupted) {
+    console.warn("Database corruption detected during pre-check. Forcing database reset...");
+    await forceResetDatabaseFile();
+    await rebuildDatabase();
+    return;
+  }
+
+  // Normal flow
+  try {
+    const tableExists = await new Promise<boolean>((resolve) => {
+      db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='Candidatos'", (err, row) => {
+        if (err || !row) resolve(false);
+        else resolve(true);
+      });
+    });
+
+    if (!tableExists) {
+      console.log("Candidatos table not found. Creating and seeding tables...");
+      await initDatabase();
+    }
+
     // 1. Seed historical data if needed
     await seedHistoricalData(dbPath);
     
     // 2. Update 2026 data every time
     await atualizarCampanhas2026(dbPath);
     
-  } catch (err) {
-    console.error("Initialization failed:", err);
+  } catch (err: any) {
+    const errMsg = String(err.message || err);
+    console.error("Initialization failed:", errMsg);
+    if (errMsg.toUpperCase().includes("CORRUPT") || errMsg.toUpperCase().includes("MALFORMED") || errMsg.toUpperCase().includes("DISK I/O")) {
+      console.warn("Database corruption detected during initialization. Forcing database reset...");
+      await forceResetDatabaseFile();
+      await rebuildDatabase();
+    }
   }
 }
-
-// Call this on startup
-ensureDatabaseInitialized();
 
 // Lazy-initialize Google GenAI to prevent module-load crashes if API key is missing
 let aiInstance: GoogleGenAI | null = null;
@@ -3154,4 +3276,7 @@ async function startServer() {
   });
 }
 
-startServer();
+// Initialize database with corruption safety before starting Express listener
+ensureDatabaseInitialized().then(() => {
+  startServer();
+});
