@@ -1,0 +1,2762 @@
+[
+  {
+    "nome_urna": "Martins Machado",
+    "nome_completo": "Martins Machado Silva",
+    "partido": "PRB",
+    "ano_eleicao": 2018,
+    "total_votos": 29457,
+    "foto_url": "/assets/fotos/martins_machado.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 150000,
+      "despesas_contratadas": 140000,
+      "despesas_pagas": 135000,
+      "maior_fornecedor_nome": "Gráfica Alvorada",
+      "maior_fornecedor_valor": 30000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":70000},{\"category\":\"Serviços de Terceiros\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":25000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 483
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 2277
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 823
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1967
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1372
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 2032
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 2413
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 1324
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1839
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 413
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 2546
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 428
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1287
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1955
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 2019
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 1658
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 1040
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 1332
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 2249
+      }
+    ]
+  },
+  {
+    "nome_urna": "Delegado Fernando Fernandes",
+    "nome_completo": "Fernando Fernandes",
+    "partido": "PROS",
+    "ano_eleicao": 2018,
+    "total_votos": 29420,
+    "foto_url": "/assets/fotos/delegado_fernando_fernandes.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 160000,
+      "despesas_contratadas": 155000,
+      "despesas_pagas": 150000,
+      "maior_fornecedor_nome": "Editora Brasília Comunicações",
+      "maior_fornecedor_valor": 45000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":80000},{\"category\":\"Atividades de Militância\",\"value\":50000},{\"category\":\"Combustíveis\",\"value\":25000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 153
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 205
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 1652
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 648
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 169
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 113
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 7754
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 499
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 840
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 194
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1418
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 170
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1017
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 8813
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 411
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 251
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 1597
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 2535
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 981
+      }
+    ]
+  },
+  {
+    "nome_urna": "Professor Reginaldo Veras",
+    "nome_completo": "Reginaldo Veras",
+    "partido": "PDT",
+    "ano_eleicao": 2018,
+    "total_votos": 27998,
+    "foto_url": "/assets/fotos/reginaldo_veras.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 120000,
+      "despesas_contratadas": 115000,
+      "despesas_pagas": 110000,
+      "maior_fornecedor_nome": "Gráfica Ceilândia S.A.",
+      "maior_fornecedor_valor": 35000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":60000},{\"category\":\"Serviços de Terceiros\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":20000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 596
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 370
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 1859
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 690
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 448
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 485
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 4066
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 1363
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1030
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 772
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1464
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 920
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 3752
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 2654
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1750
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 465
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 3080
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 1364
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 870
+      }
+    ]
+  },
+  {
+    "nome_urna": "Rafael Prudente",
+    "nome_completo": "Rafael Prudente",
+    "partido": "MDB",
+    "ano_eleicao": 2018,
+    "total_votos": 26373,
+    "foto_url": "/assets/fotos/rafael_prudente.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 240000,
+      "despesas_contratadas": 230000,
+      "despesas_pagas": 225000,
+      "maior_fornecedor_nome": "Mídia Externa Brasília",
+      "maior_fornecedor_valor": 65000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Outdoors\",\"value\":110000},{\"category\":\"Publicidade por Impressos\",\"value\":80000},{\"category\":\"Combustíveis\",\"value\":40000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 240
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 1847
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 870
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1003
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 2492
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 4986
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 1588
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 799
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1053
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 361
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1647
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 302
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 622
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1882
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1988
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 1145
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 543
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 1781
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 1224
+      }
+    ]
+  },
+  {
+    "nome_urna": "Delmasso",
+    "nome_completo": "Rodrigo Delmasso",
+    "partido": "PRB",
+    "ano_eleicao": 2018,
+    "total_votos": 23227,
+    "foto_url": "/assets/fotos/delmasso.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 180000,
+      "despesas_contratadas": 170000,
+      "despesas_pagas": 165000,
+      "maior_fornecedor_nome": "Gráfica Alvorada",
+      "maior_fornecedor_valor": 40000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":90000},{\"category\":\"Atividades de Militância\",\"value\":50000},{\"category\":\"Combustíveis\",\"value\":30000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 422
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 1684
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 659
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 565
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1683
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 741
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 1629
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 3706
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1430
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 1113
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1117
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 826
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1559
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1157
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 979
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 840
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 1423
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 828
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 866
+      }
+    ]
+  },
+  {
+    "nome_urna": "Chico Vigilante",
+    "nome_completo": "Francisco Domingos dos Santos",
+    "partido": "PT",
+    "ano_eleicao": 2018,
+    "total_votos": 20975,
+    "foto_url": "/assets/fotos/chico_vigilante.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 210000,
+      "despesas_contratadas": 195000,
+      "despesas_pagas": 190000,
+      "maior_fornecedor_nome": "Gráfica Ceilândia Central S/A",
+      "maior_fornecedor_valor": 35000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":85000},{\"category\":\"Serviços Prestados por Terceiros\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":30000},{\"category\":\"Locação de Comitês\",\"value\":20000},{\"category\":\"Militância de Rua\",\"value\":15000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 616
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 700
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 773
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1089
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 879
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 1618
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 1769
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 1052
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 976
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 602
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1188
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 769
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1239
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1719
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1897
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 690
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 800
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 1423
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 1176
+      }
+    ]
+  },
+  {
+    "nome_urna": "Robério Negreiros",
+    "nome_completo": "Robério Negreiros Filho",
+    "partido": "PSD",
+    "ano_eleicao": 2018,
+    "total_votos": 18819,
+    "foto_url": "/assets/fotos/roberio_negreiros.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 480000,
+      "despesas_contratadas": 460000,
+      "despesas_pagas": 440000,
+      "maior_fornecedor_nome": "Mídia Externa Brasília Comunicação",
+      "maior_fornecedor_valor": 95000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Outdoors/Mídia Externa\",\"value\":155000},{\"category\":\"Serviços Prestados por Terceiros\",\"value\":120000},{\"category\":\"Publicidade por Materiais Impressos\",\"value\":85000},{\"category\":\"Locação de Veículos\",\"value\":60000},{\"category\":\"Combustíveis\",\"value\":40000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 274
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 1325
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 429
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1503
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1346
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 1592
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 1133
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 744
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 875
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 331
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1370
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 330
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 753
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1615
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1777
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 771
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 628
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 805
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 1218
+      }
+    ]
+  },
+  {
+    "nome_urna": "Agaciel Maia",
+    "nome_completo": "Agaciel da Silva Maia",
+    "partido": "PR",
+    "ano_eleicao": 2018,
+    "total_votos": 17715,
+    "foto_url": "/assets/fotos/agaciel_maia.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 190000,
+      "despesas_contratadas": 185000,
+      "despesas_pagas": 180000,
+      "maior_fornecedor_nome": "Gráfica do DF Central",
+      "maior_fornecedor_valor": 45000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":90000},{\"category\":\"Serviços de Terceiros\",\"value\":55000},{\"category\":\"Combustíveis\",\"value\":40000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 501
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 868
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 399
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 587
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1207
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 2538
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 872
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 1060
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1207
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 548
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 869
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 475
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 948
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 827
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1238
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 1309
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 956
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 571
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 735
+      }
+    ]
+  },
+  {
+    "nome_urna": "José Gomes",
+    "nome_completo": "José Gomes de Souza",
+    "partido": "PSB",
+    "ano_eleicao": 2018,
+    "total_votos": 16537,
+    "foto_url": "/assets/fotos/jose_gomes.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 150000,
+      "despesas_contratadas": 142000,
+      "despesas_pagas": 138000,
+      "maior_fornecedor_nome": "Editora e Gráfica Candanga",
+      "maior_fornecedor_valor": 32000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":65000},{\"category\":\"Militância de Rua\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":32000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 81
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 518
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 434
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1134
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 417
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 1166
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 1290
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 738
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 1059
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 108
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1555
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 127
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 388
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 2836
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 966
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 423
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 380
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 724
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 2193
+      }
+    ]
+  },
+  {
+    "nome_urna": "Arlete Sampaio",
+    "nome_completo": "Arlete de Sampaio",
+    "partido": "PT",
+    "ano_eleicao": 2018,
+    "total_votos": 15537,
+    "foto_url": "/assets/fotos/arlete_sampaio.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 140000,
+      "despesas_contratadas": 132000,
+      "despesas_pagas": 128000,
+      "maior_fornecedor_nome": "Mídia Popular",
+      "maior_fornecedor_valor": 28000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":60000},{\"category\":\"Atividades de Militância\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":27000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 1503
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 791
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 511
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 261
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 784
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 427
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 487
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 1119
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 628
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 1052
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 518
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 2382
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1399
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 389
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 800
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 984
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 861
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 366
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 275
+      }
+    ]
+  },
+  {
+    "nome_urna": "Cláudio Abrantes",
+    "nome_completo": "Cláudio Abrantes",
+    "partido": "PDT",
+    "ano_eleicao": 2018,
+    "total_votos": 14238,
+    "foto_url": "/assets/fotos/claudio_abrantes.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 130000,
+      "despesas_contratadas": 122000,
+      "despesas_pagas": 118000,
+      "maior_fornecedor_nome": "Gráfica Planaltina Central",
+      "maior_fornecedor_valor": 25000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":55000},{\"category\":\"Serviços de Terceiros\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":27000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 385
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 362
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 243
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 130
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1273
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 6760
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 365
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 515
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 313
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 436
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 253
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 609
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 855
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 185
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 344
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 337
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 509
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 215
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 149
+      }
+    ]
+  },
+  {
+    "nome_urna": "Jaqueline Silva",
+    "nome_completo": "Jaqueline Angela da Silva",
+    "partido": "PTB",
+    "ano_eleicao": 2018,
+    "total_votos": 13044,
+    "foto_url": "/assets/fotos/jaqueline_silva.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 110000,
+      "despesas_contratadas": 105000,
+      "despesas_pagas": 100000,
+      "maior_fornecedor_nome": "Comunicação Brasília",
+      "maior_fornecedor_valor": 22000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Militância de Rua\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":25000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 94
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 105
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 218
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 6485
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 119
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 124
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 214
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 368
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 393
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 155
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 492
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 67
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 431
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 245
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 2518
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 117
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 315
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 157
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 427
+      }
+    ]
+  },
+  {
+    "nome_urna": "Jorge Vianna",
+    "nome_completo": "Jorge Vianna de Sousa",
+    "partido": "PODE",
+    "ano_eleicao": 2018,
+    "total_votos": 13070,
+    "foto_url": "/assets/fotos/jorge_vianna.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 120000,
+      "despesas_contratadas": 112000,
+      "despesas_pagas": 108000,
+      "maior_fornecedor_nome": "Editora Distrito S.A.",
+      "maior_fornecedor_valor": 26000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":50000},{\"category\":\"Produção de Redes Sociais\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":27000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 159
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 273
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 643
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 522
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 773
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 835
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 849
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 546
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 556
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 291
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1536
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 235
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 899
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 862
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1458
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 266
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 783
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 546
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 1038
+      }
+    ]
+  },
+  {
+    "nome_urna": "Iolando",
+    "nome_completo": "Iolando Almeida de Souza",
+    "partido": "PSC",
+    "ano_eleicao": 2018,
+    "total_votos": 13000,
+    "foto_url": "/assets/fotos/iolando.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 110000,
+      "despesas_contratadas": 105000,
+      "despesas_pagas": 100000,
+      "maior_fornecedor_nome": "Gráfica Taguatinga Central",
+      "maior_fornecedor_valor": 20000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":25000},{\"category\":\"Serviços de Terceiros\",\"value\":15000},{\"category\":\"Locação de Veículos\",\"value\":12000},{\"category\":\"Combustíveis\",\"value\":8000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 60
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 365
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 246
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 572
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 247
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 505
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 484
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 330
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 432
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 116
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 715
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 459
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 407
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 6300
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 435
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 205
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 312
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 221
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 589
+      }
+    ]
+  },
+  {
+    "nome_urna": "Eduardo Pedrosa",
+    "nome_completo": "Eduardo Souza Pedrosa",
+    "partido": "PTC",
+    "ano_eleicao": 2018,
+    "total_votos": 12806,
+    "foto_url": "/assets/fotos/eduardo_pedrosa.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 180000,
+      "despesas_contratadas": 170000,
+      "despesas_pagas": 165000,
+      "maior_fornecedor_nome": "Consultoria Alvorada S/C",
+      "maior_fornecedor_valor": 40000,
+      "detalhe_despesas": "[{\"category\":\"Serviços Prestados por Terceiros\",\"value\":65000},{\"category\":\"Publicidade por Materiais Impressos\",\"value\":50000},{\"category\":\"Locação de Veículos\",\"value\":25000},{\"category\":\"Combustíveis\",\"value\":18000},{\"category\":\"Despesas Administrativas\",\"value\":12000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 122
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 1367
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 296
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1226
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 1153
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 1600
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 619
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 696
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 471
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 158
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 671
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 137
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 293
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 902
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1129
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 853
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 334
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 227
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 552
+      }
+    ]
+  },
+  {
+    "nome_urna": "João Cardoso",
+    "nome_completo": "João Cardoso da Silva",
+    "partido": "AVANTE",
+    "ano_eleicao": 2018,
+    "total_votos": 12654,
+    "foto_url": "/assets/fotos/joao_cardoso.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 110000,
+      "despesas_contratadas": 102000,
+      "despesas_pagas": 98000,
+      "maior_fornecedor_nome": "Gráfica Sobradinho Comunicações",
+      "maior_fornecedor_valor": 22000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":22000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 154
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 347
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 149
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 43
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 8562
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 887
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 100
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 259
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 133
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 235
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 89
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 519
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 366
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 81
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 96
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 134
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 243
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 204
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 53
+      }
+    ]
+  },
+  {
+    "nome_urna": "Roosevelt Vilela",
+    "nome_completo": "Roosevelt Vilela Pires",
+    "partido": "PSB",
+    "ano_eleicao": 2018,
+    "total_votos": 12257,
+    "foto_url": "/assets/fotos/roosevelt_vilela.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 120000,
+      "despesas_contratadas": 112000,
+      "despesas_pagas": 108000,
+      "maior_fornecedor_nome": "Gráfica do DF Central",
+      "maior_fornecedor_valor": 26000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":50000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":27000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 257
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 190
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 486
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 458
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 242
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 256
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 898
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 797
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 3398
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 308
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 640
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 243
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 939
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 659
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 605
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 318
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 514
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 697
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 352
+      }
+    ]
+  },
+  {
+    "nome_urna": "Hermeto",
+    "nome_completo": "Joao Hermeto de Oliveira Neto",
+    "partido": "PHS",
+    "ano_eleicao": 2018,
+    "total_votos": 11552,
+    "foto_url": "/assets/fotos/hermeto.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 115000,
+      "despesas_contratadas": 108000,
+      "despesas_pagas": 104000,
+      "maior_fornecedor_nome": "Mídia Bandeirante",
+      "maior_fornecedor_valor": 24000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":28000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 266
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 208
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 426
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 272
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 377
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 308
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 511
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 963
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 4313
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 261
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 389
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 222
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 777
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 366
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 563
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 278
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 580
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 232
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 240
+      }
+    ]
+  },
+  {
+    "nome_urna": "Fábio Felix",
+    "nome_completo": "Fábio Felix Silveira",
+    "partido": "PSOL",
+    "ano_eleicao": 2018,
+    "total_votos": 10955,
+    "foto_url": "/assets/fotos/fabio_felix.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 90000,
+      "despesas_contratadas": 85000,
+      "despesas_pagas": 82000,
+      "maior_fornecedor_nome": "Coletivo Cultural do DF",
+      "maior_fornecedor_valor": 12000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":32000},{\"category\":\"Atividades de Militância\",\"value\":22000},{\"category\":\"Produção de Vídeo e Redes Sociais\",\"value\":15000},{\"category\":\"Despesas Administrativas\",\"value\":10000},{\"category\":\"Combustíveis\",\"value\":6000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 993
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 539
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 228
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 227
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 614
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 275
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 346
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 913
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 503
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 747
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 330
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 1836
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1130
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 237
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 425
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 610
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 541
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 249
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 212
+      }
+    ]
+  },
+  {
+    "nome_urna": "Valdelino Barcelos",
+    "nome_completo": "Valdelino Barcelos",
+    "partido": "PP",
+    "ano_eleicao": 2018,
+    "total_votos": 9704,
+    "foto_url": "/assets/fotos/valdelino_barcelos.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 100000,
+      "despesas_contratadas": 92000,
+      "despesas_pagas": 88000,
+      "maior_fornecedor_nome": "Gráfica do DF Central",
+      "maior_fornecedor_valor": 20000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":40000},{\"category\":\"Militância de Rua\",\"value\":30000},{\"category\":\"Combustíveis\",\"value\":22000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 117
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 236
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 282
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 692
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 653
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 1329
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 506
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 782
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 654
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 118
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 629
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 109
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 533
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 636
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 651
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 406
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 556
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 331
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 484
+      }
+    ]
+  },
+  {
+    "nome_urna": "Daniel Donizet",
+    "nome_completo": "Daniel Donizet de Oliveira",
+    "partido": "PRP",
+    "ano_eleicao": 2018,
+    "total_votos": 9128,
+    "foto_url": "/assets/fotos/daniel_donizet.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 95000,
+      "despesas_contratadas": 88000,
+      "despesas_pagas": 84000,
+      "maior_fornecedor_nome": "Gráfica Gama Sul",
+      "maior_fornecedor_valor": 18000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":38000},{\"category\":\"Militância de Rua\",\"value\":30000},{\"category\":\"Combustíveis\",\"value\":20000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 523
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 455
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 260
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 360
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 658
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 347
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 412
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 624
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 515
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 502
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 494
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 745
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 769
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 344
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 474
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 441
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 494
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 298
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 413
+      }
+    ]
+  },
+  {
+    "nome_urna": "Júlia Lucy",
+    "nome_completo": "Júlia Lucy",
+    "partido": "NOVO",
+    "ano_eleicao": 2018,
+    "total_votos": 7655,
+    "foto_url": "/assets/fotos/julia_lucy.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 85000,
+      "despesas_contratadas": 78000,
+      "despesas_pagas": 74000,
+      "maior_fornecedor_nome": "Digital Ads DF",
+      "maior_fornecedor_valor": 15000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade em Redes Sociais\",\"value\":35000},{\"category\":\"Publicidade por Impressos\",\"value\":25000},{\"category\":\"Despesas Administrativas\",\"value\":18000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 856
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 374
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 112
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 82
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 271
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 83
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 130
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 790
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 333
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 811
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 172
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 1032
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 1057
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 109
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 180
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 699
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 366
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 85
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 113
+      }
+    ]
+  },
+  {
+    "nome_urna": "Reginaldo Sardinha",
+    "nome_completo": "Reginaldo Sardinha",
+    "partido": "AVANTE",
+    "ano_eleicao": 2018,
+    "total_votos": 6738,
+    "foto_url": "/assets/fotos/reginaldo_sardinha.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 75000,
+      "despesas_contratadas": 68000,
+      "despesas_pagas": 65000,
+      "maior_fornecedor_nome": "Gráfica do Cruzeiro",
+      "maior_fornecedor_valor": 12000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":30000},{\"category\":\"Militância de Rua\",\"value\":25000},{\"category\":\"Combustíveis\",\"value\":13000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 206
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 141
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 120
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 96
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 196
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 106
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 144
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 492
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 237
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 3135
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 138
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 324
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 449
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 146
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 132
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 184
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 281
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 64
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 147
+      }
+    ]
+  },
+  {
+    "nome_urna": "Leandro Grass",
+    "nome_completo": "Leandro Grass",
+    "partido": "REDE",
+    "ano_eleicao": 2018,
+    "total_votos": 6578,
+    "foto_url": "/assets/fotos/leandro_grass.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 70000,
+      "despesas_contratadas": 64000,
+      "despesas_pagas": 60000,
+      "maior_fornecedor_nome": "Editora Verde DF",
+      "maior_fornecedor_valor": 11000,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":28000},{\"category\":\"Produção de Vídeo\",\"value\":22000},{\"category\":\"Combustíveis\",\"value\":14000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 1125
+      },
+      {
+        "zona": 2,
+        "ra": "Paranoá / Itapoã",
+        "votos": 237
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 106
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 71
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Planaltina",
+        "votos": 213
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 40
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 86
+      },
+      {
+        "zona": 9,
+        "ra": "Guará / Estrutural",
+        "votos": 639
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Guará",
+        "votos": 357
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Sudoeste",
+        "votos": 636
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 122
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 772
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Vicente Pires",
+        "votos": 888
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 97
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 120
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 536
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga",
+        "votos": 400
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 55
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 78
+      }
+    ]
+  }
+]
