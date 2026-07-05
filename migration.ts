@@ -49,6 +49,31 @@ export async function initTables(db: sqlite3.Database): Promise<void> {
         )
       `, (err) => {
         if (err) return reject(err);
+      });
+
+      db.run(`
+        CREATE TABLE IF NOT EXISTS Reputacao_Clipping (
+          id_clipping INTEGER PRIMARY KEY AUTOINCREMENT,
+          id_candidato INTEGER,
+          titulo TEXT,
+          fonte TEXT,
+          url TEXT,
+          data_publicacao TEXT,
+          resumo_curto TEXT,
+          resumo_executivo TEXT,
+          sentimento TEXT,
+          impacto_score INTEGER,
+          tema_principal TEXT,
+          deputados_mencionados TEXT,
+          partidos_citados TEXT,
+          orgaos_envolvidos TEXT,
+          palavras_chave TEXT,
+          riscos TEXT,
+          oportunidades TEXT,
+          FOREIGN KEY(id_candidato) REFERENCES Candidatos(id_candidato)
+        )
+      `, (err) => {
+        if (err) return reject(err);
         resolve();
       });
     });
@@ -177,11 +202,88 @@ export async function seedHistoricalData(dbPath: string) {
       console.error("[Migration] Live spreadsheet synchronization failed, proceeding with seeded database data:", err.message);
     }
 
+    // Seed Reputacao_Clipping table
+    try {
+      await seedReputacaoClipping(db);
+    } catch (err: any) {
+      console.error("[Migration] Reputacao_Clipping seeding failed:", err.message || err);
+    }
+
   } catch (error) {
     console.error("[Migration] Critical error during database seeding:", error);
   } finally {
     db.close();
   }
+}
+
+async function seedReputacaoClipping(db: sqlite3.Database): Promise<void> {
+  console.log("[Migration] Checking and seeding Reputacao_Clipping...");
+  return new Promise<void>((resolve, reject) => {
+    db.get("SELECT COUNT(*) as count FROM sqlite_master WHERE type='table' AND name='Reputacao_Clipping'", (err, tableRow) => {
+      if (err || !tableRow) {
+        console.warn("[Migration] Reputacao_Clipping table doesn't exist yet.");
+        return resolve();
+      }
+
+      db.get("SELECT COUNT(*) as count FROM Reputacao_Clipping", async (err2, row: any) => {
+        if (err2) {
+          console.error("Error checking Reputacao_Clipping:", err2);
+          return reject(err2);
+        }
+        if (row && row.count > 0) {
+          console.log("[Migration] Reputacao_Clipping table already has records. Skipping seed.");
+          return resolve();
+        }
+
+        console.log("[Migration] Reputacao_Clipping is empty. Injecting test case for Doutora Jane...");
+        
+        // Find Doutora Jane's ID
+        db.get("SELECT id_candidato FROM Candidatos WHERE nome_urna = 'Doutora Jane' LIMIT 1", (err3, candRow: any) => {
+          if (err3) {
+            console.error("Error finding Doutora Jane:", err3);
+            return reject(err3);
+          }
+          
+          let candidateId = candRow ? candRow.id_candidato : null;
+          if (!candidateId) {
+            console.warn("[Migration] Doutora Jane was not found in Candidatos. Using fallback ID 16.");
+            candidateId = 16; // some fallback
+          }
+
+          db.run(`
+            INSERT INTO Reputacao_Clipping (
+              id_candidato, titulo, fonte, url, data_publicacao, resumo_curto, resumo_executivo, sentimento, impacto_score, tema_principal,
+              deputados_mencionados, partidos_citados, orgaos_envolvidos, palavras_chave, riscos, oportunidades
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          `, [
+            candidateId,
+            "Nepotismo escancarado: Deputada Jane Klébia transforma cargos públicos em feudo familiar no DF",
+            "Fatos Online",
+            "https://fatosonline.com.br/nepotismo-escancarado-deputada-jane-klebia-transforma-cargos-publicos-em-feudo-familiar-no-df/",
+            "2025-01-15",
+            "Denúncia aponta que a deputada nomeou parentes diretos para cargos públicos no DF.",
+            "A reportagem acusa a parlamentar de transformar cargos públicos em feudo familiar, configurando prática de nepotismo, o que gera desgaste na base eleitoral e possíveis questionamentos legais.",
+            "Muito negativa",
+            85,
+            "Corrupção / Administração Pública",
+            JSON.stringify(["Jane Klébia"]),
+            JSON.stringify(["MDB"]),
+            JSON.stringify(["CLDF", "GDF"]),
+            JSON.stringify(["Nepotismo", "Cargos públicos", "Feudo familiar", "Denúncia"]),
+            JSON.stringify(["Desgaste severo de imagem", "Investigação pelo MPDFT", "Ataques de adversários nas redes"]),
+            JSON.stringify(["Preparar defesa técnica baseada na Súmula Vinculante 13 do STF", "Antecipar-se com nota de esclarecimento focada em critérios técnicos das nomeações"])
+          ], (err4) => {
+            if (err4) {
+              console.error("Error seeding Reputacao_Clipping record:", err4);
+              return reject(err4);
+            }
+            console.log("[Migration] Reputacao_Clipping successfully seeded with case 'Doutora Jane'.");
+            resolve();
+          });
+        });
+      });
+    });
+  });
 }
 
 export async function atualizarCampanhas2026(dbPath: string) {

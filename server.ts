@@ -851,6 +851,71 @@ app.get("/api/historico_politico/:nome_urna/:ano", async (req, res) => {
   }
 });
 
+// Endpoint for reputation management and media clipping
+app.get("/api/reputacao/:candidatoId", async (req, res) => {
+  try {
+    const { candidatoId } = req.params;
+    const candId = parseInt(candidatoId, 10);
+
+    if (isNaN(candId)) {
+      return res.status(400).json({ error: "ID do candidato inválido" });
+    }
+
+    const query = `
+      SELECT * FROM Reputacao_Clipping 
+      WHERE id_candidato = ?
+      ORDER BY data_publicacao DESC
+    `;
+
+    const clippings = await dbAll(query, [candId]);
+
+    const parsedClippings = clippings.map(clip => {
+      const parsed = { ...clip };
+      try {
+        parsed.deputados_mencionados = clip.deputados_mencionados ? JSON.parse(clip.deputados_mencionados) : [];
+      } catch (e) {
+        parsed.deputados_mencionados = [];
+      }
+
+      try {
+        parsed.partidos_citados = clip.partidos_citados ? JSON.parse(clip.partidos_citados) : [];
+      } catch (e) {
+        parsed.partidos_citados = [];
+      }
+
+      try {
+        parsed.orgaos_envolvidos = clip.orgaos_envolvidos ? JSON.parse(clip.orgaos_envolvidos) : [];
+      } catch (e) {
+        parsed.orgaos_envolvidos = [];
+      }
+
+      try {
+        parsed.palavras_chave = clip.palavras_chave ? JSON.parse(clip.palavras_chave) : [];
+      } catch (e) {
+        parsed.palavras_chave = [];
+      }
+
+      try {
+        parsed.riscos = clip.riscos ? JSON.parse(clip.riscos) : [];
+      } catch (e) {
+        parsed.riscos = [];
+      }
+
+      try {
+        parsed.oportunidades = clip.oportunidades ? JSON.parse(clip.oportunidades) : [];
+      } catch (e) {
+        parsed.oportunidades = [];
+      }
+
+      return parsed;
+    });
+
+    res.json(parsedClippings);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 3. AI analysis of the general election and financial stats for a given year
 app.get("/api/analise/:ano", async (req, res) => {
   try {
