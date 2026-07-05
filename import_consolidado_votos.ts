@@ -49,6 +49,7 @@ function getAliasMatch(sheetName: string): string | null {
   if (clean === "PEDRO PAULO DE OLIVEIRA") return "PEPA";
   if (clean === "CHRISTIANNO NOGUEIRA ARAUJO") return "CRISTIANO ARAUJO";
   if (clean === "FRANCISCO LEITE DE OLIVEIRA") return "CHICO LEITE";
+  if (clean.includes("FABIO FELIX")) return "FABIO FELIX";
   return null;
 }
 
@@ -177,11 +178,9 @@ async function getSpreadsheetIdFromFolder(folderId: string): Promise<string> {
 
 /**
  * Main migration coordinator.
- */
-async function executeMigration() {
+ */export async function runFullMigration(db: sqlite3.Database) {
   const folderId = "1Hx40kNiiKn7ey92y1dDKRTXTjcU3zWhg";
-  const dbPath = path.join(process.cwd(), "eleicoes.db");
-
+  
   console.log("\n=======================================================");
   console.log("GABINETE IA: DATA MIGRATION ENGINE (VOTING CONSOLIDATION)");
   console.log("=======================================================\n");
@@ -243,8 +242,7 @@ async function executeMigration() {
 
   console.log(`[Aggregation] Successfully consolidated into ${groupedVotes.size} unique geoelectoral voting records.`);
 
-  // Step 3: Open Database & Load Candidates Cache
-  const db = new sqlite3.Database(dbPath);
+  // Step 3: Use passed Database connection & Load Candidates Cache
   
   const runQuery = (sql: string, params: any[] = []): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -365,49 +363,45 @@ async function executeMigration() {
     await runQuery("COMMIT;");
     console.log(`[Database] COMMIT completed successfully. DB state is 100% consistent.`);
 
+    // Visual Audit Verification
+    console.log(`\n=======================================================`);
+    console.log("AUDIT SUMMARY & VERIFICATION FOR CANDIDATES");
+    console.log("=======================================================");
+    
+    await new Promise<void>((resolve) => {
+      db.all(
+        `SELECT c.nome_urna, c.ano_eleicao, c.total_votos, SUM(g.votos) as total_votos_geo
+         FROM Candidatos c
+         LEFT JOIN Geoeleitoral_Votos g ON c.id_candidato = g.id_candidato
+         GROUP BY c.id_candidato
+         ORDER BY c.ano_eleicao DESC, c.total_votos DESC`,
+        (err, rows: any[]) => {
+          if (err) {
+            console.error("Audit query failed:", err);
+          } else {
+            console.log(`${"NOME DE URNA".padEnd(25)} | ${"ANO".padEnd(5)} | ${"TOTAL CANDIDATO".padEnd(16)} | ${"SOMA DETALHADA"}`);
+            console.log("-".repeat(70));
+            rows.forEach(r => {
+              const totalVotos = r.total_votos || 0;
+              const totalVotosGeo = r.total_votos_geo || 0;
+              const delta = totalVotos - totalVotosGeo;
+              const alert = delta !== 0 ? `⚠️ DELTA: ${delta}` : "✅ OK";
+              console.log(
+                `${r.nome_urna.padEnd(25)} | ${r.ano_eleicao.toString().padEnd(5)} | ${totalVotos.toString().padEnd(16)} | ${totalVotosGeo.toString().padEnd(14)} | ${alert}`
+              );
+            });
+          }
+          console.log("=======================================================\n");
+          resolve();
+        }
+      );
+    });
+
   } catch (err: any) {
     console.error(`[Database Error] Write phase failed! Executing ROLLBACK...`);
     await runQuery("ROLLBACK;");
     throw err;
-  } finally {
-    db.close();
   }
-
-  // Visual Audit Verification
-  console.log(`\n=======================================================`);
-  console.log("AUDIT SUMMARY & VERIFICATION FOR CANDIDATES");
-  console.log("=======================================================");
-  
-  const dbAudit = new sqlite3.Database(dbPath);
-  dbAudit.all(
-    `SELECT c.nome_urna, c.ano_eleicao, c.total_votos, SUM(g.votos) as total_votos_geo
-     FROM Candidatos c
-     LEFT JOIN Geoeleitoral_Votos g ON c.id_candidato = g.id_candidato
-     GROUP BY c.id_candidato
-     ORDER BY c.ano_eleicao DESC, c.total_votos DESC`,
-    (err, rows: any[]) => {
-      if (err) {
-        console.error("Audit query failed:", err);
-      } else {
-        console.log(`${"NOME DE URNA".padEnd(25)} | ${"ANO".padEnd(5)} | ${"TOTAL CANDIDATO".padEnd(16)} | ${"SOMA DETALHADA"}`);
-        console.log("-".repeat(70));
-        rows.forEach(r => {
-          const totalVotos = r.total_votos || 0;
-          const totalVotosGeo = r.total_votos_geo || 0;
-          const delta = totalVotos - totalVotosGeo;
-          const alert = delta !== 0 ? `⚠️ DELTA: ${delta}` : "✅ OK";
-          console.log(
-            `${r.nome_urna.padEnd(25)} | ${r.ano_eleicao.toString().padEnd(5)} | ${totalVotos.toString().padEnd(16)} | ${totalVotosGeo.toString().padEnd(14)} | ${alert}`
-          );
-        });
-      }
-      dbAudit.close();
-      console.log("=======================================================\n");
-    }
-  );
 }
 
-executeMigration().catch(err => {
-  console.error("FATAL ERROR IN MIGRATION ENGINE:", err);
-  process.exit(1);
-});
+// Exported for central usage in migration.ts

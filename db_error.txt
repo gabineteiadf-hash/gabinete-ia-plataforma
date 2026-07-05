@@ -1,0 +1,2 @@
+ReferenceError: candidates2022 is not defined
+    at initDatabase (/app/applet/server.ts:1652:21)

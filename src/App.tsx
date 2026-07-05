@@ -143,121 +143,51 @@ const getInitials = (name: string): string => {
 };
 
 const CandidateAvatar = ({ 
+  candidatoId,
   nomeUrna, 
   fotoUrl, 
   variant = "small" 
 }: { 
+  candidatoId?: number;
   nomeUrna: string; 
   fotoUrl?: string; 
   variant?: "small" | "large"; 
 }) => {
-  const normalized = normalizeCandidateName(nomeUrna);
-  let normalizedUnderscore = normalizeWithUnderscores(nomeUrna);
-  
-  // Mapeamento de apelidos e nomes para corresponder exatamente aos arquivos de imagem em assets/fotos/
-  const nameAliases: Record<string, string> = {
-    "doutora_jane": "doutorajane",
-    "joao_cardoso_professor_auditor": "joao_cardoso",
-    "professor_reginaldo_veras": "reginaldo_veras",
-  };
-  
-  if (nameAliases[normalizedUnderscore]) {
-    normalizedUnderscore = nameAliases[normalizedUnderscore];
-  }
-  
-  const sources = React.useMemo(() => {
-    const list: string[] = [];
-    
-    // 0. Use the backend's dynamic on-demand photo proxy
-    if (nomeUrna) {
-      list.push(`/api/proxy-foto?nome=${encodeURIComponent(nomeUrna)}`);
-      list.push(`/assets/fotos/${normalizedUnderscore}.jpg`);
-      list.push(`/assets/fotos/${normalized}.jpg`);
-    }
-    
-    // 1. Try mapping the DB url to /fotos/ first if it matches
-    if (fotoUrl && fotoUrl.trim() !== "") {
-      const url = fotoUrl.trim();
-      if (url.startsWith("/assets/fotos/")) {
-        list.push(url.replace("/assets/fotos/", "/fotos/"));
-      }
-    }
-
-    // 2. Try normalized name with underscores under /fotos/
-    if (normalizedUnderscore) {
-      list.push(`/fotos/${normalizedUnderscore}.jpg`);
-    }
-
-    // 3. Try completely stripped name under /fotos/
-    if (normalized) {
-      list.push(`/fotos/${normalized}.jpg`);
-    }
-
-    // 4. Try DB url exactly (support Google Drive conversion to direct/lh3 URL)
-    if (fotoUrl && fotoUrl.trim() !== "") {
-      const directUrl = getDirectDrivePhotoUrl(fotoUrl.trim());
-      list.push(directUrl);
-      if (directUrl !== fotoUrl.trim()) {
-        list.push(fotoUrl.trim());
-      }
-    }
-
-    // 5. Try legacy/assets paths as final fallback
-    if (normalizedUnderscore) {
-      list.push(`/assets/fotos/${normalizedUnderscore}.jpg`);
-    }
-
-    if (normalized) {
-      list.push(`/assets/fotos/${normalized}.jpg`);
-    }
-    
-    return list;
-  }, [nomeUrna, fotoUrl, normalized, normalizedUnderscore]);
-
-  const [srcIndex, setSrcIndex] = useState(0);
   const [hasError, setHasError] = useState(false);
 
-  const currentSrc = sources[srcIndex];
-
   useEffect(() => {
-    setSrcIndex(0);
+    // Reset error state when the candidate changes
     setHasError(false);
-  }, [nomeUrna, fotoUrl]);
+  }, [candidatoId, nomeUrna]);
 
-  useEffect(() => {
-    if (currentSrc && !hasError) {
-      console.log(`[Foto Deputado] Tentando carregar imagem do candidato "${nomeUrna}": ${currentSrc}`);
-    }
-  }, [currentSrc, nomeUrna, hasError]);
-
-  const handleError = () => {
-    if (srcIndex < sources.length - 1) {
-      setSrcIndex(prev => prev + 1);
-    } else {
-      console.error(`[Foto Deputado Erro] Falha ao carregar imagem do candidato "${nomeUrna}" em: ${currentSrc}`);
-      setHasError(true);
-    }
-  };
-
-  const initials = getInitials(nomeUrna);
-
-  if (hasError || !currentSrc) {
-    if (variant === "large") {
-      return (
-        <span className="text-3xl font-black text-purple-600 tracking-wider">
-          {initials}
-        </span>
-      );
-    }
-    return <span className="uppercase">{initials}</span>;
+  if (hasError || !candidatoId) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-400 shrink-0 overflow-hidden rounded-full">
+        <svg
+          className="w-2/3 h-2/3"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+    );
   }
 
   return (
     <img
-      src={currentSrc}
+      src={`/api/fotos/${candidatoId}`}
       alt={nomeUrna}
-      onError={handleError}
-      className="w-full h-full object-cover"
+      onError={() => {
+        console.warn(`[Foto Deputado Erro] Falha ao carregar imagem para o candidato "${nomeUrna}" (ID: ${candidatoId}). Usando avatar padrão.`);
+        setHasError(true);
+      }}
+      className="w-full h-full object-cover rounded-full"
     />
   );
 };
@@ -2684,7 +2614,7 @@ export default function App() {
                             <div className="flex items-center gap-3">
                               <span className="text-xs font-black text-slate-400 font-mono w-5">#{rank}</span>
                               <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 group-hover:bg-purple-100 group-hover:text-purple-700 transition-colors shrink-0 overflow-hidden">
-                                <CandidateAvatar nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
+                                <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
                               </div>
                               <div className="min-w-0">
                                 <span className="font-extrabold text-xs text-slate-800 uppercase block truncate group-hover:text-purple-900 transition-colors">
@@ -2842,7 +2772,7 @@ export default function App() {
                               <div className="flex items-center gap-3 min-w-0 flex-1">
                                 <span className="text-xs font-black text-slate-400 font-mono w-5 shrink-0 flex-shrink-0">#{rank}</span>
                                 <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 group-hover:bg-pink-100 group-hover:text-pink-700 transition-colors shrink-0 flex-shrink-0 overflow-hidden">
-                                  <CandidateAvatar nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
+                                  <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
                                 </div>
                                 <div className="min-w-0 flex-1">
                                   <span className="font-extrabold text-xs text-slate-800 uppercase block truncate group-hover:text-pink-900 transition-colors whitespace-nowrap overflow-hidden text-overflow-ellipsis" title={cand.nome_urna}>
@@ -2929,7 +2859,7 @@ export default function App() {
                         >
                           <div className="flex items-center gap-2.5 min-w-0 flex-1">
                             <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 overflow-hidden shrink-0 flex-shrink-0">
-                              <CandidateAvatar nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
+                              <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
                             </div>
                             <div className="min-w-0 flex-1">
                               <h4 className="font-bold text-xs text-slate-900 truncate block w-full whitespace-nowrap overflow-hidden text-overflow-ellipsis" title={cand.nome_urna}>
@@ -2970,7 +2900,7 @@ export default function App() {
                     <div className={`w-28 h-28 rounded-full border-4 flex items-center justify-center mx-auto shadow-xs overflow-hidden ${
                       selectedYear === 2026 ? "border-purple-900 bg-slate-900" : "border-purple-200 bg-slate-50"
                     }`}>
-                      <CandidateAvatar nomeUrna={selectedCandidate.nome_urna} fotoUrl={selectedCandidate.foto_url} variant="large" />
+                      <CandidateAvatar candidatoId={selectedCandidate.id_candidato} nomeUrna={selectedCandidate.nome_urna} fotoUrl={selectedCandidate.foto_url} variant="large" />
                     </div>
                   </div>
 
