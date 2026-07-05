@@ -63,6 +63,8 @@ import {
   GitHubRepo 
 } from "./lib/githubService";
 
+import { DossieInteligencia } from "./components/DossieInteligencia";
+
 interface ExpenseCategory {
   category: string;
   value: number;
@@ -2364,7 +2366,7 @@ export default function App() {
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 pb-12 flex flex-col gap-6">
         
         {/* THREE HORIZONTAL BENTO CARDS */}
-        {selectedYear !== 2026 && (
+        {!(selectedYear === 2026 && selectedCandidate) && (
           <section id="top-bento-cards" className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* Card 1: Anatomia de Gastos */}
@@ -2436,10 +2438,16 @@ export default function App() {
         {/* WORKSPACE AREA: TWO COLUMNS WITH BLINDED RESPONSIVITY */}
         <div className="workspace-layout">
           {/* COLUMN 1: MATRIX PANEL */}
-          <section id="matrix-panel" className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col min-h-[500px]">
+          <section 
+            id="matrix-panel" 
+            className={`bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col min-h-[500px] ${
+              selectedYear === 2026 && selectedCandidate ? "lg:flex-[1_1_100%] w-full" : ""
+            }`}
+          >
             
             {/* Left Header with title and year switcher */}
-            <div id="controles-ano" className="border-b border-slate-100 pb-4 mb-6">
+            {!(selectedYear === 2026 && selectedCandidate) && (
+              <div id="controles-ano" className="border-b border-slate-100 pb-4 mb-6">
               <div>
                 <h2 className="text-sm sm:text-lg font-bold text-slate-950 flex items-center gap-2 text-left">
                   {selectedYear === 2026 ? "QG Campanhas 2026" : "Matriz: " + (
@@ -2491,6 +2499,7 @@ export default function App() {
                 </button>
               </div>
             </div>
+            )}
 
             {/* Segmented Sub-tab bar inside Engenharia Geoeleitoral */}
             {selectedYear !== 2026 && activeMainCard === "geoeleitoral" && (
@@ -2943,6 +2952,94 @@ export default function App() {
                   )}
                 </div>
               </div>
+            ) : selectedYear === 2026 ? (
+              /* 2026 CANDIDATE FOCUS MODE WITH DOSSIÊ INTELIGÊNCIA AND QG CAMPAINHA */
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                {/* LEFT COLUMN: DossieInteligencia (amplo espaço) */}
+                <div className="lg:col-span-8 flex flex-col gap-6">
+                  <DossieInteligencia 
+                    candidatoId={selectedCandidate.id_candidato} 
+                    candidatoName={selectedCandidate.nome_urna} 
+                  />
+                </div>
+
+                {/* RIGHT COLUMN: Profile Card & CampaignHQ2026 stacked harmoniously */}
+                <div className="lg:col-span-4 flex flex-col gap-6 pl-0 lg:pl-4 lg:border-l border-slate-800">
+                  {/* Compact Profile Card */}
+                  <div className="bg-slate-900/40 p-5 border border-slate-800 rounded-xl text-center space-y-4 shadow-md">
+                    {/* Circular Avatar Frame */}
+                    <div className="relative">
+                      <div className="w-24 h-24 rounded-full border-4 border-purple-900 bg-slate-900 flex items-center justify-center mx-auto shadow-xs overflow-hidden">
+                        <CandidateAvatar 
+                          candidatoId={selectedCandidate.id_candidato} 
+                          nomeUrna={selectedCandidate.nome_urna} 
+                          fotoUrl={selectedCandidate.foto_url} 
+                          variant="large" 
+                        />
+                      </div>
+                    </div>
+
+                    {/* Centered Political Party Badge */}
+                    <div>
+                      <span className="inline-block px-3.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-pink-950/40 text-pink-400 border border-pink-900/40">
+                        {selectedCandidate.partido}
+                      </span>
+                    </div>
+
+                    {/* Candidate Urn Name */}
+                    <div>
+                      <h3 className="text-lg font-black tracking-tight uppercase text-slate-100">
+                        {selectedCandidate.nome_urna}
+                      </h3>
+                      <p className="text-[9px] text-slate-400 font-extrabold tracking-widest uppercase mt-0.5">
+                        {selectedCandidate.cargo || "DEPUTADO DISTRITAL"}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        id="btn-exportar-dossie-2026"
+                        onClick={handleExportPDF}
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-black rounded-lg shadow-xs transition-all cursor-pointer"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Exportar PDF</span>
+                      </button>
+
+                      <button
+                        id="btn-sair-perfil-2026"
+                        onClick={() => {
+                          setSelectedCandidate(null);
+                          setSelectedCandidateName(null);
+                          setSelectedCandidateId(null);
+                        }}
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white text-[10px] font-black rounded-lg shadow-xs transition-all cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Sair do Perfil</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* QG Campanha Area */}
+                  <div className="bg-slate-900/30 p-4 border border-slate-800/80 rounded-xl space-y-4">
+                    <div className="flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                      <Target className="w-4 h-4 text-purple-400 shrink-0" />
+                      <h4 className="text-xs font-black text-purple-400 uppercase tracking-widest">
+                        QG Campanha Ativa
+                      </h4>
+                    </div>
+                    <CampaignHQ2026
+                      selectedCandidate={selectedCandidate}
+                      setOraculoInput={setOraculoInput}
+                      setActiveTab={setActiveTab}
+                    />
+                  </div>
+                </div>
+
+              </div>
             ) : (
               /* ACTIVE SPLIT MATRIX SCREEN (Pixel perfect matched to screenshot) */
               <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
@@ -3026,13 +3123,7 @@ export default function App() {
                 {/* SPLIT COLUMN 2: Details content matching selected activeMainCard */}
                 <div className="md:col-span-8 flex flex-col justify-between pl-0 md:pl-2">
                   
-                  {selectedYear === 2026 ? (
-                    <CampaignHQ2026
-                      selectedCandidate={selectedCandidate}
-                      setOraculoInput={setOraculoInput}
-                      setActiveTab={setActiveTab}
-                    />
-                  ) : candidateNoDataForYear ? (
+                  {candidateNoDataForYear ? (
                     <div className="flex-1 flex flex-col items-center justify-center text-center p-8 bg-slate-50/50 border border-dashed border-slate-200 rounded-2xl my-auto min-h-[280px]">
                       <div className="p-3 bg-amber-50 text-amber-600 rounded-full mb-3">
                         <AlertCircle className="w-8 h-8" />
