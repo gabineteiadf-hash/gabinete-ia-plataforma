@@ -40,7 +40,8 @@ import {
   VolumeX,
   Instagram,
   Facebook,
-  Target
+  Target,
+  X
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { jsPDF } from "jspdf";
@@ -898,6 +899,33 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<"audit" | "oraculo" | "conexoes">("oraculo");
   const [activeMainCard, setActiveMainCard] = useState<"gastos" | "geoeleitoral" | "reputacao">("gastos");
   const [isMobileAssistantOpen, setIsMobileAssistantOpen] = useState<boolean>(false);
+  
+  // Reputation / Clipping state
+  const [reputationModalOpen, setReputationModalOpen] = useState<boolean>(false);
+  const [reputationCandidate, setReputationCandidate] = useState<Candidate | null>(null);
+  const [reputationClippings, setReputationClippings] = useState<any[]>([]);
+  const [loadingReputation, setLoadingReputation] = useState<boolean>(false);
+
+  const handleOpenReputationDossier = async (cand: Candidate) => {
+    setReputationCandidate(cand);
+    setReputationModalOpen(true);
+    setLoadingReputation(true);
+    setReputationClippings([]);
+    try {
+      const response = await fetch(`/api/reputacao/${cand.id_candidato}`);
+      if (response.ok) {
+        const data = await response.json();
+        setReputationClippings(Array.isArray(data) ? data : []);
+      } else {
+        setReputationClippings([]);
+      }
+    } catch (err) {
+      console.error("Erro ao buscar dossiê de reputação:", err);
+      setReputationClippings([]);
+    } finally {
+      setLoadingReputation(false);
+    }
+  };
   
   // AI Audit State
   const [aiAuditText, setAiAuditText] = useState<string>("");
@@ -2784,11 +2812,24 @@ export default function App() {
                                 </div>
                               </div>
 
-                              <div className="text-right shrink-0 flex-shrink-0 min-w-[75px]">
-                                <span className="font-black text-sm text-pink-700 font-mono block">
-                                  R$ {cand.costPerVote.toFixed(2)}
-                                </span>
-                                <span className="text-[9px] text-slate-400 block font-medium uppercase">Por Eleitor</span>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenReputationDossier(cand);
+                                  }}
+                                  className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 hover:text-indigo-800 text-[10px] font-black rounded-lg border border-indigo-100 flex items-center gap-1 transition-all shadow-2xs cursor-pointer shrink-0"
+                                >
+                                  <Brain className="w-3 h-3 text-indigo-600" />
+                                  <span>Dossiê IA</span>
+                                </button>
+
+                                <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
+                                  <span className="font-black text-sm text-pink-700 font-mono block">
+                                    R$ {cand.costPerVote.toFixed(2)}
+                                  </span>
+                                  <span className="text-[9px] text-slate-400 block font-medium uppercase">Por Eleitor</span>
+                                </div>
                               </div>
                             </div>
 
@@ -2855,7 +2896,7 @@ export default function App() {
                         <div
                           key={cand.id_candidato}
                           onClick={() => fetchDossier(cand.nome_urna, selectedYear)}
-                          className="p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 min-w-0 w-full"
+                          className="p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 min-w-0 w-full group"
                         >
                           <div className="flex items-center gap-2.5 min-w-0 flex-1">
                             <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 overflow-hidden shrink-0 flex-shrink-0">
@@ -2870,17 +2911,32 @@ export default function App() {
                               </p>
                             </div>
                           </div>
-                          {selectedYear === 2026 ? (
-                            <div className="text-right shrink-0 flex-shrink-0 min-w-[75px]">
-                              <p className="text-[10px] text-purple-500 font-black uppercase leading-none">Campanha</p>
-                              <p className="text-xs font-black text-purple-600 mt-0.5">Ativa</p>
-                            </div>
-                          ) : (
-                            <div className="text-right shrink-0 flex-shrink-0 min-w-[75px]">
-                              <p className="text-[10px] text-slate-400 font-medium uppercase leading-none">Custo/Voto</p>
-                              <p className="text-xs font-extrabold text-slate-800 mt-0.5">R$ {costPerVote.toFixed(2)}</p>
-                            </div>
-                          )}
+
+                          <div className="flex items-center gap-3">
+                            {/* Intelligent Dossier Button directly on card */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenReputationDossier(cand);
+                              }}
+                              className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 hover:text-indigo-800 text-[10px] font-black rounded-lg border border-indigo-100 flex items-center gap-1 transition-all shadow-2xs cursor-pointer shrink-0"
+                            >
+                              <Brain className="w-3 h-3 text-indigo-600" />
+                              <span>Dossiê IA</span>
+                            </button>
+
+                            {selectedYear === 2026 ? (
+                              <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
+                                <p className="text-[10px] text-purple-500 font-black uppercase leading-none">Campanha</p>
+                                <p className="text-xs font-black text-purple-600 mt-0.5">Ativa</p>
+                              </div>
+                            ) : (
+                              <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
+                                <p className="text-[10px] text-slate-400 font-medium uppercase leading-none">Custo/Voto</p>
+                                <p className="text-xs font-extrabold text-slate-800 mt-0.5">R$ {costPerVote.toFixed(2)}</p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       );
                     })
@@ -2928,6 +2984,15 @@ export default function App() {
                   </p>
 
                   <div className="flex flex-col gap-2 w-full mt-6">
+                    {/* Intelligent Dossier Button */}
+                    <button
+                      onClick={() => handleOpenReputationDossier(selectedCandidate)}
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black rounded-lg shadow-xs w-full transition-all duration-150 cursor-pointer"
+                    >
+                      <Brain className="w-3.5 h-3.5 text-indigo-100" />
+                      <span>Dossiê de Inteligência</span>
+                    </button>
+
                     {/* Export Dossier Button */}
                     <button
                       id="btn-exportar-dossie"
@@ -4068,6 +4133,293 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* MODAL DE DOSSIÊ DE REPUTAÇÃO / INTELIGÊNCIA */}
+      <AnimatePresence>
+        {reputationModalOpen && reputationCandidate && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-4xl bg-[#090d16] text-slate-100 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              {/* Top title bar */}
+              <div className="px-6 py-4 bg-slate-950 border-b border-slate-800/80 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
+                    Gabinete IA • Monitoramento de Reputação e Inteligência
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setReputationModalOpen(false)}
+                  className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable content area */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* CABEÇALHO */}
+                <div className="bg-slate-950/60 p-5 border border-slate-800/60 rounded-xl flex flex-col md:flex-row md:items-center gap-4">
+                  <div className="w-20 h-20 rounded-full border-2 border-indigo-500/30 bg-slate-900 overflow-hidden shrink-0 mx-auto md:mx-0">
+                    <CandidateAvatar candidatoId={reputationCandidate.id_candidato} nomeUrna={reputationCandidate.nome_urna} fotoUrl={reputationCandidate.foto_url} variant="large" />
+                  </div>
+                  <div className="text-center md:text-left flex-1 space-y-1">
+                    <span className="px-2.5 py-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-md text-[10px] font-black uppercase tracking-wider">
+                      {reputationCandidate.partido}
+                    </span>
+                    <h2 className="text-2xl font-black tracking-tight text-white uppercase mt-1">
+                      {reputationCandidate.nome_urna}
+                    </h2>
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                      {reputationCandidate.cargo || "DEPUTADO DISTRITAL"}
+                    </p>
+                  </div>
+                </div>
+
+                {loadingReputation ? (
+                  <div className="py-24 flex flex-col items-center justify-center gap-3">
+                    <div className="w-8 h-8 border-2 border-slate-800 border-t-indigo-500 rounded-full animate-spin"></div>
+                    <p className="text-xs text-slate-400 font-mono">
+                      Consultando canais e banco de dados de inteligência de reputação...
+                    </p>
+                  </div>
+                ) : reputationClippings.length === 0 ? (
+                  /* STATE VAZIO ELEGANTE */
+                  <div className="py-16 text-center bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-8 flex flex-col items-center max-w-lg mx-auto">
+                    <div className="p-4 bg-slate-900 text-slate-400 rounded-full mb-3 border border-slate-800">
+                      <ShieldAlert className="w-8 h-8 text-indigo-400" />
+                    </div>
+                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
+                      O Agente de Inteligência ainda não detectou movimentações de mídia relevantes para este perfil nas últimas 24h.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {/* TERMÔMETRO DE REPUTAÇÃO */}
+                    {(() => {
+                      // Calculate average impact score and aggregated sentiment
+                      const totalImpact = reputationClippings.reduce((sum, item) => sum + (item.impacto_score || 0), 0);
+                      const avgImpact = Math.round(totalImpact / reputationClippings.length);
+                      
+                      // Sentiment aggregation (most frequent or worst case)
+                      const sentiments = reputationClippings.map(item => item.sentimento || "Neutro");
+                      const sentimentCount = sentiments.reduce((acc, curr) => {
+                        acc[curr] = (acc[curr] || 0) + 1;
+                        return acc;
+                      }, {} as Record<string, number>);
+                      
+                      // For testing/visualizing, we just take the first clipping's sentiment as a highlight
+                      const primarySentiment = reputationClippings[0]?.sentimento || "Neutro";
+                      
+                      // Semantic colors
+                      const isNegative = primarySentiment.toLowerCase().includes("negativ") || primarySentiment.toLowerCase().includes("crise");
+                      const isPositive = primarySentiment.toLowerCase().includes("positiv") || primarySentiment.toLowerCase().includes("oportunidad");
+                      
+                      let sentimentBg = "bg-slate-900 border-slate-800 text-slate-400";
+                      let sentimentDot = "bg-slate-400";
+                      let sentimentBorder = "border-slate-800/60";
+                      
+                      if (isNegative) {
+                        sentimentBg = "bg-rose-950/40 border-rose-900/40 text-rose-400";
+                        sentimentDot = "bg-rose-500 animate-pulse";
+                        sentimentBorder = "border-rose-900/40";
+                      } else if (isPositive) {
+                        sentimentBg = "bg-emerald-950/40 border-emerald-900/40 text-emerald-400";
+                        sentimentDot = "bg-emerald-500 animate-pulse";
+                        sentimentBorder = "border-emerald-900/40";
+                      }
+
+                      return (
+                        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 border p-4 rounded-xl ${sentimentBorder} bg-slate-950/40`}>
+                          <div className="flex items-center gap-3">
+                            <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                              <Brain className="w-6 h-6 text-indigo-400" />
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Sentimento Geral de Mídia</span>
+                              <div className="flex items-center gap-1.5 mt-1">
+                                <span className={`w-2.5 h-2.5 rounded-full ${sentimentDot}`}></span>
+                                <span className={`text-sm font-black uppercase tracking-tight ${isNegative ? "text-rose-400" : isPositive ? "text-emerald-400" : "text-slate-300"}`}>
+                                  {primarySentiment}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                              <ShieldAlert className="w-6 h-6 text-amber-400" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex justify-between items-center">
+                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Índice de Impacto</span>
+                                <span className="text-sm font-black text-amber-400 font-mono">{avgImpact}/100</span>
+                              </div>
+                              <div className="w-full h-1.5 bg-slate-900 border border-slate-800 rounded-full mt-1 overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full ${avgImpact > 75 ? "bg-red-500" : avgImpact > 45 ? "bg-amber-500" : "bg-emerald-500"}`}
+                                  style={{ width: `${avgImpact}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* RADAR DE CRISES E OPORTUNIDADES */}
+                    {(() => {
+                      // Aggregate all risks and opportunities from clips
+                      const allRiscos = reputationClippings.flatMap(item => Array.isArray(item.riscos) ? item.riscos : []);
+                      const allOportunidades = reputationClippings.flatMap(item => Array.isArray(item.oportunidades) ? item.oportunidades : []);
+
+                      if (allRiscos.length === 0 && allOportunidades.length === 0) return null;
+
+                      return (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Coluna Riscos */}
+                          <div className="bg-slate-950/60 p-4 border border-rose-950/30 rounded-xl space-y-3">
+                            <h4 className="text-xs font-black text-rose-400 uppercase tracking-widest flex items-center gap-1.5">
+                              <AlertTriangle className="w-4 h-4 text-rose-500 shrink-0" />
+                              <span>Radar de Crises (Riscos)</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {allRiscos.map((risco, rIdx) => (
+                                <li key={rIdx} className="text-xs text-slate-300 flex items-start gap-2 bg-slate-900/50 p-2.5 border border-slate-800/40 rounded-lg text-left">
+                                  <span className="text-rose-500 shrink-0 font-bold mt-0.5">•</span>
+                                  <span className="font-medium leading-relaxed">{risco}</span>
+                                </li>
+                              ))}
+                              {allRiscos.length === 0 && (
+                                <li className="text-xs text-slate-500 font-medium italic py-2 text-left">Nenhum fator crítico de risco identificado.</li>
+                              )}
+                            </ul>
+                          </div>
+
+                          {/* Coluna Oportunidades */}
+                          <div className="bg-slate-950/60 p-4 border border-emerald-950/30 rounded-xl space-y-3">
+                            <h4 className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
+                              <Target className="w-4 h-4 text-emerald-500 shrink-0" />
+                              <span>Recomendações e Oportunidades</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {allOportunidades.map((op, oIdx) => (
+                                <li key={oIdx} className="text-xs text-slate-300 flex items-start gap-2 bg-slate-900/50 p-2.5 border border-slate-800/40 rounded-lg text-left">
+                                  <span className="text-emerald-500 shrink-0 font-bold mt-0.5">•</span>
+                                  <span className="font-medium leading-relaxed">{op}</span>
+                                </li>
+                              ))}
+                              {allOportunidades.length === 0 && (
+                                <li className="text-xs text-slate-500 font-medium italic py-2 text-left">Nenhuma recomendação preventiva extraída.</li>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* CLIPPING (Linha do Tempo) */}
+                    <div className="space-y-4">
+                      <div className="border-b border-slate-800/60 pb-2">
+                        <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                          <FileText className="w-4 h-4 text-indigo-400" />
+                          <span>Clipping de Mídia Recente ({reputationClippings.length})</span>
+                        </h4>
+                      </div>
+
+                      <div className="space-y-3.5">
+                        {reputationClippings.map((clip) => (
+                          <div
+                            key={clip.id_clipping}
+                            className="bg-slate-950/80 border border-slate-800 hover:border-slate-700/80 rounded-xl p-4 transition-all space-y-3 text-left"
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 border-b border-slate-900 pb-2">
+                              <div>
+                                <h3 className="text-sm font-extrabold text-white leading-snug">
+                                  {clip.titulo}
+                                </h3>
+                                <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                                  <span className="text-[10px] font-bold text-slate-400 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md">
+                                    {clip.fonte}
+                                  </span>
+                                  <span className="text-[10px] text-slate-500 font-mono font-medium">
+                                    {clip.data_publicacao}
+                                  </span>
+                                  <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                                    clip.sentimento.toLowerCase().includes("negativ") || clip.sentimento.toLowerCase().includes("crise")
+                                      ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                                      : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                  }`}>
+                                    {clip.sentimento}
+                                  </span>
+                                  {clip.tema_principal && (
+                                    <span className="text-[9px] font-extrabold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded-md">
+                                      {clip.tema_principal}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            <p className="text-xs text-slate-300 font-medium leading-relaxed">
+                              {clip.resumo_curto}
+                            </p>
+
+                            {clip.resumo_executivo && (
+                              <div className="p-3 bg-slate-900/60 border border-slate-850 rounded-lg">
+                                <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">Análise do Agente NLP (Resumo Executivo)</span>
+                                <p className="text-[11px] text-slate-400 leading-relaxed font-medium mt-1">
+                                  {clip.resumo_executivo}
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Keywords and metadata tags */}
+                            <div className="flex flex-wrap gap-1.5 pt-1">
+                              {Array.isArray(clip.palavras_chave) && clip.palavras_chave.map((kw: string, kwIdx: number) => (
+                                <span key={kwIdx} className="text-[9px] font-mono font-bold text-slate-400 bg-slate-900 border border-slate-850 px-2 py-0.5 rounded">
+                                  #{kw}
+                                </span>
+                              ))}
+                            </div>
+
+                            <div className="flex justify-end pt-2 border-t border-slate-900">
+                              <a
+                                href={clip.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+                              >
+                                <span>Ver Fonte Original</span>
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Bottom footer action bar */}
+              <div className="px-6 py-4 bg-slate-950 border-t border-slate-850 flex justify-end">
+                <button
+                  onClick={() => setReputationModalOpen(false)}
+                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
+                >
+                  Fechar
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -855,10 +855,32 @@ app.get("/api/historico_politico/:nome_urna/:ano", async (req, res) => {
 app.get("/api/reputacao/:candidatoId", async (req, res) => {
   try {
     const { candidatoId } = req.params;
-    const candId = parseInt(candidatoId, 10);
+    let candId = parseInt(candidatoId, 10);
 
     if (isNaN(candId)) {
       return res.status(400).json({ error: "ID do candidato inválido" });
+    }
+
+    // Map hardcoded 2026 IDs to their database candidate records using nome_urna
+    if (candId > 20000) {
+      const mapping: Record<number, string> = {
+        20261: "Fábio Felix",
+        20262: "Chico Vigilante",
+        20263: "Max Maciel",
+        20264: "Robério Negreiros",
+        20265: "Eduardo Pedrosa",
+        20266: "Dayse Amarilio",
+        20267: "Gabriel Magno",
+        20268: "Doutora Jane",
+        20269: "Hermeto"
+      };
+      const nomeUrna = mapping[candId];
+      if (nomeUrna) {
+        const dbCand = await dbGet("SELECT id_candidato FROM Candidatos WHERE nome_urna = ? LIMIT 1", [nomeUrna]);
+        if (dbCand && dbCand.id_candidato) {
+          candId = dbCand.id_candidato;
+        }
+      }
     }
 
     const query = `
