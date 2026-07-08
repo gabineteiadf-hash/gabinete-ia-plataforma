@@ -2646,10 +2646,10 @@
   },
   {
     "nome_urna": "Juarezão",
-    "nome_completo": "Juarez Oliveira",
+    "nome_completo": "JUAREZ CARLOS DE LIMA OLIVEIRA",
     "partido": "PRTB",
     "ano_eleicao": 2014,
-    "total_votos": 2564,
+    "total_votos": 15923,
     "foto_url": "/assets/fotos/juarezao.jpg",
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
@@ -2713,6 +2713,11 @@
         "votos": 64
       },
       {
+        "zona": 12,
+        "ra": "Zona não mapeada",
+        "votos": 68
+      },
+      {
         "zona": 13,
         "ra": "Samambaia",
         "votos": 201
@@ -2730,7 +2735,7 @@
       {
         "zona": 16,
         "ra": "Ceilândia",
-        "votos": 328
+        "votos": 13619
       },
       {
         "zona": 17,

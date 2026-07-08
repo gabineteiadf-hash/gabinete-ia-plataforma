@@ -49,6 +49,7 @@ function getAliasMatch(sheetName: string): string | null {
   if (clean === "PEDRO PAULO DE OLIVEIRA") return "PEPA";
   if (clean === "CHRISTIANNO NOGUEIRA ARAUJO") return "CRISTIANO ARAUJO";
   if (clean === "FRANCISCO LEITE DE OLIVEIRA") return "CHICO LEITE";
+  if (clean === "JUAREZ CARLOS DE LIMA OLIVEIRA") return "JUAREZÃO";
   if (clean.includes("FABIO FELIX")) return "FABIO FELIX";
   return null;
 }
@@ -215,10 +216,17 @@ async function getSpreadsheetIdFromFolder(folderId: string): Promise<string> {
     const sheetName = cells[1];
     const ra = cells[2];
     const zona = parseInt(cells[3], 10);
-    const votos = parseInt(cells[4], 10);
+    let votos = parseInt(cells[4], 10);
 
     if (isNaN(ano) || !sheetName || !ra || isNaN(zona) || isNaN(votos)) {
       continue;
+    }
+
+    // OVERRIDE FOR JUAREZÃO 2014 DATA CORRECTION (Zone 16 should be 13619 instead of 328)
+    if (cleanString(sheetName) === "JUAREZ CARLOS DE LIMA OLIVEIRA" && ano === 2014) {
+      if (zona === 16) {
+        votos = 13619;
+      }
     }
 
     // Compose strict key: NOME_CANDIDATO + ANO + ZONA + LOCALIDADE_RA
@@ -238,6 +246,18 @@ async function getSpreadsheetIdFromFolder(folderId: string): Promise<string> {
         votos
       });
     }
+  }
+
+  // OVERRIDE FOR JUAREZÃO 2014 DATA CORRECTION (Inject missing Zone 12 "Zona não mapeada" of 68 votes)
+  const juarezZone12Key = "JUAREZ CARLOS DE LIMA OLIVEIRA#2014#12#ZONA NAO MAPEADA";
+  if (!groupedVotes.has(juarezZone12Key)) {
+    groupedVotes.set(juarezZone12Key, {
+      sheetName: "JUAREZ CARLOS DE LIMA OLIVEIRA",
+      ano: 2014,
+      zona: 12,
+      ra: "Zona não mapeada",
+      votos: 68
+    });
   }
 
   console.log(`[Aggregation] Successfully consolidated into ${groupedVotes.size} unique geoelectoral voting records.`);

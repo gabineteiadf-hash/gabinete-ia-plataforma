@@ -2575,8 +2575,16 @@ export default function App() {
             )}
 
             {/* If we are on geoeleitoral and the general tab is active, render the consolidated results dashboard */}
-            {activeMainCard === "geoeleitoral" && geoSubTab === "geral" ? (
-              <div className="flex-1 flex flex-col gap-4">
+            <AnimatePresence mode="wait">
+              {activeMainCard === "geoeleitoral" && geoSubTab === "geral" ? (
+                <motion.div
+                  key="geoeleitoral-geral"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 flex flex-col gap-4"
+                >
                 <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-xl">
                   <h3 className="text-sm font-bold text-purple-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
                     <span>📊</span> PAINEL GEOELEITORAL DE RESULTADOS CONSOLIDADOS
@@ -2686,9 +2694,16 @@ export default function App() {
                     })
                   )}
                 </div>
-              </div>
+              </motion.div>
             ) : activeMainCard === "reputacao" && repSubTab === "geral" ? (
-              <div className="flex-1 flex flex-col gap-4">
+              <motion.div
+                key="reputacao-geral"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-1 flex flex-col gap-4"
+              >
                 <div className="bg-pink-50/50 border border-pink-100 p-4 rounded-xl">
                   <h3 className="text-sm font-bold text-pink-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
                     <span>🧠</span> ESTUDO DE EFICIÊNCIA ELEITORAL ({selectedYear})
@@ -2869,9 +2884,16 @@ export default function App() {
                     })()}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ) : !selectedCandidate ? (
-              <div className="flex-1 flex flex-col gap-4">
+              <motion.div
+                key="search-list"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-1 flex flex-col gap-4"
+              >
                 <div className="text-center py-6">
                   <p className="text-sm text-slate-500 font-medium">
                     Busque e selecione um deputado eleito para detalhar a matriz acima.
@@ -2954,10 +2976,17 @@ export default function App() {
                     })
                   )}
                 </div>
-              </div>
+              </motion.div>
             ) : selectedYear === 2026 ? (
               /* 2026 CANDIDATE FOCUS MODE - HIGH FIDELITY NETFLIX EXPERIENCE */
-              <div className="flex-1">
+              <motion.div
+                key="candidate-2026"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-1"
+              >
                 <CandidateDeepDive2026
                   selectedCandidate={selectedCandidate}
                   onExitProfile={() => {
@@ -2974,10 +3003,17 @@ export default function App() {
                   autoSpeakEnabled={autoSpeakEnabled}
                   handleSetAutoSpeak={setAutoSpeakEnabled}
                 />
-              </div>
+              </motion.div>
             ) : (
               /* ACTIVE SPLIT MATRIX SCREEN (Pixel perfect matched to screenshot) */
-              <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+              <motion.div
+                key="split-matrix"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch"
+              >
                 
                 {/* SPLIT COLUMN 1: Profile card (md:col-span-4) */}
                 <div className={`md:col-span-4 pr-0 md:pr-6 flex flex-col items-center justify-center text-center ${
@@ -3072,8 +3108,16 @@ export default function App() {
                       </p>
                     </div>
                   ) : (
-                    <>
-                      {/* SUB-VIEW 1: ANATOMIA DE GASTOS */}
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeMainCard}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex-1 flex flex-col justify-between"
+                      >
+                        {/* SUB-VIEW 1: ANATOMIA DE GASTOS */}
                   {activeMainCard === "gastos" && (
                     <div className="space-y-4">
                       {/* Title indicator with dollar sign */}
@@ -3432,8 +3476,8 @@ export default function App() {
                       )}
                     </div>
                   )}
-
-                    </>
+                      </motion.div>
+                    </AnimatePresence>
                   )}
 
                   {/* List of other campaigns disputed at the bottom */}
@@ -3464,8 +3508,9 @@ export default function App() {
 
                 </div>
 
-              </div>
+              </motion.div>
             )}
+            </AnimatePresence>
 
           </section>
 
