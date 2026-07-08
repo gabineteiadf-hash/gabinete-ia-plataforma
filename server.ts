@@ -743,6 +743,46 @@ app.get("/api/eleitos/:ano", async (req, res) => {
       return res.status(400).json({ error: "Ano inválido" });
     }
 
+    // Try to load from source-of-truth JSON files to avoid binary DB locking/conflicts
+    const jsonPath = path.join(process.cwd(), `dados_${year}.json`);
+    if (fs.existsSync(jsonPath)) {
+      console.log(`[API /api/eleitos/${year}] Reading directly from source-of-truth JSON file: ${jsonPath}`);
+      const fileContent = fs.readFileSync(jsonPath, "utf-8");
+      const candidatesList = JSON.parse(fileContent);
+      
+      const formatted = candidatesList.map((cand: any, idx: number) => {
+        const fin = cand.financeiro || {};
+        let detailExpenses = fin.detalhe_despesas;
+        if (typeof detailExpenses === "string") {
+          try {
+            detailExpenses = JSON.parse(detailExpenses);
+          } catch (e) {
+            detailExpenses = [];
+          }
+        }
+        return {
+          id_candidato: cand.id_candidato || (idx + 1 + year * 10),
+          nome_urna: cand.nome_urna,
+          nome_completo: cand.nome_completo,
+          partido: cand.partido,
+          ano_eleicao: cand.ano_eleicao,
+          total_votos: cand.total_votos,
+          foto_url: cand.foto_url,
+          cargo: cand.cargo || "Deputado Distrital",
+          situacao: cand.situacao || "Eleito",
+          total_receitas: fin.total_receitas || 0,
+          despesas_contratadas: fin.despesas_contratadas || 0,
+          despesas_pagas: fin.despesas_pagas || 0,
+          maior_fornecedor_nome: fin.maior_fornecedor_nome || "Não Informado",
+          maior_fornecedor_valor: fin.maior_fornecedor_valor || 0,
+          detalhe_despesas: Array.isArray(detailExpenses) ? detailExpenses : []
+        };
+      });
+      
+      formatted.sort((a: any, b: any) => b.total_votos - a.total_votos);
+      return res.json(formatted);
+    }
+
     const query = `
       SELECT 
         c.id_candidato,
@@ -788,6 +828,79 @@ app.get("/api/historico_politico/:nome_urna/:ano", async (req, res) => {
 
     if (isNaN(year)) {
       return res.status(400).json({ error: "Ano inválido" });
+    }
+
+    // Try to load from source-of-truth JSON files to avoid binary DB locking/conflicts
+    const jsonPath = path.join(process.cwd(), `dados_${year}.json`);
+    if (fs.existsSync(jsonPath)) {
+      console.log(`[API /api/historico_politico/${nome_urna}/${year}] Reading from source-of-truth JSON file: ${jsonPath}`);
+      const fileContent = fs.readFileSync(jsonPath, "utf-8");
+      const candidatesList = JSON.parse(fileContent);
+      
+      const cleanTarget = nome_urna.toLowerCase().trim();
+      const candMatch = candidatesList.find((c: any) => 
+        c.nome_urna.toLowerCase().trim() === cleanTarget || 
+        c.nome_completo.toLowerCase().trim() === cleanTarget
+      );
+      
+      if (candMatch) {
+        const fin = candMatch.financeiro || {};
+        let detailExpenses = fin.detalhe_despesas;
+        if (typeof detailExpenses === "string") {
+          try {
+            detailExpenses = JSON.parse(detailExpenses);
+          } catch (e) {
+            detailExpenses = [];
+          }
+        }
+        
+        const mappedGeoVotes = (candMatch.votos || []).map((v: any) => ({
+          zona_eleitoral: v.zona,
+          ra_nome: v.ra,
+          votos: v.votos
+        }));
+        
+        const candidateObj = {
+          id_candidato: candMatch.id_candidato || 99999,
+          nome_urna: candMatch.nome_urna,
+          nome_completo: candMatch.nome_completo,
+          partido: candMatch.partido,
+          ano_eleicao: candMatch.ano_eleicao,
+          total_votos: candMatch.total_votos,
+          foto_url: candMatch.foto_url,
+          cargo: candMatch.cargo || "Deputado Distrital",
+          situacao: candMatch.situacao || "Eleito",
+          total_receitas: fin.total_receitas || 0,
+          despesas_contratadas: fin.despesas_contratadas || 0,
+          despesas_pagas: fin.despesas_pagas || 0,
+          maior_fornecedor_nome: fin.maior_fornecedor_nome || "Não Informado",
+          maior_fornecedor_valor: fin.maior_fornecedor_valor || 0,
+          detalhe_despesas: Array.isArray(detailExpenses) ? detailExpenses : [],
+          votos_geoeleitorais: mappedGeoVotes
+        };
+        
+        let historicalDisputes = [];
+        try {
+          const query = `
+            SELECT ano_eleicao, partido, total_votos, situacao
+            FROM Candidatos
+            WHERE LOWER(nome_urna) = LOWER(?)
+            ORDER BY ano_eleicao DESC
+          `;
+          historicalDisputes = await dbAll(query, [nome_urna]);
+        } catch (e) {
+          historicalDisputes = [{ ano_eleicao: year, partido: candMatch.partido, total_votos: candMatch.total_votos, situacao: candMatch.situacao || "Eleito" }];
+        }
+        
+        if (historicalDisputes.length === 0) {
+          historicalDisputes = [{ ano_eleicao: year, partido: candMatch.partido, total_votos: candMatch.total_votos, situacao: candMatch.situacao || "Eleito" }];
+        }
+        
+        return res.json({
+          candidate: candidateObj,
+          anos_disputados: historicalDisputes
+        });
+      }
     }
 
     // Get specific year details
@@ -948,23 +1061,45 @@ app.get("/api/analise/:ano", async (req, res) => {
       return res.status(400).json({ error: "Ano inválido" });
     }
 
-    // Get all candidates and financial stats for analysis
-    const query = `
-      SELECT 
-        c.nome_urna,
-        c.partido,
-        c.total_votos,
-        rf.total_receitas,
-        rf.despesas_contratadas,
-        rf.despesas_pagas,
-        rf.maior_fornecedor_nome,
-        rf.maior_fornecedor_valor
-      FROM Candidatos c
-      JOIN Resumo_Financeiro rf ON c.id_candidato = rf.id_candidato
-      WHERE c.ano_eleicao = ?
-      ORDER BY rf.despesas_contratadas DESC
-    `;
-    const stats = await dbAll(query, [year]);
+    let stats: any[] = [];
+    const jsonPath = path.join(process.cwd(), `dados_${year}.json`);
+    if (fs.existsSync(jsonPath)) {
+      console.log(`[API /api/analise/${year}] Reading stats directly from source-of-truth JSON file: ${jsonPath}`);
+      const fileContent = fs.readFileSync(jsonPath, "utf-8");
+      const candidatesList = JSON.parse(fileContent);
+      stats = candidatesList.map((cand: any) => {
+        const fin = cand.financeiro || {};
+        return {
+          nome_urna: cand.nome_urna,
+          partido: cand.partido,
+          total_votos: cand.total_votos,
+          total_receitas: fin.total_receitas || 0,
+          despesas_contratadas: fin.despesas_contratadas || 0,
+          despesas_pagas: fin.despesas_pagas || 0,
+          maior_fornecedor_nome: fin.maior_fornecedor_nome || "Não Informado",
+          maior_fornecedor_valor: fin.maior_fornecedor_valor || 0
+        };
+      });
+      stats.sort((a, b) => b.despesas_contratadas - a.despesas_contratadas);
+    } else {
+      // Get all candidates and financial stats for analysis
+      const query = `
+        SELECT 
+          c.nome_urna,
+          c.partido,
+          c.total_votos,
+          rf.total_receitas,
+          rf.despesas_contratadas,
+          rf.despesas_pagas,
+          rf.maior_fornecedor_nome,
+          rf.maior_fornecedor_valor
+        FROM Candidatos c
+        JOIN Resumo_Financeiro rf ON c.id_candidato = rf.id_candidato
+        WHERE c.ano_eleicao = ?
+        ORDER BY rf.despesas_contratadas DESC
+      `;
+      stats = await dbAll(query, [year]);
+    }
 
     if (stats.length === 0) {
       return res.status(404).json({ error: `Nenhum dado encontrado para o ano ${year}` });

@@ -109,6 +109,8 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
     "geral" | "reputacao" | "redes" | "oraculo" | "geoeleitoral" | "benchmark" | "cruzamento" | "demandas" | "marketing" | "campanhas"
   >("geral");
 
+  const [activeSocialTab, setActiveSocialTab] = useState<"instagram" | "facebook" | "tiktok" | "youtube">("instagram");
+
   // Collapsible Sidebar Menus (Accordions)
   const [openMonitoramento, setOpenMonitoramento] = useState<boolean>(true);
   const [openEngenharia, setOpenEngenharia] = useState<boolean>(true);
@@ -122,10 +124,6 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
 
   // Marketing age group selector
   const [selectedDemographic, setSelectedDemographic] = useState<"jovens" | "adultos" | "seniors">("jovens");
-
-  // Local Oráculo input state
-  const [localChatInput, setLocalChatInput] = useState<string>("");
-  const localChatEndRef = useRef<HTMLDivElement | null>(null);
 
   // Fetch both endpoints
   useEffect(() => {
@@ -165,47 +163,29 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
     };
   }, [selectedCandidate.id_candidato]);
 
-  // Scroll local chat to bottom on updates
-  useEffect(() => {
-    localChatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [oraculoChat]);
+  // Action to trigger and focus the global chat assistant
+  const handleTriggerGlobalOraculo = (promptText: string) => {
+    setActiveTab("oraculo");
+    setOraculoInput(promptText);
+    
+    setTimeout(() => {
+      const inputEl = document.getElementById("oraculo-chat-input");
+      if (inputEl) {
+        inputEl.scrollIntoView({ behavior: "smooth" });
+        inputEl.focus();
+      }
+    }, 150);
+  };
 
   // Handle Analisar com IA click from news card
   const handleAnalyzeWithAI = (titulo: string, resumo: string) => {
     const promptText = `Analise o impacto político desta notícia atual para o candidato ${selectedCandidate.nome_urna}: [${titulo.toUpperCase()} - ${resumo}]`;
-    setLocalChatInput(promptText);
-    
-    setTimeout(() => {
-      const inputEl = document.getElementById("oraculo-chat-input-fixed");
-      if (inputEl) {
-        inputEl.scrollIntoView({ behavior: "smooth" });
-        inputEl.focus();
-      }
-    }, 150);
+    handleTriggerGlobalOraculo(promptText);
   };
 
   // Sends recommendation prompts directly to Oraculo from marketing tab
   const handleSendPromptToOraculo = (promptText: string) => {
-    setLocalChatInput(promptText);
-    setTimeout(() => {
-      const inputEl = document.getElementById("oraculo-chat-input-fixed");
-      if (inputEl) {
-        inputEl.scrollIntoView({ behavior: "smooth" });
-        inputEl.focus();
-      }
-    }, 150);
-  };
-
-  // Submit local chat inside candidate profile
-  const handleLocalChatSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!localChatInput.trim()) return;
-    setOraculoInput(localChatInput.trim());
-    setLocalChatInput("");
-    // Give state time to update
-    setTimeout(() => {
-      handleSendOraculo();
-    }, 35);
+    handleTriggerGlobalOraculo(promptText);
   };
 
   // Pre-process sentiment arrays for clipping carousels
@@ -246,15 +226,47 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
 
   const activeDemo = demographicDetails[selectedDemographic];
 
-  // Scraping defaults
-  const scraping = apiData?.scraping_redes || {
-    plataforma: "Instagram",
-    tempo: "Há 2 horas",
-    ultimo_post: "Focando no diálogo com a comunidade. Juntos podemos transformar as demandas locais em projetos reais.",
-    likes: 1250,
-    comentarios: 340,
-    engajamento: "3.8%"
+  // Dynamic scraping data per platform
+  const socialData = {
+    instagram: {
+      plataforma: "Instagram",
+      tempo: "Há 2 horas",
+      ultimo_post: `Dia de visitar as obras e dialogar com os moradores de Ceilândia. O progresso do Distrito Federal não pode parar! 💪🇧🇷`,
+      likes: Math.round((apiData?.scraping_redes?.likes || 1250) * 1.0),
+      comentarios: Math.round((apiData?.scraping_redes?.comentarios || 340) * 1.0),
+      engajamento: (parseFloat(apiData?.scraping_redes?.engajamento) || 3.8).toFixed(1) + "%",
+      gargalo: "Forte engajamento visual, mas necessita responder a comentários negativos mais rapidamente nas transmissões ao vivo."
+    },
+    facebook: {
+      plataforma: "Facebook",
+      tempo: "Há 4 horas",
+      ultimo_post: `Prestando contas sobre o nosso mandato e os investimentos na segurança pública local. Compromisso e transparência sempre com as famílias do DF.`,
+      likes: Math.round((apiData?.scraping_redes?.likes || 1250) * 0.75),
+      comentarios: Math.round((apiData?.scraping_redes?.comentarios || 340) * 1.5),
+      engajamento: ((parseFloat(apiData?.scraping_redes?.engajamento) || 3.8) * 0.8).toFixed(1) + "%",
+      gargalo: "Público mais velho e engajador, porém com alto volume de compartilhamentos orgânicos que necessitam de moderação de fake news."
+    },
+    tiktok: {
+      plataforma: "TikTok",
+      tempo: "Há 1 dia",
+      ultimo_post: `Bastidores da nossa correria diária para fiscalizar o transporte público do DF! Quem acompanha sabe o trabalho duro. 🚌💨 #Fiscalização #DF`,
+      likes: Math.round((apiData?.scraping_redes?.likes || 1250) * 4.2),
+      comentarios: Math.round((apiData?.scraping_redes?.comentarios || 340) * 3.8),
+      engajamento: ((parseFloat(apiData?.scraping_redes?.engajamento) || 3.8) * 2.1).toFixed(1) + "%",
+      gargalo: "Grande viralização de vídeos curtos, porém difícil conversão de visualizações de jovens em engajamento orgânico de voto real."
+    },
+    youtube: {
+      plataforma: "YouTube",
+      tempo: "Há 2 dias",
+      ultimo_post: `ENTREVISTA COMPLETA: Plano de Ação, Desafios da Educação Pública e Geração de Emprego para os jovens do Distrito Federal nos próximos anos.`,
+      likes: Math.round((apiData?.scraping_redes?.likes || 1250) * 0.45),
+      comentarios: Math.round((apiData?.scraping_redes?.comentarios || 340) * 0.9),
+      engajamento: ((parseFloat(apiData?.scraping_redes?.engajamento) || 3.8) * 0.4).toFixed(1) + "%",
+      gargalo: "Excelente fixação de conteúdo denso em vídeo longo, mas taxa de retenção média de 40% indica necessidade de cortes dinâmicos."
+    }
   };
+
+  const scraping = socialData[activeSocialTab];
 
   // Local demands
   const demandas = apiData?.mapeamento_demandas || [
@@ -360,10 +372,10 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
   const totalVotesFormatted = selectedCandidate.total_votos ? selectedCandidate.total_votos.toLocaleString("pt-BR") : "36.555";
 
   return (
-    <div className="w-full grid grid-cols-1 xl:grid-cols-12 gap-6 text-slate-200 items-start" id="deep-dive-workspace-2026">
+    <div className="w-full flex flex-col xl:flex-row gap-6 text-slate-200 items-start animate-fade-in" id="deep-dive-workspace-2026">
       
-      {/* ================= COLUMN 1 (3/12 Cols): ANCHOR CARD & CONTROL MENU SIDEBAR ================= */}
-      <div className="col-span-1 xl:col-span-3 flex flex-col gap-4">
+      {/* ================= COLUMN 1: ANCHOR CARD & METRICS BADGES (w-72 fixed on desktop) ================= */}
+      <div className="w-full xl:w-72 flex-shrink-0 flex flex-col gap-4">
         
         {/* PROFILE ANCHOR CARD with Glassmorphism */}
         <div className="bg-slate-900/40 backdrop-blur-lg border border-slate-700/85 rounded-2xl p-5 text-center space-y-4 shadow-[0_4px_30px_rgba(0,0,0,0.4)] relative overflow-hidden">
@@ -434,211 +446,234 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
           </div>
         </div>
 
-        {/* ACCORDION VERTICAL NAVIGATION MENU */}
-        <div className="bg-slate-900/40 backdrop-blur-lg border border-slate-700/85 rounded-2xl p-3.5 shadow-xl space-y-3.5 text-left">
-          <span className="text-[9px] font-black tracking-widest text-slate-500 uppercase px-2 block">Sistemas de Comando</span>
-          
-          {/* VISÃO GERAL */}
-          <button
-            onClick={() => setActiveSubTab("geral")}
-            className={`w-full py-2.5 px-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer ${
-              activeSubTab === "geral"
-                ? "bg-gradient-to-r from-cyan-500/10 to-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.15)] border border-cyan-500/30"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-            }`}
-          >
-            <Grid className="w-4 h-4 text-cyan-500" />
-            <span>Visão Geral</span>
-          </button>
-
-          {/* ACCORDION 1: MONITORAMENTO DIGITAL */}
-          <div className="space-y-1">
-            <button
-              onClick={() => setOpenMonitoramento(!openMonitoramento)}
-              className="w-full py-1.5 px-2 rounded-lg text-[10px] font-extrabold text-slate-400 hover:text-slate-200 uppercase tracking-wider flex items-center justify-between transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-fuchsia-400" />
-                <span>📂 Monitoramento Digital</span>
-              </span>
-              {openMonitoramento ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
-            </button>
-            
-            {openMonitoramento && (
-              <div className="pl-3.5 border-l border-slate-800 ml-2.5 space-y-1.5 pt-1">
-                <button
-                  onClick={() => setActiveSubTab("reputacao")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "reputacao"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Reputação & Mídia</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("redes")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "redes"
-                      ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <Instagram className="w-3.5 h-3.5 text-fuchsia-400" />
-                  <span>Redes Sociais</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("oraculo")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "oraculo"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Oráculo Local</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* ACCORDION 2: ENGENHARIA & HISTÓRICO */}
-          <div className="space-y-1">
-            <button
-              onClick={() => setOpenEngenharia(!openEngenharia)}
-              className="w-full py-1.5 px-2 rounded-lg text-[10px] font-extrabold text-slate-400 hover:text-slate-200 uppercase tracking-wider flex items-center justify-between transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-cyan-400" />
-                <span>📂 Engenharia & Histórico</span>
-              </span>
-              {openEngenharia ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
-            </button>
-            
-            {openEngenharia && (
-              <div className="pl-3.5 border-l border-slate-800 ml-2.5 space-y-1.5 pt-1">
-                <button
-                  onClick={() => setActiveSubTab("geoeleitoral")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "geoeleitoral"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Eng. Geoeleitoral</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("benchmark")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "benchmark"
-                      ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <BarChart3 className="w-3.5 h-3.5 text-fuchsia-400" />
-                  <span>Benchmark</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("cruzamento")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "cruzamento"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <ArrowLeftRight className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Cruzamento</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* ACCORDION 3: CAMPANHA EM CAMPO */}
-          <div className="space-y-1">
-            <button
-              onClick={() => setOpenCampanhas(!openCampanhas)}
-              className="w-full py-1.5 px-2 rounded-lg text-[10px] font-extrabold text-slate-400 hover:text-slate-200 uppercase tracking-wider flex items-center justify-between transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-fuchsia-400" />
-                <span>📂 Campanha em Campo</span>
-              </span>
-              {openCampanhas ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
-            </button>
-            
-            {openCampanhas && (
-              <div className="pl-3.5 border-l border-slate-800 ml-2.5 space-y-1.5 pt-1">
-                <button
-                  onClick={() => setActiveSubTab("demandas")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "demandas"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Demandas Locais</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("marketing")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "marketing"
-                      ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-fuchsia-400" />
-                  <span>Diretrizes de Marketing</span>
-                </button>
-                <button
-                  onClick={() => setActiveSubTab("campanhas")}
-                  className={`w-full py-2 px-2.5 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer ${
-                    activeSubTab === "campanhas"
-                      ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30"
-                  }`}
-                >
-                  <Target className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>QG Ativo</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-        </div>
-      </div>
-
-      {/* ================= COLUMN 2 (5/12 Cols): THE DYNAMIC PALCO ================= */}
-      <div className="col-span-1 xl:col-span-5 flex flex-col gap-6">
-        
-        {/* DATA BADGES ("Badges de Inteligência") with neon outlines & glassmorphism */}
-        <div className="flex flex-row flex-wrap gap-2.5">
-          {/* Badges de Doutora Jane ou Candidato Selecionado */}
-          <div className="flex-1 min-w-[130px] bg-slate-900/40 backdrop-blur-md border border-cyan-500/35 shadow-[0_0_12px_rgba(34,211,238,0.2)] rounded-xl px-3.5 py-2 flex items-center gap-2 hover:border-cyan-400 hover:shadow-[0_0_18px_rgba(34,211,238,0.35)] transition-all">
-            <Award className="w-4 h-4 text-cyan-400 shrink-0" />
+        {/* 3 INTELLIGENCE METRIC BADGES STACKED VERTICALLY - COMPACT & ELEGANT */}
+        <div className="flex flex-col gap-2.5">
+          <div className="bg-slate-900/40 backdrop-blur-md border border-cyan-500/35 shadow-[0_0_12px_rgba(34,211,238,0.1)] rounded-xl px-3.5 py-2.5 flex items-center gap-3 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(34,211,238,0.25)] transition-all">
+            <Award className="w-5 h-5 text-cyan-400 shrink-0" />
             <div className="text-left">
               <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block leading-none">Votação 2026</span>
-              <span className="text-xs font-black text-white font-mono mt-0.5 block">{isJane ? "36.555 Votos Totais" : `${totalVotesFormatted} Votos Totais`}</span>
+              <span className="text-xs font-black text-white font-mono mt-1 block">{isJane ? "36.555 Votos Totais" : `${totalVotesFormatted} Votos Totais`}</span>
             </div>
           </div>
 
-          <div className="flex-1 min-w-[130px] bg-slate-900/40 backdrop-blur-md border border-fuchsia-500/35 shadow-[0_0_12px_rgba(217,70,239,0.2)] rounded-xl px-3.5 py-2 flex items-center gap-2 hover:border-fuchsia-400 hover:shadow-[0_0_18px_rgba(217,70,239,0.35)] transition-all">
-            <Facebook className="w-4 h-4 text-fuchsia-400 shrink-0" />
+          <div className="bg-slate-900/40 backdrop-blur-md border border-fuchsia-500/35 shadow-[0_0_12px_rgba(217,70,239,0.1)] rounded-xl px-3.5 py-2.5 flex items-center gap-3 hover:border-fuchsia-400 hover:shadow-[0_0_15px_rgba(217,70,239,0.25)] transition-all">
+            <Facebook className="w-5 h-5 text-fuchsia-400 shrink-0" />
             <div className="text-left">
               <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block leading-none">Alcance FB</span>
-              <span className="text-xs font-black text-white font-mono mt-0.5 block">{isJane ? "51 Mil Seg. Facebook" : "42k Seg. Facebook"}</span>
+              <span className="text-xs font-black text-white font-mono mt-1 block">{isJane ? "51 Mil Seg. Facebook" : "42k Seg. Facebook"}</span>
             </div>
           </div>
 
-          <div className="flex-1 min-w-[130px] bg-slate-900/40 backdrop-blur-md border border-cyan-500/35 shadow-[0_0_12px_rgba(34,211,238,0.2)] rounded-xl px-3.5 py-2 flex items-center gap-2 hover:border-cyan-400 hover:shadow-[0_0_18px_rgba(34,211,238,0.35)] transition-all">
-            <TrendingUp className="w-4 h-4 text-cyan-400 shrink-0" />
+          <div className="bg-slate-900/40 backdrop-blur-md border border-cyan-500/35 shadow-[0_0_12px_rgba(34,211,238,0.1)] rounded-xl px-3.5 py-2.5 flex items-center gap-3 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(34,211,238,0.25)] transition-all">
+            <TrendingUp className="w-5 h-5 text-cyan-400 shrink-0" />
             <div className="text-left">
               <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider block leading-none">Alcance TikTok</span>
-              <span className="text-xs font-black text-white font-mono mt-0.5 block">{isJane ? "860 Seg. TikTok" : "1.2k Seg. TikTok"}</span>
+              <span className="text-xs font-black text-white font-mono mt-1 block">{isJane ? "860 Seg. TikTok" : "1.2k Seg. TikTok"}</span>
             </div>
           </div>
+        </div>
+
+      </div>
+
+      {/* ================= COLUMN 2: THE DYNAMIC PALCO (EXPANDED - flex-1) ================= */}
+      <div className="flex-1 min-w-0 flex flex-col gap-6">
+        
+        {/* SISTEMAS DE COMANDO HORIZONTAL MENU BAR WITH NEON GLOWS & GLASSMORPHISM */}
+        <div className="bg-slate-900/40 backdrop-blur-lg border border-slate-700/80 rounded-2xl p-2.5 shadow-xl flex flex-col gap-2.5">
+          
+          <div className="flex flex-col sm:flex-row gap-1.5 w-full">
+            {/* Visão Geral Tab */}
+            <button
+              onClick={() => setActiveSubTab("geral")}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                activeSubTab === "geral"
+                  ? "bg-gradient-to-r from-cyan-500/10 to-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.15)] border border-cyan-500/30"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30 border border-transparent"
+              }`}
+            >
+              <Grid className="w-4 h-4 text-cyan-500 shrink-0" />
+              <span>Visão Geral</span>
+            </button>
+
+            {/* Monitoramento Tab */}
+            <button
+              onClick={() => {
+                if (!["reputacao", "redes", "oraculo"].includes(activeSubTab)) {
+                  setActiveSubTab("reputacao");
+                }
+              }}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                ["reputacao", "redes", "oraculo"].includes(activeSubTab)
+                  ? "bg-gradient-to-r from-fuchsia-500/10 to-fuchsia-500/20 text-fuchsia-400 shadow-[0_0_15px_rgba(217,70,239,0.15)] border border-fuchsia-500/30"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30 border border-transparent"
+              }`}
+            >
+              <Activity className="w-4 h-4 text-fuchsia-500 shrink-0" />
+              <span>Monitoramento</span>
+            </button>
+
+            {/* Engenharia Tab */}
+            <button
+              onClick={() => {
+                if (!["geoeleitoral", "benchmark", "cruzamento"].includes(activeSubTab)) {
+                  setActiveSubTab("geoeleitoral");
+                }
+              }}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                ["geoeleitoral", "benchmark", "cruzamento"].includes(activeSubTab)
+                  ? "bg-gradient-to-r from-cyan-500/10 to-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.15)] border border-cyan-500/30"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30 border border-transparent"
+              }`}
+            >
+              <Briefcase className="w-4 h-4 text-cyan-500 shrink-0" />
+              <span>Engenharia</span>
+            </button>
+
+            {/* Campanha Tab */}
+            <button
+              onClick={() => {
+                if (!["demandas", "marketing", "campanhas"].includes(activeSubTab)) {
+                  setActiveSubTab("demandas");
+                }
+              }}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
+                ["demandas", "marketing", "campanhas"].includes(activeSubTab)
+                  ? "bg-gradient-to-r from-fuchsia-500/10 to-fuchsia-500/20 text-fuchsia-400 shadow-[0_0_15px_rgba(217,70,239,0.15)] border border-fuchsia-500/30"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/30 border border-transparent"
+              }`}
+            >
+              <Target className="w-4 h-4 text-fuchsia-500 shrink-0" />
+              <span>Campanha</span>
+            </button>
+          </div>
+
+          {/* SECONDARY PILLS BAR FOR CURRENT CATEGORY SUB-OPTIONS */}
+          {activeSubTab !== "geral" && (
+            <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-slate-800/60 pt-2 px-1 animate-fade-in">
+              
+              {/* Monitoramento Sub-tabs */}
+              {["reputacao", "redes", "oraculo"].includes(activeSubTab) && (
+                <>
+                  <button
+                    onClick={() => setActiveSubTab("reputacao")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "reputacao"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <ShieldAlert className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Reputação & Mídia</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab("redes")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "redes"
+                        ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <Instagram className="w-3.5 h-3.5 text-fuchsia-400" />
+                    <span>Redes Sociais</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveSubTab("oraculo");
+                      handleTriggerGlobalOraculo(`Faça uma análise preditiva sobre ${selectedCandidate.nome_urna}`);
+                    }}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "oraculo"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Oráculo Local</span>
+                  </button>
+                </>
+              )}
+
+              {/* Engenharia Sub-tabs */}
+              {["geoeleitoral", "benchmark", "cruzamento"].includes(activeSubTab) && (
+                <>
+                  <button
+                    onClick={() => setActiveSubTab("geoeleitoral")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "geoeleitoral"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Eng. Geoeleitoral</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab("benchmark")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "benchmark"
+                        ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <BarChart3 className="w-3.5 h-3.5 text-fuchsia-400" />
+                    <span>Benchmark</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab("cruzamento")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "cruzamento"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <ArrowLeftRight className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Cruzamento</span>
+                  </button>
+                </>
+              )}
+
+              {/* Campanha Sub-tabs */}
+              {["demandas", "marketing", "campanhas"].includes(activeSubTab) && (
+                <>
+                  <button
+                    onClick={() => setActiveSubTab("demandas")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "demandas"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Demandas Locais</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab("marketing")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "marketing"
+                        ? "bg-fuchsia-950/40 text-fuchsia-400 border border-fuchsia-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-fuchsia-400" />
+                    <span>Diretrizes de Marketing</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveSubTab("campanhas")}
+                    className={`py-1 px-3 rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                      activeSubTab === "campanhas"
+                        ? "bg-cyan-950/40 text-cyan-400 border border-cyan-900/40 shadow-sm"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-850/20 border border-transparent"
+                    }`}
+                  >
+                    <Target className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>QG Ativo</span>
+                  </button>
+                </>
+              )}
+
+            </div>
+          )}
+
         </div>
 
         {/* DYNAMIC PALCO CONTENT AREA with transparent background */}
@@ -878,19 +913,56 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
           {/* VIEW: REDES SOCIAIS & SCRAPING */}
           {activeSubTab === "redes" && (
             <div className="space-y-6 animate-fade-in">
-              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-                <TrendingUp className="w-5 h-5 text-cyan-400 shrink-0" />
-                <div>
-                  <h3 className="text-sm font-black uppercase tracking-widest text-cyan-400">
-                    Análise e Scraping de Redes Sociais
-                  </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Live feed de posts extraídos e métricas de engajamento orgânico do candidato.</p>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <div>
+                    <h3 className="text-sm font-black uppercase tracking-widest text-cyan-400">
+                      Análise e Scraping de Redes Sociais
+                    </h3>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Live feed de posts extraídos e métricas de engajamento orgânico do candidato.</p>
+                  </div>
+                </div>
+
+                {/* Interactive Social Media Platform Bar */}
+                <div className="flex bg-slate-950/60 p-1 border border-slate-800/80 rounded-xl gap-1 shrink-0">
+                  {[
+                    { id: "instagram", label: "Instagram", icon: <Instagram className="w-3.5 h-3.5" />, color: "text-fuchsia-400 border-fuchsia-500/20 shadow-[0_0_15px_rgba(217,70,239,0.15)]" },
+                    { id: "facebook", label: "Facebook", icon: <Facebook className="w-3.5 h-3.5" />, color: "text-blue-400 border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]" },
+                    { id: "tiktok", label: "TikTok", icon: (
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.94 1.15 2.27 1.95 3.73 2.25v3.96c-1.39-.08-2.77-.51-3.95-1.28-.47-.3-.91-.66-1.3-1.07v6.1c0 1.25-.26 2.5-.78 3.65-.95 2.1-2.91 3.7-5.22 4.19-1.36.29-2.79.24-4.13-.15-2.07-.6-3.79-2.14-4.6-4.12-.85-2.06-.79-4.45.16-6.46.99-2.1 3.01-3.66 5.32-4.1 1.04-.2 2.1-.14 3.12.16v4c-.79-.34-1.68-.42-2.52-.22-1.25.3-2.31 1.25-2.73 2.47-.46 1.35-.11 2.92.89 3.89.87.85 2.14 1.18 3.32.84 1.1-.31 1.95-1.27 2.19-2.4.06-.29.08-.59.08-.88V0h-.01z"/>
+                      </svg>
+                    ), color: "text-cyan-400 border-cyan-500/20 shadow-[0_0_15px_rgba(34,211,238,0.15)]" },
+                    { id: "youtube", label: "YouTube", icon: (
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.503a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.503 9.388.503 9.388.503s7.518 0 9.388-.503a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                    ), color: "text-red-500 border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.15)]" }
+                  ].map((tab) => {
+                    const isActive = activeSocialTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveSocialTab(tab.id as any)}
+                        className={`py-1.5 px-3 text-[11px] font-extrabold rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+                          isActive
+                            ? `bg-slate-900 border-cyan-500/30 ${tab.color.split(" ")[0]} ${tab.color.split(" ")[2]}`
+                            : "border-transparent text-slate-400 hover:text-white hover:bg-slate-900/30"
+                        }`}
+                      >
+                        {tab.icon}
+                        <span className="hidden sm:inline">{tab.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* KPI metrics row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-xl flex items-center gap-3">
+                <div className="p-4 bg-[#151f32]/80 backdrop-blur-md border border-slate-800 rounded-xl flex items-center gap-3 shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
                   <div className="p-2.5 bg-cyan-950/40 border border-cyan-900/20 rounded-xl text-cyan-400">
                     <ThumbsUp className="w-5 h-5" />
                   </div>
@@ -900,7 +972,7 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-xl flex items-center gap-3">
+                <div className="p-4 bg-[#151f32]/80 backdrop-blur-md border border-slate-800 rounded-xl flex items-center gap-3 shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
                   <div className="p-2.5 bg-fuchsia-950/40 border border-fuchsia-900/20 rounded-xl text-fuchsia-400">
                     <MessageSquare className="w-5 h-5" />
                   </div>
@@ -910,7 +982,7 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-950/40 border border-slate-800 rounded-xl flex items-center gap-3">
+                <div className="p-4 bg-[#151f32]/80 backdrop-blur-md border border-slate-800 rounded-xl flex items-center gap-3 shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
                   <div className="p-2.5 bg-indigo-950/40 border border-indigo-900/20 rounded-xl text-indigo-400">
                     <Activity className="w-5 h-5" />
                   </div>
@@ -921,16 +993,28 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
                 </div>
               </div>
 
-              <div className="bg-slate-950/40 border border-slate-800 p-5 rounded-xl space-y-4">
+              <div className="bg-[#151f32]/80 backdrop-blur-md border border-slate-800 p-5 rounded-xl space-y-4 shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
                 <div className="flex items-center justify-between border-b border-slate-900 pb-3">
                   <div className="flex items-center gap-2">
                     {scraping.plataforma.toLowerCase() === "instagram" ? (
-                      <span className="p-1 bg-fuchsia-950/60 text-fuchsia-400 border border-fuchsia-900/40 rounded-lg text-xs font-black">
+                      <span className="p-1.5 bg-fuchsia-950/60 text-fuchsia-400 border border-fuchsia-900/40 rounded-lg text-xs font-black">
                         <Instagram className="w-4 h-4" />
                       </span>
-                    ) : (
-                      <span className="p-1 bg-cyan-950/60 text-cyan-400 border border-cyan-900/40 rounded-lg text-xs font-black">
+                    ) : scraping.plataforma.toLowerCase() === "facebook" ? (
+                      <span className="p-1.5 bg-blue-950/60 text-blue-400 border border-blue-900/40 rounded-lg text-xs font-black">
                         <Facebook className="w-4 h-4" />
+                      </span>
+                    ) : scraping.plataforma.toLowerCase() === "tiktok" ? (
+                      <span className="p-1.5 bg-cyan-950/60 text-cyan-400 border border-cyan-900/40 rounded-lg text-xs font-black">
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.94 1.15 2.27 1.95 3.73 2.25v3.96c-1.39-.08-2.77-.51-3.95-1.28-.47-.3-.91-.66-1.3-1.07v6.1c0 1.25-.26 2.5-.78 3.65-.95 2.1-2.91 3.7-5.22 4.19-1.36.29-2.79.24-4.13-.15-2.07-.6-3.79-2.14-4.6-4.12-.85-2.06-.79-4.45.16-6.46.99-2.1 3.01-3.66 5.32-4.1 1.04-.2 2.1-.14 3.12.16v4c-.79-.34-1.68-.42-2.52-.22-1.25.3-2.31 1.25-2.73 2.47-.46 1.35-.11 2.92.89 3.89.87.85 2.14 1.18 3.32.84 1.1-.31 1.95-1.27 2.19-2.4.06-.29.08-.59.08-.88V0h-.01z"/>
+                        </svg>
+                      </span>
+                    ) : (
+                      <span className="p-1.5 bg-red-950/60 text-red-400 border border-red-900/40 rounded-lg text-xs font-black">
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.503a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.503 9.388.503 9.388.503s7.518 0 9.388-.503a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
                       </span>
                     )}
                     <span className="text-xs font-black text-slate-200 uppercase tracking-widest">{scraping.plataforma} Live Post</span>
@@ -943,7 +1027,7 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
                 <div className="pt-2">
                   <span className="text-[9px] font-black text-fuchsia-400 uppercase tracking-widest block mb-1">Gargalo nas Mídias Digitais</span>
                   <p className="text-xs text-slate-400 leading-relaxed font-semibold">
-                    {apiData?.cruzamento_politico?.gargalo_redes || "O engajamento do candidato é sólido, mas necessita de uma maior presença orgânica e respostas ágeis a boatos de oposição no WhatsApp e canais fechados."}
+                    {scraping.gargalo || apiData?.cruzamento_politico?.gargalo_redes || "O engajamento do candidato é sólido, mas necessita de uma maior presença orgânica e respostas ágeis a boatos de oposição no WhatsApp e canais fechados."}
                   </p>
                 </div>
               </div>
@@ -1365,102 +1449,6 @@ export const CandidateDeepDive2026: React.FC<CandidateDeepDive2026Props> = ({
           )}
 
         </div>
-      </div>
-
-      {/* ================= COLUMN 3 (4/12 Cols): FIXED ORÁCULO CHAT ================= */}
-      <div className="col-span-1 xl:col-span-4 bg-slate-900/40 backdrop-blur-lg border border-slate-700/80 rounded-2xl p-5 shadow-[0_4px_30px_rgba(0,0,0,0.4)] flex flex-col h-[620px]">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-cyan-400 shrink-0" />
-            <div className="text-left">
-              <h3 className="text-xs font-black uppercase tracking-widest text-cyan-400">
-                Oráculo Assistente Fixo
-              </h3>
-              <p className="text-[9px] text-slate-500">Mecanismo cognitivo de Gabinete ativo 24h</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1 bg-cyan-950/40 border border-cyan-900/40 px-2 py-0.5 rounded-full text-[9px] text-cyan-400">
-            <Volume2 className="w-3 h-3" />
-            <span className="font-extrabold">{autoSpeakEnabled ? "LIG" : "DES"}</span>
-          </div>
-        </div>
-
-        {/* Chat Messages Log */}
-        <div className="flex-1 bg-slate-950/40 rounded-xl p-3.5 overflow-y-auto border border-slate-850 space-y-3.5 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
-          {oraculoChat.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 px-4 space-y-2">
-              <Brain className="w-7 h-7 text-slate-600 animate-pulse" />
-              <p className="text-[11px] font-bold">Inicie sua consulta estratégica com o Oráculo.</p>
-              <p className="text-[9px] text-slate-600 font-medium">Use a Biblioteca de Prompts no menu Oráculo ou clique em "Analisar com IA" nas notícias.</p>
-            </div>
-          ) : (
-            oraculoChat.map((msg, idx) => (
-              <div 
-                key={msg.id || idx} 
-                className={`flex flex-col max-w-[85%] ${msg.sender === "user" ? "ml-auto items-end" : "mr-auto items-start"}`}
-              >
-                <span className="text-[9px] font-bold text-slate-500 mb-0.5">
-                  {msg.sender === "user" ? "Operador" : "Oráculo"}
-                </span>
-                <div className={`p-2.5 rounded-2xl text-[11px] font-semibold leading-relaxed ${
-                  msg.sender === "user" 
-                    ? "bg-cyan-600/20 border border-cyan-500/35 text-cyan-200 rounded-tr-none shadow-[0_0_8px_rgba(34,211,238,0.1)]" 
-                    : "bg-slate-950/80 text-slate-100 border border-slate-800 rounded-tl-none shadow-md"
-                }`}>
-                  {msg.text}
-                </div>
-              </div>
-            ))
-          )}
-          {sendingOraculo && (
-            <div className="flex items-center gap-2 text-cyan-500 text-[10px] font-black pl-1.5 animate-pulse">
-              <div className="w-3.5 h-3.5 border-2 border-slate-800 border-t-cyan-500 rounded-full animate-spin"></div>
-              <span>Processando cenário 2026...</span>
-            </div>
-          )}
-          <div ref={localChatEndRef}></div>
-        </div>
-
-        {/* Pre-cooked Question Pill shortcuts */}
-        <div className="flex gap-2 overflow-x-auto pb-1.5 pt-1 scrollbar-none">
-          {[
-            "Risco de crise?",
-            "Roteiro de vídeo de 60s",
-            "Mapeamento de Ceilândia"
-          ].map((pill, pIdx) => (
-            <button
-              key={pIdx}
-              type="button"
-              onClick={() => setLocalChatInput(pill)}
-              className="px-2.5 py-1 bg-slate-950/80 hover:bg-slate-850/80 border border-slate-800 hover:border-cyan-500/30 text-slate-400 hover:text-white text-[9px] font-black rounded-lg whitespace-nowrap cursor-pointer shrink-0 transition-all shadow-xs"
-            >
-              {pill}
-            </button>
-          ))}
-        </div>
-
-        {/* Input Chat form */}
-        <form onSubmit={handleLocalChatSubmit} className="flex gap-2">
-          <input
-            id="oraculo-chat-input-fixed"
-            type="text"
-            value={localChatInput}
-            onChange={(e) => setLocalChatInput(e.target.value)}
-            placeholder="Pergunte ao Oráculo sobre campanhas..."
-            className="flex-1 bg-slate-950/80 border border-slate-800 hover:border-cyan-500/30 focus:border-cyan-500 rounded-xl px-3 py-2.5 text-xs font-semibold text-slate-100 placeholder-slate-500 focus:outline-none focus:bg-slate-950 transition-all shadow-inner"
-          />
-          <button
-            type="submit"
-            disabled={sendingOraculo || !localChatInput.trim()}
-            className="px-3.5 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800/80 text-white font-bold rounded-xl flex items-center justify-center transition-all cursor-pointer shadow-md shadow-cyan-600/10 border border-cyan-500/20"
-          >
-            <Send className="w-3.5 h-3.5" />
-          </button>
-        </form>
-
       </div>
 
     </div>

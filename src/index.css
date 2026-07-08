@@ -6,9 +6,9 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Base Body Styles for Netflix-Style Premium Dark Mode */
+/* Base Body Styles for Cosmic Neon Premium Dark Mode */
 body {
-  background-color: #0c0c0e !important;
+  background-color: #0b1221 !important;
   color: #ffffff !important;
   font-family: "Inter", sans-serif;
 }
@@ -24,7 +24,7 @@ body {
 
 /* Root Cabinet Container Overrides */
 #gabinete-root {
-  background-color: #0c0c0e !important;
+  background-color: #0b1221 !important;
   color: #ffffff !important;
 }
 
@@ -130,6 +130,34 @@ body {
   #assistant-panel {
     width: 100% !important;
   }
+}
+
+/* 3.5 Deep Dive Active Layout Overrides */
+@media (min-width: 993px) {
+  .deep-dive-active #matrix-panel {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  
+  .deep-dive-active #assistant-panel {
+    width: 384px !important;
+    flex: none !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+.deep-dive-active #matrix-panel {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.deep-dive-active #assistant-panel {
+  background-color: rgba(21, 31, 50, 0.8) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(6, 182, 212, 0.3) !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15) !important;
 }
 
 /* 4. Matrix Panel & Assistant Panel Containers */

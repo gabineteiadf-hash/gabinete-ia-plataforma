@@ -2352,7 +2352,9 @@ export default function App() {
   };
 
   return (
-    <div id="gabinete-root" className="min-h-screen bg-[#f1f5f9] text-[#1e293b] font-sans flex flex-col antialiased">
+    <div id="gabinete-root" className={`min-h-screen bg-[#0b1221] text-[#1e293b] font-sans flex flex-col antialiased ${
+      selectedYear === 2026 && selectedCandidate ? "deep-dive-active" : ""
+    }`}>
       {/* Centered Top Header matched to screenshot */}
       <header id="header-gabinete" className="w-full pt-10 pb-6 px-4 flex flex-col items-center justify-center text-center">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1e3a8a] tracking-tight flex items-center justify-center gap-2">

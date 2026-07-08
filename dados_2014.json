@@ -9,11 +9,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 140000,
-      "despesas_contratadas": 135000,
-      "despesas_pagas": 130000,
+      "total_receitas": 140000.0,
+      "despesas_contratadas": 135000.0,
+      "despesas_pagas": 130000.0,
       "maior_fornecedor_nome": "Gráfica Alvorada",
-      "maior_fornecedor_valor": 25000,
+      "maior_fornecedor_valor": 25000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":65000},{\"category\":\"Serviços de Terceiros\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":25000}]"
     },
     "votos": [
@@ -124,11 +124,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 410000,
-      "despesas_contratadas": 395000,
-      "despesas_pagas": 380000,
+      "total_receitas": 410000.0,
+      "despesas_contratadas": 395000.0,
+      "despesas_pagas": 380000.0,
       "maior_fornecedor_nome": "Mídia Externa Brasília Comunicação",
-      "maior_fornecedor_valor": 85000,
+      "maior_fornecedor_valor": 85000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Outdoors/Mídia Externa\",\"value\":135000},{\"category\":\"Serviços Prestados por Terceiros\",\"value\":100000},{\"category\":\"Publicidade por Materiais Impressos\",\"value\":75000},{\"category\":\"Locação de Veículos\",\"value\":50000},{\"category\":\"Combustíveis\",\"value\":35000}]"
     },
     "votos": [
@@ -230,121 +230,6 @@
     ]
   },
   {
-    "nome_urna": "Professor Israel",
-    "nome_completo": "Israel Matos Batista",
-    "partido": "PV",
-    "ano_eleicao": 2014,
-    "total_votos": 21762,
-    "foto_url": "/assets/fotos/professor_israel.jpg",
-    "cargo": "Deputado Distrital",
-    "situacao": "Eleito",
-    "financeiro": {
-      "total_receitas": 160000,
-      "despesas_contratadas": 152000,
-      "despesas_pagas": 148000,
-      "maior_fornecedor_nome": "Editora Expressão de Brasília Ltda",
-      "maior_fornecedor_valor": 45000,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":60000},{\"category\":\"Produção de Vídeo e Redes Sociais\",\"value\":35000},{\"category\":\"Serviços Prestados por Terceiros\",\"value\":25000},{\"category\":\"Locação de Veículos\",\"value\":18000},{\"category\":\"Combustíveis\",\"value\":14000}]"
-    },
-    "votos": [
-      {
-        "zona": 1,
-        "ra": "Asa Sul",
-        "votos": 1125
-      },
-      {
-        "zona": 2,
-        "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 810
-      },
-      {
-        "zona": 3,
-        "ra": "Taguatinga",
-        "votos": 949
-      },
-      {
-        "zona": 4,
-        "ra": "Gama / Santa Maria",
-        "votos": 983
-      },
-      {
-        "zona": 5,
-        "ra": "Sobradinho / Sobradinho II",
-        "votos": 1137
-      },
-      {
-        "zona": 6,
-        "ra": "Planaltina",
-        "votos": 315
-      },
-      {
-        "zona": 8,
-        "ra": "Ceilândia",
-        "votos": 598
-      },
-      {
-        "zona": 9,
-        "ra": "Estrutural / Guará I / Guará II",
-        "votos": 2446
-      },
-      {
-        "zona": 10,
-        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 1125
-      },
-      {
-        "zona": 11,
-        "ra": "Cruzeiro / Octogonal",
-        "votos": 1115
-      },
-      {
-        "zona": 13,
-        "ra": "Samambaia",
-        "votos": 1275
-      },
-      {
-        "zona": 14,
-        "ra": "Asa Norte",
-        "votos": 1884
-      },
-      {
-        "zona": 15,
-        "ra": "Águas Claras / Taguatinga",
-        "votos": 2348
-      },
-      {
-        "zona": 16,
-        "ra": "Ceilândia",
-        "votos": 707
-      },
-      {
-        "zona": 17,
-        "ra": "Gama",
-        "votos": 891
-      },
-      {
-        "zona": 18,
-        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 881
-      },
-      {
-        "zona": 19,
-        "ra": "Taguatinga / Vicente Pires",
-        "votos": 1570
-      },
-      {
-        "zona": 20,
-        "ra": "Ceilândia",
-        "votos": 819
-      },
-      {
-        "zona": 21,
-        "ra": "Recanto das Emas",
-        "votos": 784
-      }
-    ]
-  },
-  {
     "nome_urna": "Dr. Michel",
     "nome_completo": "Michel Alano de Sousa Belo",
     "partido": "PP",
@@ -354,11 +239,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 130000,
-      "despesas_contratadas": 122000,
-      "despesas_pagas": 118000,
+      "total_receitas": 130000.0,
+      "despesas_contratadas": 122000.0,
+      "despesas_pagas": 118000.0,
       "maior_fornecedor_nome": "Editora e Gráfica Candanga",
-      "maior_fornecedor_valor": 28000,
+      "maior_fornecedor_valor": 28000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":55000},{\"category\":\"Serviços de Terceiros\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":23000}]"
     },
     "votos": [
@@ -460,117 +345,117 @@
     ]
   },
   {
-    "nome_urna": "Delmasso",
-    "nome_completo": "Rodrigo Delmasso",
-    "partido": "PTN",
+    "nome_urna": "Professor Israel",
+    "nome_completo": "Israel Matos Batista",
+    "partido": "PV",
     "ano_eleicao": 2014,
-    "total_votos": 19793,
-    "foto_url": "/assets/fotos/delmasso.jpg",
+    "total_votos": 21762,
+    "foto_url": "/assets/fotos/professor_israel.jpg",
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 150000,
-      "despesas_contratadas": 142000,
-      "despesas_pagas": 138000,
-      "maior_fornecedor_nome": "Gráfica do DF Central",
-      "maior_fornecedor_valor": 30000,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":65000},{\"category\":\"Militância de Rua\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":28000}]"
+      "total_receitas": 160000.0,
+      "despesas_contratadas": 152000.0,
+      "despesas_pagas": 148000.0,
+      "maior_fornecedor_nome": "Editora Expressão de Brasília Ltda",
+      "maior_fornecedor_valor": 45000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":60000},{\"category\":\"Produção de Vídeo e Redes Sociais\",\"value\":35000},{\"category\":\"Serviços Prestados por Terceiros\",\"value\":25000},{\"category\":\"Locação de Veículos\",\"value\":18000},{\"category\":\"Combustíveis\",\"value\":14000}]"
     },
     "votos": [
       {
         "zona": 1,
         "ra": "Asa Sul",
-        "votos": 426
+        "votos": 1125
       },
       {
         "zona": 2,
         "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 1328
+        "votos": 810
       },
       {
         "zona": 3,
         "ra": "Taguatinga",
-        "votos": 578
+        "votos": 949
       },
       {
         "zona": 4,
         "ra": "Gama / Santa Maria",
-        "votos": 1042
+        "votos": 983
       },
       {
         "zona": 5,
         "ra": "Sobradinho / Sobradinho II",
-        "votos": 1513
+        "votos": 1137
       },
       {
         "zona": 6,
         "ra": "Planaltina",
-        "votos": 521
+        "votos": 315
       },
       {
         "zona": 8,
         "ra": "Ceilândia",
-        "votos": 862
+        "votos": 598
       },
       {
         "zona": 9,
         "ra": "Estrutural / Guará I / Guará II",
-        "votos": 1803
+        "votos": 2446
       },
       {
         "zona": 10,
         "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 1475
+        "votos": 1125
       },
       {
         "zona": 11,
         "ra": "Cruzeiro / Octogonal",
-        "votos": 966
+        "votos": 1115
       },
       {
         "zona": 13,
         "ra": "Samambaia",
-        "votos": 1322
+        "votos": 1275
       },
       {
         "zona": 14,
         "ra": "Asa Norte",
-        "votos": 715
+        "votos": 1884
       },
       {
         "zona": 15,
         "ra": "Águas Claras / Taguatinga",
-        "votos": 1329
+        "votos": 2348
       },
       {
         "zona": 16,
         "ra": "Ceilândia",
-        "votos": 1070
+        "votos": 707
       },
       {
         "zona": 17,
         "ra": "Gama",
-        "votos": 1096
+        "votos": 891
       },
       {
         "zona": 18,
         "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 821
+        "votos": 881
       },
       {
         "zona": 19,
         "ra": "Taguatinga / Vicente Pires",
-        "votos": 1157
+        "votos": 1570
       },
       {
         "zona": 20,
         "ra": "Ceilândia",
-        "votos": 874
+        "votos": 819
       },
       {
         "zona": 21,
         "ra": "Recanto das Emas",
-        "votos": 895
+        "votos": 784
       }
     ]
   },
@@ -584,11 +469,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 170000,
-      "despesas_contratadas": 162000,
-      "despesas_pagas": 158000,
+      "total_receitas": 170000.0,
+      "despesas_contratadas": 162000.0,
+      "despesas_pagas": 158000.0,
       "maior_fornecedor_nome": "Mídia Externa Brasília",
-      "maior_fornecedor_valor": 40000,
+      "maior_fornecedor_valor": 40000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Outdoors\",\"value\":70000},{\"category\":\"Publicidade por Impressos\",\"value\":55000},{\"category\":\"Combustíveis\",\"value\":33000}]"
     },
     "votos": [
@@ -690,6 +575,121 @@
     ]
   },
   {
+    "nome_urna": "Delmasso",
+    "nome_completo": "Rodrigo Delmasso",
+    "partido": "PTN",
+    "ano_eleicao": 2014,
+    "total_votos": 19793,
+    "foto_url": "/assets/fotos/delmasso.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 150000.0,
+      "despesas_contratadas": 142000.0,
+      "despesas_pagas": 138000.0,
+      "maior_fornecedor_nome": "Gráfica do DF Central",
+      "maior_fornecedor_valor": 30000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":65000},{\"category\":\"Militância de Rua\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":28000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 426
+      },
+      {
+        "zona": 2,
+        "ra": "Itapoã / Lago Norte / Paranoá",
+        "votos": 1328
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 578
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1042
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Sobradinho II",
+        "votos": 1513
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 521
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 862
+      },
+      {
+        "zona": 9,
+        "ra": "Estrutural / Guará I / Guará II",
+        "votos": 1803
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
+        "votos": 1475
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Octogonal",
+        "votos": 966
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 1322
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 715
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Taguatinga",
+        "votos": 1329
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1070
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 1096
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 821
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga / Vicente Pires",
+        "votos": 1157
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 874
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 895
+      }
+    ]
+  },
+  {
     "nome_urna": "Sandra Faraj",
     "nome_completo": "Sandra Faraj Cavalcante",
     "partido": "SD",
@@ -699,11 +699,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 120000,
-      "despesas_contratadas": 110000,
-      "despesas_pagas": 105000,
+      "total_receitas": 120000.0,
+      "despesas_contratadas": 110000.0,
+      "despesas_pagas": 105000.0,
       "maior_fornecedor_nome": "Gráfica Taguatinga Central",
-      "maior_fornecedor_valor": 22000,
+      "maior_fornecedor_valor": 22000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":25000},{\"category\":\"Serviços de Terceiros\",\"value\":18000},{\"category\":\"Locação de Veículos\",\"value\":12000},{\"category\":\"Combustíveis\",\"value\":10000}]"
     },
     "votos": [
@@ -814,11 +814,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 145000,
-      "despesas_contratadas": 138000,
-      "despesas_pagas": 132000,
+      "total_receitas": 145000.0,
+      "despesas_contratadas": 138000.0,
+      "despesas_pagas": 132000.0,
       "maior_fornecedor_nome": "Gráfica Ceilândia S.A.",
-      "maior_fornecedor_valor": 32000,
+      "maior_fornecedor_valor": 32000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":65000},{\"category\":\"Atividades de Militância\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":27000}]"
     },
     "votos": [
@@ -929,11 +929,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 180000,
-      "despesas_contratadas": 170000,
-      "despesas_pagas": 165000,
+      "total_receitas": 180000.0,
+      "despesas_contratadas": 170000.0,
+      "despesas_pagas": 165000.0,
       "maior_fornecedor_nome": "Mídia Externa Brasília",
-      "maior_fornecedor_valor": 45000,
+      "maior_fornecedor_valor": 45000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Outdoors\",\"value\":80000},{\"category\":\"Publicidade por Impressos\",\"value\":55000},{\"category\":\"Combustíveis\",\"value\":30000}]"
     },
     "votos": [
@@ -1035,121 +1035,6 @@
     ]
   },
   {
-    "nome_urna": "Chico Vigilante",
-    "nome_completo": "Francisco Domingos dos Santos",
-    "partido": "PT",
-    "ano_eleicao": 2014,
-    "total_votos": 16052,
-    "foto_url": "/assets/fotos/chico_vigilante.jpg",
-    "cargo": "Deputado Distrital",
-    "situacao": "Eleito",
-    "financeiro": {
-      "total_receitas": 180000,
-      "despesas_contratadas": 172000,
-      "despesas_pagas": 168000,
-      "maior_fornecedor_nome": "Gráfica Ceilândia Central S/A",
-      "maior_fornecedor_valor": 30000,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":65000},{\"category\":\"Atividades de Militância\",\"value\":45000},{\"category\":\"Produção de Rádio, TV e Vídeo\",\"value\":30000},{\"category\":\"Combustíveis\",\"value\":18000},{\"category\":\"Locação de Veículos\",\"value\":14000}]"
-    },
-    "votos": [
-      {
-        "zona": 1,
-        "ra": "Asa Sul",
-        "votos": 546
-      },
-      {
-        "zona": 2,
-        "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 407
-      },
-      {
-        "zona": 3,
-        "ra": "Taguatinga",
-        "votos": 732
-      },
-      {
-        "zona": 4,
-        "ra": "Gama / Santa Maria",
-        "votos": 1358
-      },
-      {
-        "zona": 5,
-        "ra": "Sobradinho / Sobradinho II",
-        "votos": 493
-      },
-      {
-        "zona": 6,
-        "ra": "Planaltina",
-        "votos": 1117
-      },
-      {
-        "zona": 8,
-        "ra": "Ceilândia",
-        "votos": 1014
-      },
-      {
-        "zona": 9,
-        "ra": "Estrutural / Guará I / Guará II",
-        "votos": 742
-      },
-      {
-        "zona": 10,
-        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 723
-      },
-      {
-        "zona": 11,
-        "ra": "Cruzeiro / Octogonal",
-        "votos": 485
-      },
-      {
-        "zona": 13,
-        "ra": "Samambaia",
-        "votos": 668
-      },
-      {
-        "zona": 14,
-        "ra": "Asa Norte",
-        "votos": 670
-      },
-      {
-        "zona": 15,
-        "ra": "Águas Claras / Taguatinga",
-        "votos": 798
-      },
-      {
-        "zona": 16,
-        "ra": "Ceilândia",
-        "votos": 1363
-      },
-      {
-        "zona": 17,
-        "ra": "Gama",
-        "votos": 1108
-      },
-      {
-        "zona": 18,
-        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 574
-      },
-      {
-        "zona": 19,
-        "ra": "Taguatinga / Vicente Pires",
-        "votos": 625
-      },
-      {
-        "zona": 20,
-        "ra": "Ceilândia",
-        "votos": 1805
-      },
-      {
-        "zona": 21,
-        "ra": "Recanto das Emas",
-        "votos": 824
-      }
-    ]
-  },
-  {
     "nome_urna": "Liliane Roriz",
     "nome_completo": "Liliane Maria Roriz",
     "partido": "PRTB",
@@ -1159,11 +1044,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 135000,
-      "despesas_contratadas": 125000,
-      "despesas_pagas": 120000,
+      "total_receitas": 135000.0,
+      "despesas_contratadas": 125000.0,
+      "despesas_pagas": 120000.0,
       "maior_fornecedor_nome": "Gráfica Alvorada",
-      "maior_fornecedor_valor": 24000,
+      "maior_fornecedor_valor": 24000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":60000},{\"category\":\"Serviços de Terceiros\",\"value\":38000},{\"category\":\"Combustíveis\",\"value\":22000}]"
     },
     "votos": [
@@ -1265,117 +1150,117 @@
     ]
   },
   {
-    "nome_urna": "Juarezão",
-    "nome_completo": "Juarez Oliveira",
-    "partido": "PRTB",
+    "nome_urna": "Chico Vigilante",
+    "nome_completo": "Francisco Domingos dos Santos",
+    "partido": "PT",
     "ano_eleicao": 2014,
-    "total_votos": 2564,
-    "foto_url": "/assets/fotos/juarezao.jpg",
+    "total_votos": 16052,
+    "foto_url": "/assets/fotos/chico_vigilante.jpg",
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 110000,
-      "despesas_contratadas": 102000,
-      "despesas_pagas": 98000,
-      "maior_fornecedor_nome": "Gráfica Sobradinho Comunicações",
-      "maior_fornecedor_valor": 22000,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":18000}]"
+      "total_receitas": 180000.0,
+      "despesas_contratadas": 172000.0,
+      "despesas_pagas": 168000.0,
+      "maior_fornecedor_nome": "Gráfica Ceilândia Central S/A",
+      "maior_fornecedor_valor": 30000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Materiais Impressos\",\"value\":65000},{\"category\":\"Atividades de Militância\",\"value\":45000},{\"category\":\"Produção de Rádio, TV e Vídeo\",\"value\":30000},{\"category\":\"Combustíveis\",\"value\":18000},{\"category\":\"Locação de Veículos\",\"value\":14000}]"
     },
     "votos": [
       {
         "zona": 1,
         "ra": "Asa Sul",
-        "votos": 55
+        "votos": 546
       },
       {
         "zona": 2,
         "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 45
+        "votos": 407
       },
       {
         "zona": 3,
         "ra": "Taguatinga",
-        "votos": 200
+        "votos": 732
       },
       {
         "zona": 4,
         "ra": "Gama / Santa Maria",
-        "votos": 72
+        "votos": 1358
       },
       {
         "zona": 5,
         "ra": "Sobradinho / Sobradinho II",
-        "votos": 44
+        "votos": 493
       },
       {
         "zona": 6,
         "ra": "Planaltina",
-        "votos": 24
+        "votos": 1117
       },
       {
         "zona": 8,
         "ra": "Ceilândia",
-        "votos": 158
+        "votos": 1014
       },
       {
         "zona": 9,
         "ra": "Estrutural / Guará I / Guará II",
-        "votos": 127
+        "votos": 742
       },
       {
         "zona": 10,
         "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 92
+        "votos": 723
       },
       {
         "zona": 11,
         "ra": "Cruzeiro / Octogonal",
-        "votos": 64
+        "votos": 485
       },
       {
         "zona": 13,
         "ra": "Samambaia",
-        "votos": 201
+        "votos": 668
       },
       {
         "zona": 14,
         "ra": "Asa Norte",
-        "votos": 61
+        "votos": 670
       },
       {
         "zona": 15,
         "ra": "Águas Claras / Taguatinga",
-        "votos": 285
+        "votos": 798
       },
       {
         "zona": 16,
         "ra": "Ceilândia",
-        "votos": 328
+        "votos": 1363
       },
       {
         "zona": 17,
         "ra": "Gama",
-        "votos": 48
+        "votos": 1108
       },
       {
         "zona": 18,
         "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 83
+        "votos": 574
       },
       {
         "zona": 19,
         "ra": "Taguatinga / Vicente Pires",
-        "votos": 389
+        "votos": 625
       },
       {
         "zona": 20,
         "ra": "Ceilândia",
-        "votos": 124
+        "votos": 1805
       },
       {
         "zona": 21,
         "ra": "Recanto das Emas",
-        "votos": 164
+        "votos": 824
       }
     ]
   },
@@ -1389,11 +1274,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 130000,
-      "despesas_contratadas": 122000,
-      "despesas_pagas": 118000,
+      "total_receitas": 130000.0,
+      "despesas_contratadas": 122000.0,
+      "despesas_pagas": 118000.0,
       "maior_fornecedor_nome": "Coletivo Cultural do DF",
-      "maior_fornecedor_valor": 25000,
+      "maior_fornecedor_valor": 25000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":55000},{\"category\":\"Serviços de Terceiros\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":23000}]"
     },
     "votos": [
@@ -1504,11 +1389,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 155000,
-      "despesas_contratadas": 145000,
-      "despesas_pagas": 140000,
+      "total_receitas": 155000.0,
+      "despesas_contratadas": 145000.0,
+      "despesas_pagas": 140000.0,
       "maior_fornecedor_nome": "Gráfica do DF Central",
-      "maior_fornecedor_valor": 35000,
+      "maior_fornecedor_valor": 35000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":70000},{\"category\":\"Serviços de Terceiros\",\"value\":45000},{\"category\":\"Combustíveis\",\"value\":25000}]"
     },
     "votos": [
@@ -1610,121 +1495,6 @@
     ]
   },
   {
-    "nome_urna": "Cristiano Araújo",
-    "nome_completo": "Cristiano Nogueira Araújo",
-    "partido": "PTB",
-    "ano_eleicao": 2014,
-    "total_votos": 13679,
-    "foto_url": "/assets/fotos/cristiano_araujo.jpg",
-    "cargo": "Deputado Distrital",
-    "situacao": "Eleito",
-    "financeiro": {
-      "total_receitas": 125000,
-      "despesas_contratadas": 118000,
-      "despesas_pagas": 112000,
-      "maior_fornecedor_nome": "Editora Distrito S.A.",
-      "maior_fornecedor_valor": 26000,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":50000},{\"category\":\"Serviços de Terceiros\",\"value\":38000},{\"category\":\"Combustíveis\",\"value\":24000}]"
-    },
-    "votos": [
-      {
-        "zona": 1,
-        "ra": "Asa Sul",
-        "votos": 226
-      },
-      {
-        "zona": 2,
-        "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 470
-      },
-      {
-        "zona": 3,
-        "ra": "Taguatinga",
-        "votos": 723
-      },
-      {
-        "zona": 4,
-        "ra": "Gama / Santa Maria",
-        "votos": 1115
-      },
-      {
-        "zona": 5,
-        "ra": "Sobradinho / Sobradinho II",
-        "votos": 570
-      },
-      {
-        "zona": 6,
-        "ra": "Planaltina",
-        "votos": 677
-      },
-      {
-        "zona": 8,
-        "ra": "Ceilândia",
-        "votos": 569
-      },
-      {
-        "zona": 9,
-        "ra": "Estrutural / Guará I / Guará II",
-        "votos": 897
-      },
-      {
-        "zona": 10,
-        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 1399
-      },
-      {
-        "zona": 11,
-        "ra": "Cruzeiro / Octogonal",
-        "votos": 218
-      },
-      {
-        "zona": 13,
-        "ra": "Samambaia",
-        "votos": 962
-      },
-      {
-        "zona": 14,
-        "ra": "Asa Norte",
-        "votos": 211
-      },
-      {
-        "zona": 15,
-        "ra": "Águas Claras / Taguatinga",
-        "votos": 712
-      },
-      {
-        "zona": 16,
-        "ra": "Ceilândia",
-        "votos": 1098
-      },
-      {
-        "zona": 17,
-        "ra": "Gama",
-        "votos": 714
-      },
-      {
-        "zona": 18,
-        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 652
-      },
-      {
-        "zona": 19,
-        "ra": "Taguatinga / Vicente Pires",
-        "votos": 690
-      },
-      {
-        "zona": 20,
-        "ra": "Ceilândia",
-        "votos": 437
-      },
-      {
-        "zona": 21,
-        "ra": "Recanto das Emas",
-        "votos": 1339
-      }
-    ]
-  },
-  {
     "nome_urna": "Ricardo Vale",
     "nome_completo": "Ricardo Vale da Silva",
     "partido": "PT",
@@ -1734,11 +1504,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 115000,
-      "despesas_contratadas": 108000,
-      "despesas_pagas": 104000,
+      "total_receitas": 115000.0,
+      "despesas_contratadas": 108000.0,
+      "despesas_pagas": 104000.0,
       "maior_fornecedor_nome": "Mídia Popular",
-      "maior_fornecedor_valor": 24000,
+      "maior_fornecedor_valor": 24000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Serviços de Terceiros\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":24000}]"
     },
     "votos": [
@@ -1840,6 +1610,121 @@
     ]
   },
   {
+    "nome_urna": "Cristiano Araújo",
+    "nome_completo": "Cristiano Nogueira Araújo",
+    "partido": "PTB",
+    "ano_eleicao": 2014,
+    "total_votos": 13679,
+    "foto_url": "/assets/fotos/cristiano_araujo.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 125000.0,
+      "despesas_contratadas": 118000.0,
+      "despesas_pagas": 112000.0,
+      "maior_fornecedor_nome": "Editora Distrito S.A.",
+      "maior_fornecedor_valor": 26000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":50000},{\"category\":\"Serviços de Terceiros\",\"value\":38000},{\"category\":\"Combustíveis\",\"value\":24000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 226
+      },
+      {
+        "zona": 2,
+        "ra": "Itapoã / Lago Norte / Paranoá",
+        "votos": 470
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 723
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 1115
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Sobradinho II",
+        "votos": 570
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 677
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 569
+      },
+      {
+        "zona": 9,
+        "ra": "Estrutural / Guará I / Guará II",
+        "votos": 897
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
+        "votos": 1399
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Octogonal",
+        "votos": 218
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 962
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 211
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Taguatinga",
+        "votos": 712
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 1098
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 714
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 652
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga / Vicente Pires",
+        "votos": 690
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 437
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 1339
+      }
+    ]
+  },
+  {
     "nome_urna": "Bispo Renato",
     "nome_completo": "Renato Andrade dos Santos",
     "partido": "PR",
@@ -1849,11 +1734,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 120000,
-      "despesas_contratadas": 112000,
-      "despesas_pagas": 108000,
+      "total_receitas": 120000.0,
+      "despesas_contratadas": 112000.0,
+      "despesas_pagas": 108000.0,
       "maior_fornecedor_nome": "Gráfica Planaltina Central",
-      "maior_fornecedor_valor": 25000,
+      "maior_fornecedor_valor": 25000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":50000},{\"category\":\"Serviços de Terceiros\",\"value\":38000},{\"category\":\"Combustíveis\",\"value\":20000}]"
     },
     "votos": [
@@ -1964,11 +1849,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 140000,
-      "despesas_contratadas": 132000,
-      "despesas_pagas": 128000,
+      "total_receitas": 140000.0,
+      "despesas_contratadas": 132000.0,
+      "despesas_pagas": 128000.0,
       "maior_fornecedor_nome": "Consultoria Alvorada S/C",
-      "maior_fornecedor_valor": 30000,
+      "maior_fornecedor_valor": 30000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":60000},{\"category\":\"Serviços de Terceiros\",\"value\":40000},{\"category\":\"Combustíveis\",\"value\":28000}]"
     },
     "votos": [
@@ -2079,11 +1964,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 110000,
-      "despesas_contratadas": 105000,
-      "despesas_pagas": 100000,
+      "total_receitas": 110000.0,
+      "despesas_contratadas": 105000.0,
+      "despesas_pagas": 100000.0,
       "maior_fornecedor_nome": "Comunicação Brasília",
-      "maior_fornecedor_valor": 20000,
+      "maior_fornecedor_valor": 20000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":20000}]"
     },
     "votos": [
@@ -2194,11 +2079,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 95000,
-      "despesas_contratadas": 88000,
-      "despesas_pagas": 84000,
+      "total_receitas": 95000.0,
+      "despesas_contratadas": 88000.0,
+      "despesas_pagas": 84000.0,
       "maior_fornecedor_nome": "Gráfica do Cruzeiro",
-      "maior_fornecedor_valor": 18000,
+      "maior_fornecedor_valor": 18000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":40000},{\"category\":\"Militância de Rua\",\"value\":28000},{\"category\":\"Combustíveis\",\"value\":16000}]"
     },
     "votos": [
@@ -2309,11 +2194,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 98000,
-      "despesas_contratadas": 90000,
-      "despesas_pagas": 86000,
+      "total_receitas": 98000.0,
+      "despesas_contratadas": 90000.0,
+      "despesas_pagas": 86000.0,
       "maior_fornecedor_nome": "Digital Ads DF",
-      "maior_fornecedor_valor": 18000,
+      "maior_fornecedor_valor": 18000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":42000},{\"category\":\"Militância de Rua\",\"value\":28000},{\"category\":\"Combustíveis\",\"value\":16000}]"
     },
     "votos": [
@@ -2424,11 +2309,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 112000,
-      "despesas_contratadas": 105000,
-      "despesas_pagas": 100000,
+      "total_receitas": 112000.0,
+      "despesas_contratadas": 105000.0,
+      "despesas_pagas": 100000.0,
       "maior_fornecedor_nome": "Gráfica Gama Sul",
-      "maior_fornecedor_valor": 22000,
+      "maior_fornecedor_valor": 22000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Militância de Rua\",\"value\":33000},{\"category\":\"Combustíveis\",\"value\":22000}]"
     },
     "votos": [
@@ -2539,11 +2424,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 105000,
-      "despesas_contratadas": 98000,
-      "despesas_pagas": 94000,
+      "total_receitas": 105000.0,
+      "despesas_contratadas": 98000.0,
+      "despesas_pagas": 94000.0,
       "maior_fornecedor_nome": "Editora Verde DF",
-      "maior_fornecedor_valor": 20000,
+      "maior_fornecedor_valor": 20000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":42000},{\"category\":\"Militância de Rua\",\"value\":30000},{\"category\":\"Combustíveis\",\"value\":22000}]"
     },
     "votos": [
@@ -2654,11 +2539,11 @@
     "cargo": "Deputado Distrital",
     "situacao": "Eleito",
     "financeiro": {
-      "total_receitas": 85000,
-      "despesas_contratadas": 78000,
-      "despesas_pagas": 74000,
+      "total_receitas": 85000.0,
+      "despesas_contratadas": 78000.0,
+      "despesas_pagas": 74000.0,
       "maior_fornecedor_nome": "Gráfica de Taguatinga",
-      "maior_fornecedor_valor": 15000,
+      "maior_fornecedor_valor": 15000.0,
       "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":35000},{\"category\":\"Militância de Rua\",\"value\":24000},{\"category\":\"Combustíveis\",\"value\":15000}]"
     },
     "votos": [
@@ -2756,6 +2641,121 @@
         "zona": 21,
         "ra": "Recanto das Emas",
         "votos": 171
+      }
+    ]
+  },
+  {
+    "nome_urna": "Juarezão",
+    "nome_completo": "Juarez Oliveira",
+    "partido": "PRTB",
+    "ano_eleicao": 2014,
+    "total_votos": 2564,
+    "foto_url": "/assets/fotos/juarezao.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 110000.0,
+      "despesas_contratadas": 102000.0,
+      "despesas_pagas": 98000.0,
+      "maior_fornecedor_nome": "Gráfica Sobradinho Comunicações",
+      "maior_fornecedor_valor": 22000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":18000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 55
+      },
+      {
+        "zona": 2,
+        "ra": "Itapoã / Lago Norte / Paranoá",
+        "votos": 45
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 200
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 72
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Sobradinho II",
+        "votos": 44
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 24
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 158
+      },
+      {
+        "zona": 9,
+        "ra": "Estrutural / Guará I / Guará II",
+        "votos": 127
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
+        "votos": 92
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Octogonal",
+        "votos": 64
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 201
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 61
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Taguatinga",
+        "votos": 285
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 328
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 48
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 83
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga / Vicente Pires",
+        "votos": 389
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 124
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 164
       }
     ]
   }
