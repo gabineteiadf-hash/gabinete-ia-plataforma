@@ -8,6 +8,9 @@ import {
   Users, 
   Award, 
   ChevronRight, 
+  ChevronUp,
+  ChevronDown,
+  Check,
   Sparkles, 
   MessageSquare, 
   Send, 
@@ -65,6 +68,7 @@ import {
 
 import { DossieInteligencia } from "./components/DossieInteligencia";
 import { CandidateDeepDive2026 } from "./components/CandidateDeepDive2026";
+import { OraculoPremium } from "./components/OraculoPremium";
 
 interface ExpenseCategory {
   category: string;
@@ -157,14 +161,38 @@ const CandidateAvatar = ({
   fotoUrl?: string; 
   variant?: "small" | "large"; 
 }) => {
-  const [hasError, setHasError] = useState(false);
+  const [src, setSrc] = useState<string>("");
+  const [estagio, setEstagio] = useState<"direct" | "proxy" | "fallback">("direct");
 
   useEffect(() => {
-    // Reset error state when the candidate changes
-    setHasError(false);
-  }, [candidatoId, nomeUrna]);
+    if (fotoUrl && (fotoUrl.startsWith("/assets/") || (fotoUrl.startsWith("http") && !fotoUrl.includes("drive.google.com")))) {
+      setSrc(fotoUrl);
+      setEstagio("direct");
+    } else {
+      setSrc(`/api/proxy-foto?nome=${encodeURIComponent(nomeUrna)}`);
+      setEstagio("proxy");
+    }
+  }, [candidatoId, nomeUrna, fotoUrl]);
 
-  if (hasError || !candidatoId) {
+  const handleError = () => {
+    if (estagio === "direct") {
+      setSrc(`/api/proxy-foto?nome=${encodeURIComponent(nomeUrna)}`);
+      setEstagio("proxy");
+    } else if (estagio === "proxy") {
+      if (fotoUrl && fotoUrl.includes("drive.google.com")) {
+        const match = fotoUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || fotoUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          setSrc(`https://lh3.googleusercontent.com/d/${match[1]}`);
+          setEstagio("fallback");
+          return;
+        }
+      }
+      setSrc("");
+      setEstagio("fallback");
+    }
+  };
+
+  if (estagio === "fallback" && !src) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-400 shrink-0 overflow-hidden rounded-full">
         <svg
@@ -185,12 +213,9 @@ const CandidateAvatar = ({
 
   return (
     <img
-      src={`/api/fotos/${candidatoId}`}
+      src={src || `/api/proxy-foto?nome=${encodeURIComponent(nomeUrna)}`}
       alt={nomeUrna}
-      onError={() => {
-        console.warn(`[Foto Deputado Erro] Falha ao carregar imagem para o candidato "${nomeUrna}" (ID: ${candidatoId}). Usando avatar padrão.`);
-        setHasError(true);
-      }}
+      onError={handleError}
       className="w-full h-full object-cover rounded-full"
     />
   );
@@ -899,9 +924,14 @@ export default function App() {
   const [loadingDossier, setLoadingDossier] = useState<boolean>(false);
   const [dossierHistory, setDossierHistory] = useState<HistoricalDispute[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedNameFilter, setSelectedNameFilter] = useState<string>("");
+  const [selectedPartyFilter, setSelectedPartyFilter] = useState<string>("");
+  const [isNameDropdownOpen, setIsNameDropdownOpen] = useState<boolean>(false);
+  const [isPartyDropdownOpen, setIsPartyDropdownOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"audit" | "oraculo" | "conexoes">("oraculo");
   const [activeMainCard, setActiveMainCard] = useState<"gastos" | "geoeleitoral" | "reputacao">("gastos");
   const [isMobileAssistantOpen, setIsMobileAssistantOpen] = useState<boolean>(false);
+  const [isOraculoOpen, setIsOraculoOpen] = useState<boolean>(false);
   
   // Reputation / Clipping state
   const [reputationModalOpen, setReputationModalOpen] = useState<boolean>(false);
@@ -1210,6 +1240,10 @@ export default function App() {
 
   // Load candidate list for selected year
   useEffect(() => {
+    setSelectedNameFilter("");
+    setSelectedPartyFilter("");
+    setIsNameDropdownOpen(false);
+    setIsPartyDropdownOpen(false);
     if (selectedYear === 2026) {
       setCandidates(candidates2026);
       setLoadingList(false);
@@ -1292,6 +1326,9 @@ export default function App() {
 
   // Fetch detailed candidate dossier
   async function fetchDossier(nomeUrna: string, ano: number) {
+    setGeoSubTab("candidato");
+    setRepSubTab("candidato");
+    
     if (ano === 2026) {
       const match = candidates2026.find(c => c.nome_urna === nomeUrna);
       if (match) {
@@ -2322,12 +2359,25 @@ export default function App() {
     };
   };
 
-  // Filter candidates list
-  const filteredCandidates = candidates.filter(c => 
-    c.nome_urna.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.partido.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (c.nome_completo && c.nome_completo.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  // Filter candidates list based on three-part filters
+  const filteredCandidates = candidates.filter(c => {
+    if (selectedNameFilter && c.nome_urna !== selectedNameFilter) {
+      return false;
+    }
+    if (selectedPartyFilter && c.partido !== selectedPartyFilter) {
+      return false;
+    }
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchName = c.nome_urna.toLowerCase().includes(q);
+      const matchParty = c.partido.toLowerCase().includes(q);
+      const matchFullName = c.nome_completo ? c.nome_completo.toLowerCase().includes(q) : false;
+      if (!matchName && !matchParty && !matchFullName) {
+        return false;
+      }
+    }
+    return true;
+  });
 
   // Global financial totals for overview widgets
   const totalVotes = candidates.reduce((sum, c) => sum + c.total_votos, 0);
@@ -2357,126 +2407,169 @@ export default function App() {
     }`}>
       {/* Centered Top Header matched to screenshot */}
       <header id="header-gabinete" className="w-full pt-10 pb-6 px-4 flex flex-col items-center justify-center text-center">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1e3a8a] tracking-tight flex items-center justify-center gap-2">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center justify-center gap-2.5">
           Gabinete IA
         </h1>
-        <p className="text-sm text-slate-500 font-medium mt-1">
+        <p className="text-sm text-slate-400 font-semibold mt-1.5">
           Plataforma Inteligente de Monitoramento e Estratégia Política
         </p>
       </header>
 
       {/* Main Content Dashboard Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 pb-12 flex flex-col gap-6">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 pb-12 flex flex-col lg:flex-row gap-6 items-start">
         
-        {/* THREE HORIZONTAL BENTO CARDS */}
-        {!(selectedYear === 2026 && selectedCandidate) && (
-          <section id="top-bento-cards" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Card 1: Anatomia de Gastos */}
-            <div
-              id="card-anatomia-gastos"
-              onClick={() => setActiveMainCard("gastos")}
-              className={`bg-white rounded-2xl p-5 border cursor-pointer transition-all duration-200 shadow-xs flex gap-4 ${
-                activeMainCard === "gastos"
-                  ? "border-blue-500 ring-2 ring-blue-500/10"
-                  : "border-slate-200 hover:border-slate-300 hover:shadow-md"
+        {/* LEFT SIDEBAR NAVIGATION GUIDES (Guidelines) */}
+        <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-4">
+          <div className="bg-[#141417] border border-[#25252a] rounded-2xl p-4 flex flex-col gap-3 shadow-lg w-full">
+            <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2 mb-1">
+              Diretrizes & Navegação
+            </h3>
+
+            {/* Link 1: Anatomia de Gastos */}
+            <button
+              onClick={() => {
+                setActiveMainCard("gastos");
+                if (selectedYear === 2026) {
+                  setSelectedYear(2022);
+                }
+                setSelectedCandidate(null);
+                setSelectedCandidateName(null);
+                setSelectedCandidateId(null);
+              }}
+              className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 flex items-center gap-3 cursor-pointer ${
+                selectedYear !== 2026 && activeMainCard === "gastos"
+                  ? "bg-[#1e1e24] border-[#e50914] text-[#e50914] shadow-md shadow-[#e50914]/5"
+                  : "bg-transparent border-[#25252a] text-slate-300 hover:bg-[#1e1e24]/50 hover:text-white"
               }`}
             >
-              <div className="p-3 bg-blue-50 text-blue-500 rounded-xl h-fit shrink-0">
-                <CreditCard className="w-6 h-6" />
+              <CreditCard className="w-4.5 h-4.5 shrink-0" />
+              <div className="min-w-0">
+                <span className="font-extrabold text-sm block">Anatomia de Gastos</span>
+                <span className="text-[10px] text-slate-500 truncate block">Contas e Despesas de Campanha</span>
               </div>
-              <div className="text-left">
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Anatomia de Gastos</h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Prestação de contas, despesas de campanha contratadas e análise de fornecedores políticos.
-                </p>
-              </div>
-            </div>
+            </button>
 
-            {/* Card 2: Engenharia Geoeleitoral */}
-            <div
-              id="card-engenharia-geoeleitoral"
-              onClick={() => setActiveMainCard("geoeleitoral")}
-              className={`bg-white rounded-2xl p-5 border cursor-pointer transition-all duration-200 shadow-xs flex gap-4 ${
-                activeMainCard === "geoeleitoral"
-                  ? "border-blue-500 ring-2 ring-blue-500/10"
-                  : "border-slate-200 hover:border-slate-300 hover:shadow-md"
+            {/* Link 2: Engenharia Geoeleitoral */}
+            <button
+              onClick={() => {
+                setActiveMainCard("geoeleitoral");
+                if (selectedYear === 2026) {
+                  setSelectedYear(2022);
+                }
+                setSelectedCandidate(null);
+                setSelectedCandidateName(null);
+                setSelectedCandidateId(null);
+              }}
+              className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 flex items-center gap-3 cursor-pointer ${
+                selectedYear !== 2026 && activeMainCard === "geoeleitoral"
+                  ? "bg-[#1e1e24] border-[#e50914] text-[#e50914] shadow-md shadow-[#e50914]/5"
+                  : "bg-transparent border-[#25252a] text-slate-300 hover:bg-[#1e1e24]/50 hover:text-white"
               }`}
             >
-              <div className="p-3 bg-purple-50 text-purple-500 rounded-xl h-fit shrink-0">
-                <Layers className="w-6 h-6" />
+              <Layers className="w-4.5 h-4.5 shrink-0" />
+              <div className="min-w-0">
+                <span className="font-extrabold text-sm block">Engenharia Geoeleitoral</span>
+                <span className="text-[10px] text-slate-500 truncate block">Distribuição Geográfica e Zonas</span>
               </div>
-              <div className="text-left">
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Engenharia Geoeleitoral</h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Distribuição de votação por zonas, seções eleitorais e análise de densidade territorial.
-                </p>
-              </div>
-            </div>
+            </button>
 
-            {/* Card 3: Benchmark & Reputação */}
-            <div
-              id="card-benchmark-reputacao"
-              onClick={() => setActiveMainCard("reputacao")}
-              className={`bg-white rounded-2xl p-5 border cursor-pointer transition-all duration-200 shadow-xs flex gap-4 ${
-                activeMainCard === "reputacao"
-                  ? "border-blue-500 ring-2 ring-blue-500/10"
-                  : "border-slate-200 hover:border-slate-300 hover:shadow-md"
+            {/* Link 3: Benchmark & Reputação */}
+            <button
+              onClick={() => {
+                setActiveMainCard("reputacao");
+                if (selectedYear === 2026) {
+                  setSelectedYear(2022);
+                }
+                setSelectedCandidate(null);
+                setSelectedCandidateName(null);
+                setSelectedCandidateId(null);
+              }}
+              className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 flex items-center gap-3 cursor-pointer ${
+                selectedYear !== 2026 && activeMainCard === "reputacao"
+                  ? "bg-[#1e1e24] border-[#e50914] text-[#e50914] shadow-md shadow-[#e50914]/5"
+                  : "bg-transparent border-[#25252a] text-slate-300 hover:bg-[#1e1e24]/50 hover:text-white"
               }`}
             >
-              <div className="p-3 bg-pink-50 text-pink-500 rounded-xl h-fit shrink-0">
-                <Brain className="w-6 h-6" />
+              <Brain className="w-4.5 h-4.5 shrink-0" />
+              <div className="min-w-0">
+                <span className="font-extrabold text-sm block">Benchmark & Eficiência</span>
+                <span className="text-[10px] text-slate-500 truncate block">Eficiência e SWOT de IA</span>
               </div>
-              <div className="text-left">
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Benchmark & Reputação</h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                  Cruzamentos avançados de eficiência (custo por voto), SWOT competitiva e insights preditivos.
-                </p>
+            </button>
+
+            {/* Link 4: Campanhas 2026 Ativas */}
+            <button
+              onClick={() => {
+                setSelectedYear(2026);
+                setSelectedCandidate(null);
+                setSelectedCandidateName(null);
+                setSelectedCandidateId(null);
+              }}
+              className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 flex items-center gap-3 cursor-pointer ${
+                selectedYear === 2026
+                  ? "bg-gradient-to-r from-[#1b1b22] to-purple-950/25 border-purple-600 text-purple-400 shadow-md"
+                  : "bg-transparent border-[#25252a] text-slate-300 hover:bg-[#1e1e24]/50 hover:text-white"
+              }`}
+            >
+              <Sparkles className="w-4.5 h-4.5 shrink-0 text-purple-400" />
+              <div className="min-w-0">
+                <span className="font-extrabold text-sm block">Campanhas 2026 Ativas</span>
+                <span className="text-[10px] text-purple-500/80 truncate block font-bold flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> QG Eleitoral Ativo
+                </span>
               </div>
-            </div>
+            </button>
+          </div>
+        </aside>
 
-          </section>
-        )}
-
-        {/* WORKSPACE AREA: TWO COLUMNS WITH BLINDED RESPONSIVITY */}
-        <div className="workspace-layout">
-          {/* COLUMN 1: MATRIX PANEL */}
-          <section 
-            id="matrix-panel" 
-            className={`bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col min-h-[500px] ${
-              selectedYear === 2026 && selectedCandidate ? "lg:flex-[1_1_100%] w-full" : ""
-            }`}
-          >
-            
-            {/* Left Header with title and year switcher */}
-            {!(selectedYear === 2026 && selectedCandidate) && (
-              <div id="controles-ano" className="border-b border-slate-100 pb-4 mb-6">
-              <div>
-                <h2 className="text-sm sm:text-lg font-bold text-slate-950 flex items-center gap-2 text-left">
-                  {selectedYear === 2026 ? "QG Campanhas 2026" : "Matriz: " + (
-                    activeMainCard === "gastos" 
+        {/* CENTER CONTENT DOCK (Main center panel) */}
+        <div className="flex-1 w-full flex flex-col gap-6 min-w-0">
+          
+          {/* Header Title with Year Selector */}
+          <div className="bg-[#141417] border border-[#25252a] p-5 sm:p-6 rounded-2xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+                {selectedYear === 2026 ? (
+                  <span className="flex items-center gap-2">
+                    <span className="p-1.5 bg-purple-500/10 text-purple-400 rounded-lg text-sm">🔮</span>
+                    QG Campanhas 2026 (Ativas)
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <span className="p-1.5 bg-[#e50914]/10 text-[#e50914] rounded-lg text-sm">📊</span>
+                    {activeMainCard === "gastos" 
                       ? "Anatomia de Gastos" 
                       : activeMainCard === "geoeleitoral"
                       ? "Engenharia Geoeleitoral"
-                      : "Benchmark & Reputação"
-                  )}
-                </h2>
-              </div>
-              
-              {/* Year Selectors matched to screenshot */}
-              <div className="flex flex-wrap gap-2 items-center shrink-0">
-                <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                      : "Benchmark & Eficiência"}
+                  </span>
+                )}
+              </h2>
+              <p className="text-xs text-slate-400 mt-1 font-semibold">
+                Monitoramento avançado de deputados, candidaturas e estratégias territoriais.
+              </p>
+            </div>
+
+            {/* Year Selector for historical years */}
+            {selectedYear !== 2026 && !selectedCandidate && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-slate-400">Selecionar Pleito:</span>
+                <div className="flex gap-1 bg-[#1e1e24] p-1 rounded-xl border border-[#2d2d35]">
                   {[2014, 2018, 2022].map((year) => {
                     const isSelected = selectedYear === year;
                     return (
                       <button
                         key={year}
-                        id={`btn-ano-${year}`}
-                        onClick={() => setSelectedYear(year)}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all duration-150 cursor-pointer ${
+                        onClick={() => {
+                          setSelectedYear(year);
+                          setSelectedCandidate(null);
+                          setSelectedCandidateName(null);
+                          setSelectedCandidateId(null);
+                        }}
+                        className={`px-3 py-1.5 text-xs font-black rounded-lg transition-all duration-150 cursor-pointer ${
                           isSelected
-                            ? "bg-[#1e293b] text-white shadow-xs"
-                            : "text-slate-600 hover:bg-slate-200"
+                            ? "bg-[#e50914] text-white shadow-md"
+                            : "text-slate-400 hover:bg-[#2b2b35] hover:text-white"
                         }`}
                       >
                         {year}
@@ -2484,499 +2577,731 @@ export default function App() {
                     );
                   })}
                 </div>
-
-                <button
-                  id="btn-ano-2026"
-                  onClick={() => setSelectedYear(2026)}
-                  className={`px-3 py-1.5 text-xs font-extrabold rounded-xl transition-all duration-150 cursor-pointer flex items-center gap-1.5 ${
-                    selectedYear === 2026
-                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md"
-                      : "bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-100"
-                  }`}
-                >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span>Campanhas 2026 (Ativas)</span>
-                </button>
               </div>
+            )}
+          </div>
+          {/* COLUMN 1: MATRIX PANEL */}
+          <section 
+            id="matrix-panel" 
+            className="w-full flex flex-col gap-6"
+          >
+            {/* COLLAPSIBLE ORÁCULO INTELIGENTE PANEL */}
+            <div className="bg-[#141417] border border-[#25252a] rounded-2xl overflow-hidden shadow-xl transition-all duration-300">
+              {/* Header Toggle Banner */}
+              <div 
+                onClick={() => setIsOraculoOpen(!isOraculoOpen)}
+                className="p-4 sm:p-5 flex items-center justify-between cursor-pointer hover:bg-slate-800/10 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">🔮</span>
+                  <div className="text-left">
+                    <h3 className="font-black text-white text-sm sm:text-base tracking-tight uppercase flex items-center gap-2">
+                      Oráculo de Inteligência
+                      <span className="text-[9px] px-2 py-0.5 bg-purple-950/40 text-purple-400 border border-purple-500/20 rounded-full font-black">
+                        Mecanismo Ativo
+                      </span>
+                    </h3>
+                    <p className="text-xs text-slate-400 font-semibold mt-0.5">
+                      {isOraculoOpen ? "Clique para encolher o assessor de inteligência" : "Clique para abrir o painel integrado do Oráculo"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-1.5 bg-[#1e1e24] border border-[#2d2d35] rounded-xl text-slate-400 shrink-0">
+                  {isOraculoOpen ? <ChevronUp className="w-5 h-5 text-[#e50914]" /> : <ChevronDown className="w-5 h-5" />}
+                </div>
+              </div>
+
+              {/* Collapsed/Expanded Panel Content */}
+              <AnimatePresence mode="wait">
+                {isOraculoOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="border-t border-[#25252a] bg-[#101012] p-5 space-y-6"
+                  >
+                    {/* Subtabs chooser inside Oráculo */}
+                    <div className="flex bg-[#1e1e24] border border-[#2d2d35] rounded-xl p-1 gap-1">
+                      <button
+                        onClick={() => setActiveTab("oraculo")}
+                        className={`flex-1 py-2 text-center text-xs font-black transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${
+                          activeTab === "oraculo"
+                            ? "bg-[#e50914] text-white shadow-md"
+                            : "text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        Oráculo Chat
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("audit")}
+                        className={`flex-1 py-2 text-center text-xs font-black transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${
+                          activeTab === "audit"
+                            ? "bg-[#e50914] text-white shadow-md"
+                            : "text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Auditoria IA
+                      </button>
+                      <button
+                        onClick={() => setActiveTab("conexoes")}
+                        className={`flex-1 py-2 text-center text-xs font-black transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${
+                          activeTab === "conexoes"
+                            ? "bg-[#e50914] text-white shadow-md"
+                            : "text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        <ArrowRightLeft className="w-3.5 h-3.5" />
+                        Conexões
+                      </button>
+                    </div>
+
+                    {/* RENDER ACTIVE TAB INSIDE COLLAPSED CONTAINER */}
+                    {activeTab === "oraculo" && (
+                      <div className="flex-1 flex flex-col justify-between gap-4 text-left">
+                        {/* Audio auto-play options */}
+                        <div className="flex justify-between items-center bg-[#1e1e24] border border-[#2d2d35] px-4 py-2.5 rounded-xl text-xs">
+                          <span className="font-extrabold text-slate-300 flex items-center gap-2">
+                            <Volume2 className="w-4 h-4 text-slate-400 shrink-0" />
+                            Respostas de Áudio por Síntese de Voz (TTS)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleSetAutoSpeak(!autoSpeakEnabled)}
+                            className={`px-3 py-1 rounded-full text-[10px] font-black tracking-wider transition-all cursor-pointer ${
+                              autoSpeakEnabled
+                                ? "bg-emerald-600 text-white shadow-md"
+                                : "bg-slate-800 text-slate-400 border border-[#2d2d35]"
+                            }`}
+                          >
+                            {autoSpeakEnabled ? "LIGADO (Auto-play)" : "DESLIGADO"}
+                          </button>
+                        </div>
+
+                        {/* Interactive Suggestion Queries */}
+                        {oraculoChat.length <= 1 && (
+                          <div className="space-y-2 mt-2 w-full text-left">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Sugestões de Análise:</span>
+                            {[
+                              "Quem gastou mais em 2022 por voto?",
+                              "Qual candidato teve mais despesas de campanha?",
+                              "Qual o custo médio por voto na eleição de 2022?"
+                            ].map((query, qIdx) => (
+                              <button
+                                key={qIdx}
+                                type="button"
+                                onClick={() => {
+                                  setOraculoInput(query);
+                                }}
+                                className="w-full p-3 bg-[#1e1e24] hover:bg-[#25252f] border border-[#2d2d35] rounded-xl text-left text-xs font-black text-slate-300 transition-all flex items-center justify-between gap-2 cursor-pointer"
+                              >
+                                <span>{query}</span>
+                                <ChevronRight className="w-4 h-4 text-slate-500 shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Conversational timeline */}
+                        {oraculoChat.length > 1 && (
+                          <div className="max-h-72 overflow-y-auto space-y-3.5 pr-1 scroll-hide bg-[#141417] p-4 border border-[#2d2d35] rounded-xl">
+                            {oraculoChat.map((msg) => {
+                              const isOraculo = msg.sender === "oraculo";
+                              return (
+                                <div key={msg.id} className={`flex ${isOraculo ? "justify-start" : "justify-end"} items-end gap-2`}>
+                                  {isOraculo && (
+                                    <button
+                                      type="button"
+                                      onClick={() => speakMessage(msg.id, msg.text)}
+                                      className={`p-2 rounded-xl border transition-all shrink-0 cursor-pointer ${
+                                        speakingMessageId === msg.id
+                                          ? "bg-red-950/40 border-red-500/20 text-red-400 animate-pulse"
+                                          : "bg-[#1e1e24] border-[#2d2d35] text-slate-400 hover:text-white"
+                                      }`}
+                                    >
+                                      {speakingMessageId === msg.id ? <VolumeX className="w-4 h-4 text-red-500" /> : <Volume2 className="w-4 h-4" />}
+                                    </button>
+                                  )}
+                                  <div className={`p-3.5 rounded-2xl text-xs max-w-[85%] leading-relaxed ${
+                                    isOraculo ? "bg-[#1e1e24] border border-[#2d2d35] text-slate-200" : "bg-[#e50914] text-white font-extrabold shadow-md"
+                                  }`}>
+                                    <p className="whitespace-pre-line">{msg.text}</p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            {sendingOraculo && (
+                              <div className="flex justify-start">
+                                <div className="bg-[#1e1e24] border border-[#2d2d35] p-3 rounded-2xl text-xs text-slate-400 flex items-center gap-2">
+                                  <div className="w-4 h-4 border-2 border-slate-600 border-t-[#e50914] rounded-full animate-spin shrink-0"></div>
+                                  <span>O Oráculo está processando...</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Action submission form */}
+                        <form onSubmit={handleSendOraculo} className="flex gap-2 pt-2 border-t border-[#2d2d35]">
+                          <input
+                            type="text"
+                            placeholder="Pergunte ao Oráculo IA (Ex: Quem foi mais eficiente em 2022?)"
+                            value={oraculoInput}
+                            onChange={(e) => setOraculoInput(e.target.value)}
+                            disabled={sendingOraculo}
+                            className="flex-1 px-4 py-3 bg-[#1e1e24] border border-[#2d2d35] rounded-xl text-xs font-semibold placeholder-slate-500 text-white focus:outline-none focus:border-[#e50914] focus:bg-[#25252f]"
+                          />
+                          <button
+                            type="button"
+                            onClick={toggleRecording}
+                            className={`p-3 rounded-xl border transition-all duration-150 shrink-0 cursor-pointer ${
+                              isRecording
+                                ? "bg-red-600 border-red-600 text-white animate-pulse"
+                                : "bg-[#1e1e24] border-[#2d2d35] text-slate-400 hover:text-white"
+                            }`}
+                          >
+                            <Mic className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={sendingOraculo || !oraculoInput.trim()}
+                            className="p-3 bg-[#e50914] hover:bg-[#b80710] text-white rounded-xl shadow-md transition-colors disabled:opacity-50 cursor-pointer"
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                        </form>
+                      </div>
+                    )}
+
+                    {activeTab === "audit" && (
+                      <div className="space-y-4 text-left">
+                        <div className="p-4 bg-amber-950/20 border border-amber-500/25 rounded-2xl flex gap-3">
+                          <Sparkles className="w-5 h-5 text-amber-500 shrink-0 mt-0.5 animate-pulse" />
+                          <div>
+                            <h4 className="font-extrabold text-xs text-amber-400 uppercase">Auditor Geral Independente</h4>
+                            <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                              Realiza uma varredura completa da prestação de contas de todos os candidatos distritais do ano de {selectedYear}, auditando disparidades contábeis e eficiência por IA.
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={runAiAudit}
+                          disabled={loadingAudit}
+                          className="w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                          {loadingAudit ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-slate-300 border-t-white rounded-full animate-spin"></div>
+                              <span>Processando Contas Eleitorais com Gemini...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 text-amber-300" />
+                              <span>Executar Auditoria Geral do Pleito {selectedYear}</span>
+                            </>
+                          )}
+                        </button>
+
+                        <div className="bg-[#141417] border border-[#2d2d35] rounded-xl p-4 min-h-[160px] max-h-[280px] overflow-y-auto text-xs text-slate-300">
+                          {loadingAudit ? (
+                            <div className="flex flex-col items-center justify-center py-12 gap-2">
+                              <div className="w-6 h-6 border-2 border-slate-700 border-t-[#e50914] rounded-full animate-spin"></div>
+                              <p className="text-[10px] text-slate-500 font-mono">Consolidando dados...</p>
+                            </div>
+                          ) : aiAuditText ? (
+                            <div className="prose prose-invert prose-sm leading-relaxed text-xs space-y-3">
+                              {aiAuditText.split("\n\n").map((para, pIdx) => {
+                                if (para.startsWith("1.") || para.startsWith("2.") || para.startsWith("3.") || para.startsWith("4.")) {
+                                  return (
+                                    <div key={pIdx} className="bg-[#1e1e24] border border-[#2d2d35] rounded-xl p-3 shadow-sm font-extrabold text-white">
+                                      <p>{para}</p>
+                                    </div>
+                                  );
+                                }
+                                return <p key={pIdx} className="text-slate-300 font-medium whitespace-pre-line">{para.replace(/\*\*/g, "")}</p>;
+                              })}
+                            </div>
+                          ) : (
+                            <div className="py-12 text-center text-slate-500 italic">
+                              Aguardando execução da varredura geral técnica.
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {activeTab === "conexoes" && (
+                      <div className="space-y-4 text-left">
+                        {/* Google Drive Planilhas */}
+                        <div className="bg-[#1e1e24] border border-[#2d2d35] rounded-xl p-4 space-y-3.5 text-xs text-slate-300">
+                          <div className="flex items-center justify-between border-b border-[#2d2d35] pb-2">
+                            <span className="text-xs font-black text-slate-200 flex items-center gap-2">
+                              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                              Google Drive Planilhas
+                            </span>
+                            {googleUser ? (
+                              <span className="text-[10px] font-black px-2.5 py-0.5 bg-emerald-950/30 text-emerald-400 border border-emerald-500/20 rounded-full">
+                                Ativo
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-black px-2.5 py-0.5 bg-slate-800 text-slate-500 border border-[#2d2d35] rounded-full">
+                                Off
+                              </span>
+                            )}
+                          </div>
+
+                          {needsAuth ? (
+                            <button
+                              onClick={handleGoogleSignInClick}
+                              disabled={loadingGoogleAuth}
+                              className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-[#2d2d35] rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                            >
+                              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                              Conectar Google Drive
+                            </button>
+                          ) : (
+                            <div className="space-y-3">
+                              <div className="flex justify-between items-center bg-[#141417] p-2.5 border border-[#2d2d35] rounded-xl">
+                                <div className="min-w-0">
+                                  <p className="font-extrabold text-slate-200 truncate">{googleUser.displayName}</p>
+                                  <p className="text-[10px] text-slate-500 truncate">{googleUser.email}</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={handleGoogleSignOutClick}
+                                  className="p-1.5 text-rose-500 hover:bg-rose-950/50 rounded-xl transition-colors cursor-pointer"
+                                >
+                                  <LogOut className="w-4 h-4" />
+                                </button>
+                              </div>
+
+                              <div className="space-y-1">
+                                <label className="text-[9px] font-black text-slate-500 uppercase block">Selecione Planilha:</label>
+                                {loadingFiles ? (
+                                  <p className="text-[10px] text-slate-500 italic">Buscando planilhas...</p>
+                                ) : driveFiles.length === 0 ? (
+                                  <p className="text-[10px] text-slate-500 italic">Nenhum arquivo encontrado.</p>
+                                ) : (
+                                  <div className="max-h-24 overflow-y-auto border border-[#2d2d35] rounded-xl divide-y divide-[#2d2d35] bg-[#141417]">
+                                    {driveFiles.map((f) => (
+                                      <button
+                                        key={f.id}
+                                        onClick={() => handleSelectFile(f)}
+                                        className={`w-full text-left p-2.5 text-[11px] truncate hover:bg-slate-800 ${
+                                          selectedFile?.id === f.id ? "bg-blue-950/40 font-black text-blue-400" : ""
+                                        }`}
+                                      >
+                                        {f.name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Cabinet spreadsheets links */}
+                              <div className="space-y-1.5 border-t border-[#2d2d35] pt-2.5">
+                                <label className="text-[9px] font-black text-slate-500 uppercase block">Links de Planilhas Rápidas:</label>
+                                <div className="grid grid-cols-1 gap-1.5">
+                                  {FIXED_SPREADSHEETS.map((item, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => {
+                                        handleSelectFile({
+                                          id: item.id,
+                                          name: item.name,
+                                          mimeType: "application/vnd.google-apps.spreadsheet",
+                                          modifiedTime: new Date().toISOString()
+                                        });
+                                      }}
+                                      className={`w-full text-left p-2 border rounded-xl text-[11px] transition-colors flex items-center justify-between ${
+                                        selectedFile?.id === item.id 
+                                          ? "border-emerald-500/20 bg-emerald-950/20 font-black text-emerald-400" 
+                                          : "border-[#2d2d35] bg-[#141417] hover:bg-slate-800 text-slate-300"
+                                      }`}
+                                    >
+                                      <span className="truncate flex items-center gap-1.5">
+                                        <FileSpreadsheet className={`w-3.5 h-3.5 shrink-0 ${selectedFile?.id === item.id ? 'text-emerald-500' : 'text-slate-500'}`} />
+                                        {item.name}
+                                      </span>
+                                      <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* GitHub Backup & Sincronia */}
+                        <div className="bg-[#1e1e24] border border-[#2d2d35] rounded-xl p-4 space-y-3 text-xs text-slate-300">
+                          <div className="flex items-center justify-between border-b border-[#2d2d35] pb-2">
+                            <span className="text-xs font-black text-slate-200 flex items-center gap-2">
+                              <Github className="w-4 h-4 text-slate-300" />
+                              GitHub Backup & Sincronia
+                            </span>
+                            {githubUser ? (
+                              <span className="text-[10px] font-black px-2.5 py-0.5 bg-emerald-950/30 text-emerald-400 border border-emerald-500/20 rounded-full">
+                                Ativo
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-black px-2.5 py-0.5 bg-slate-800 text-slate-500 border border-[#2d2d35] rounded-full">
+                                Off
+                              </span>
+                            )}
+                          </div>
+
+                          {!githubUser ? (
+                            <div className="space-y-2">
+                              <input
+                                type="password"
+                                placeholder="Insira seu GitHub PAT..."
+                                value={githubToken}
+                                onChange={(e) => setGithubToken(e.target.value)}
+                                className="w-full px-3 py-2 bg-[#141417] border border-[#2d2d35] rounded-lg text-xs font-semibold placeholder-slate-600 text-white focus:outline-none focus:border-[#e50914]"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (githubToken.trim()) {
+                                    localStorage.setItem("github_token", githubToken);
+                                    fetchGitHubProfile(githubToken);
+                                  }
+                                }}
+                                className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                              >
+                                <Lock className="w-3.5 h-3.5" />
+                                Conectar com Token
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="space-y-2.5">
+                              <div className="flex justify-between items-center bg-[#141417] p-2 border border-[#2d2d35] rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  {githubUser.avatar_url ? (
+                                    <img src={githubUser.avatar_url} alt="GitHub" className="w-6 h-6 rounded-full" />
+                                  ) : (
+                                    <div className="w-6 h-6 bg-slate-700 rounded-full" />
+                                  )}
+                                  <p className="font-extrabold text-slate-200">{githubUser.login}</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setGithubUser(null);
+                                    setGithubToken("");
+                                    localStorage.removeItem("github_token");
+                                  }}
+                                  className="p-1 text-rose-500 hover:bg-rose-950 rounded-lg cursor-pointer"
+                                >
+                                  <LogOut className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            )}
 
-            {/* Segmented Sub-tab bar inside Engenharia Geoeleitoral */}
-            {selectedYear !== 2026 && activeMainCard === "geoeleitoral" && (
-              <div className="flex gap-2 mb-4 bg-slate-50 p-1.5 rounded-xl w-fit border border-slate-150">
-                <button
-                  id="tab-geo-geral"
-                  onClick={() => setGeoSubTab("geral")}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    geoSubTab === "geral"
-                      ? "bg-purple-600 text-white shadow-xs"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }`}
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  Painel de Resultados Consolidados
-                </button>
-                <button
-                  id="tab-geo-candidato"
-                  disabled={!selectedCandidate}
-                  onClick={() => setGeoSubTab("candidato")}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    !selectedCandidate
-                      ? "text-slate-300 bg-transparent cursor-not-allowed"
-                      : geoSubTab === "candidato"
-                      ? "bg-purple-600 text-white shadow-xs"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }`}
-                  title={!selectedCandidate ? "Selecione um candidato abaixo para ver a distribuição geográfica." : ""}
-                >
-                  <MapPin className="w-3.5 h-3.5" />
-                  Distribuição por Candidato {selectedCandidate ? `(${selectedCandidate.nome_urna})` : ""}
-                </button>
-              </div>
-            )}
-
-            {/* Segmented Sub-tab bar inside Benchmark & Reputação */}
-            {selectedYear !== 2026 && activeMainCard === "reputacao" && (
-              <div className="flex gap-2 mb-4 bg-slate-50 p-1.5 rounded-xl w-fit border border-slate-150">
-                <button
-                  id="tab-rep-geral"
-                  onClick={() => {
-                    setRepSubTab("geral");
-                  }}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    repSubTab === "geral"
-                      ? "bg-pink-600 text-white shadow-xs"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }`}
-                >
-                  <TrendingUp className="w-3.5 h-3.5" />
-                  Estudo de Eficiência Geral
-                </button>
-                <button
-                  id="tab-rep-candidato"
-                  disabled={!selectedCandidate}
-                  onClick={() => setRepSubTab("candidato")}
-                  className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                    !selectedCandidate
-                      ? "text-slate-300 bg-transparent cursor-not-allowed"
-                      : repSubTab === "candidato"
-                      ? "bg-pink-600 text-white shadow-xs"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }`}
-                  title={!selectedCandidate ? "Selecione um candidato abaixo para ver as métricas individuais." : ""}
-                >
-                  <Award className="w-3.5 h-3.5" />
-                  Eficiência por Candidato {selectedCandidate ? `(${selectedCandidate.nome_urna})` : ""}
-                </button>
-              </div>
-            )}
-
-            {/* If we are on geoeleitoral and the general tab is active, render the consolidated results dashboard */}
             <AnimatePresence mode="wait">
-              {activeMainCard === "geoeleitoral" && geoSubTab === "geral" ? (
+              {!selectedCandidate ? (
                 <motion.div
-                  key="geoeleitoral-geral"
+                  key="search-list"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="flex-1 flex flex-col gap-4"
+                  className="flex-1 flex flex-col gap-6"
                 >
-                <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-xl">
-                  <h3 className="text-sm font-bold text-purple-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                    <span>📊</span> PAINEL GEOELEITORAL DE RESULTADOS CONSOLIDADOS
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Soma de votação consolidada de todos os candidatos por Região Administrativa (RA) e Zona Eleitoral do DF. Clique em qualquer candidato abaixo para detalhar sua distribuição territorial.
-                  </p>
-                </div>
-
-                {/* KPI Metrics deck */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Votos Totais Consolidados</span>
-                    <span className="text-base font-black text-slate-900 mt-1 block">
-                      {candidates.reduce((sum, c) => sum + (c.total_votos || 0), 0).toLocaleString("pt-BR")}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      Soma das duas bases de candidatos
-                    </span>
+                  <div className="text-left bg-gradient-to-r from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800 shadow-lg">
+                    <h2 className="text-lg font-black text-white tracking-tight uppercase flex items-center gap-2">
+                      {selectedYear === 2026 ? (
+                        <>
+                          <span>🔮</span> QG Campanhas 2026 (Ativas)
+                        </>
+                      ) : activeMainCard === "gastos" ? (
+                        <>
+                          <span>💵</span> Anatomia de Gastos
+                        </>
+                      ) : activeMainCard === "geoeleitoral" ? (
+                        <>
+                          <span>📍</span> Engenharia Geoeleitoral
+                        </>
+                      ) : (
+                        <>
+                          <span>🧠</span> Benchmark & Eficiência
+                        </>
+                      )}
+                    </h2>
+                    <p className="text-xs text-slate-400 font-semibold mt-1">
+                      {selectedYear === 2026 ? (
+                        "Selecione uma candidatura ativa abaixo para detalhar a estratégia e projeções de inteligência."
+                      ) : activeMainCard === "gastos" ? (
+                        "Selecione um candidato abaixo para realizar o cruzamento completo de gastos, receitas e contratações."
+                      ) : activeMainCard === "geoeleitoral" ? (
+                        "Selecione um candidato abaixo para visualizar a distribuição territorial e densidade de votação."
+                      ) : (
+                        "Selecione um candidato abaixo para analisar a eficiência financeira e o benchmark comparativo de custo por voto."
+                      )}
+                    </p>
                   </div>
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Candidato Líder</span>
-                    <span className="text-base font-black text-purple-700 mt-1 block truncate">
-                      {candidates.length > 0 ? candidates[0].nome_urna : "Nenhum"}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      {candidates.length > 0 ? `${candidates[0].total_votos.toLocaleString("pt-BR")} votos (${candidates[0].partido})` : "Sem dados"}
-                    </span>
-                  </div>
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Média por Concorrente</span>
-                    <span className="text-base font-black text-slate-900 mt-1 block">
-                      {candidates.length > 0 ? Math.round(candidates.reduce((sum, c) => sum + (c.total_votos || 0), 0) / candidates.length).toLocaleString("pt-BR") : 0}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      Média entre os {candidates.length} candidatos
-                    </span>
-                  </div>
-                </div>
-
-                {/* Search candidate list */}
-                <div className="relative mt-2">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    id="search-candidates-ranking"
-                    type="text"
-                    placeholder="Filtrar candidatos no ranking por nome ou partido..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
-                  />
-                </div>
-
-                {/* Ranking List */}
-                <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1 scroll-hide mt-1">
-                  {filteredCandidates.length === 0 ? (
-                    <div className="text-center py-12 text-xs text-slate-400 font-medium">
-                      Nenhum candidato localizado no ranking.
-                    </div>
-                  ) : (
-                    filteredCandidates.map((cand, idx) => {
-                      const rank = idx + 1;
-                      const maxV = candidates.length > 0 ? Math.max(...candidates.map(c => c.total_votos || 1)) : 1;
-                      const pctOfMax = maxV > 0 ? (cand.total_votos / maxV) * 100 : 0;
-                      return (
-                        <div
-                          key={cand.id_candidato}
-                          onClick={() => {
-                            fetchDossier(cand.nome_urna, selectedYear);
-                            setGeoSubTab("candidato");
-                          }}
-                          className="p-3 border border-slate-150 bg-white hover:bg-purple-50/20 hover:border-purple-300 rounded-xl transition-all duration-150 cursor-pointer flex flex-col gap-2 shadow-xs group"
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                              <span className="text-xs font-black text-slate-400 font-mono w-5">#{rank}</span>
-                              <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 group-hover:bg-purple-100 group-hover:text-purple-700 transition-colors shrink-0 overflow-hidden">
-                                <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
-                              </div>
-                              <div className="min-w-0">
-                                <span className="font-extrabold text-xs text-slate-800 uppercase block truncate group-hover:text-purple-900 transition-colors">
-                                  {cand.nome_urna}
-                                </span>
-                                <span className="text-[10px] font-semibold text-slate-400 uppercase">
-                                  {cand.partido} • Deputado Distrital
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <div className="text-right shrink-0">
-                              <span className="font-black text-sm text-slate-900 font-mono">
-                                {cand.total_votos.toLocaleString("pt-BR")}
-                              </span>
-                              <span className="text-[9px] text-slate-400 block font-medium">VOTOS</span>
-                            </div>
-                          </div>
-                          
-                          {/* Custom micro bar chart */}
-                          <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-purple-500 rounded-full group-hover:bg-purple-600 transition-all duration-300" 
-                              style={{ width: `${pctOfMax}%` }}
-                            ></div>
-                          </div>
+                  
+                  {/* Custom 3-Part Filter Bar */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full z-30">
+                    
+                    {/* Filtro 1 (Dropdown de Nomes) */}
+                    <div className="relative" id="filter-name-container">
+                      <button
+                        id="filter-name-btn"
+                        type="button"
+                        onClick={() => {
+                          setIsNameDropdownOpen(!isNameDropdownOpen);
+                          setIsPartyDropdownOpen(false);
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-[#141417] border border-[#2d2d35] rounded-xl text-xs font-semibold text-white hover:border-slate-600 focus:border-[#e50914] focus:outline-none transition-all cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="text-slate-400">👤</span>
+                          <span className="truncate">
+                            {selectedNameFilter ? selectedNameFilter : "Todos os Deputados"}
+                          </span>
                         </div>
-                      );
-                    })
-                  )}
-                </div>
-              </motion.div>
-            ) : activeMainCard === "reputacao" && repSubTab === "geral" ? (
-              <motion.div
-                key="reputacao-geral"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex-1 flex flex-col gap-4"
-              >
-                <div className="bg-pink-50/50 border border-pink-100 p-4 rounded-xl">
-                  <h3 className="text-sm font-bold text-pink-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                    <span>🧠</span> ESTUDO DE EFICIÊNCIA ELEITORAL ({selectedYear})
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Análise comparativa relacionando despesas contratadas com a quantidade de votos recebidos.
-                    Descubra o custo por voto de cada deputado distrital eleito e identifique as campanhas com melhor aproveitamento financeiro.
-                  </p>
-                </div>
+                        <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isNameDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
 
-                {/* KPI Metrics deck */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Custo Médio por Voto</span>
-                    <span className="text-base font-black text-slate-900 mt-1 block">
-                      R$ {(candidates.reduce((sum, c) => sum + (c.total_votos || 0), 0) > 0
-                        ? candidates.reduce((sum, c) => sum + (c.despesas_contratadas || 0), 0) /
-                          candidates.reduce((sum, c) => sum + (c.total_votos || 0), 0)
-                        : 0).toFixed(2)}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      Média geral de toda a eleição
-                    </span>
-                  </div>
-
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Investimento Contratado Total</span>
-                    <span className="text-base font-black text-slate-900 mt-1 block">
-                      R$ {candidates.reduce((sum, c) => sum + (c.despesas_contratadas || 0), 0).toLocaleString("pt-BR")}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      Soma dos gastos dos {candidates.length} eleitos
-                    </span>
-                  </div>
-
-                  <div className="p-3 border border-slate-150 bg-slate-50/50 rounded-xl">
-                    <span className="text-[10px] font-bold text-pink-700 uppercase tracking-wider block">Campanha Mais Eficiente</span>
-                    <span className="text-base font-black text-emerald-600 mt-1 block truncate">
-                      {candidates.length > 0
-                        ? [...candidates]
-                            .filter(c => c.total_votos > 0)
-                            .sort((a, b) => (a.despesas_contratadas / a.total_votos) - (b.despesas_contratadas / b.total_votos))[0]?.nome_urna
-                        : "Sem dados"}
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-medium leading-none block mt-1">
-                      {(() => {
-                        const sorted = [...candidates]
-                          .filter(c => c.total_votos > 0)
-                          .sort((a, b) => (a.despesas_contratadas / a.total_votos) - (b.despesas_contratadas / b.total_votos));
-                        if (sorted.length > 0) {
-                          const cost = sorted[0].despesas_contratadas / sorted[0].total_votos;
-                          return `Apenas R$ ${cost.toFixed(2)} por voto`;
-                        }
-                        return "Sem dados";
-                      })()}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Main Ranking Layout */}
-                <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs">
-                  <div className="flex justify-between items-center mb-3">
-                    <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      Ranking de Eficiência (Menor custo por voto)
-                    </h4>
-                    <span className="text-[10px] font-mono text-slate-500 font-bold uppercase">
-                      Ordenado por R$/Voto
-                    </span>
-                  </div>
-
-                  {/* Search candidate list */}
-                  <div className="relative mb-3">
-                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      id="search-candidates-efficiency"
-                      type="text"
-                      placeholder="Filtrar candidatos por nome ou partido..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-pink-500 focus:bg-white"
-                    />
-                  </div>
-
-                  <div className="space-y-2 max-h-[350px] overflow-y-auto pr-1 scroll-hide">
-                    {(() => {
-                      const list = [...candidates]
-                        .filter(c => c.total_votos > 0)
-                        .map(c => ({
-                          ...c,
-                          costPerVote: c.despesas_contratadas / c.total_votos
-                        }))
-                        .filter(c =>
-                          c.nome_urna.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          c.partido.toLowerCase().includes(searchQuery.toLowerCase())
-                        )
-                        .sort((a, b) => a.costPerVote - b.costPerVote);
-
-                      if (list.length === 0) {
-                        return (
-                          <div className="text-center py-12 text-xs text-slate-400 font-medium">
-                            Nenhum candidato localizado com os filtros aplicados.
+                      {isNameDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-40" onClick={() => setIsNameDropdownOpen(false)} />
+                          <div id="filter-name-menu" className="absolute left-0 right-0 mt-1.5 max-h-60 overflow-y-auto bg-[#141417] border border-[#2d2d35] rounded-xl shadow-2xl z-50 py-1 font-sans text-xs scrollbar-thin scrollbar-thumb-slate-800">
+                            <button
+                              key="all-names"
+                              type="button"
+                              onClick={() => {
+                                setSelectedNameFilter("");
+                                setIsNameDropdownOpen(false);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 hover:bg-[#1e1e24] transition-colors flex items-center justify-between font-bold ${
+                                !selectedNameFilter ? "text-[#e50914] bg-[#1e1e24]/30" : "text-slate-300"
+                              }`}
+                            >
+                              <span>Todos os Deputados</span>
+                              {!selectedNameFilter && <Check className="w-3.5 h-3.5" />}
+                            </button>
+                            
+                            {candidates
+                              .filter(c => !selectedPartyFilter || c.partido === selectedPartyFilter)
+                              .map(c => c.nome_urna)
+                              .filter((v, i, a) => a.indexOf(v) === i)
+                              .sort((a, b) => a.localeCompare(b))
+                              .map((name) => {
+                                const isSel = selectedNameFilter === name;
+                                return (
+                                  <button
+                                    key={name}
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedNameFilter(name);
+                                      setIsNameDropdownOpen(false);
+                                    }}
+                                    className={`w-full text-left px-4 py-2.5 hover:bg-[#1e1e24] transition-colors flex items-center justify-between font-semibold ${
+                                      isSel ? "text-[#e50914] bg-[#1e1e24]/30" : "text-slate-300"
+                                    }`}
+                                  >
+                                    <span className="truncate">{name}</span>
+                                    {isSel && <Check className="w-3.5 h-3.5" />}
+                                  </button>
+                                );
+                              })}
                           </div>
-                        );
-                      }
+                        </>
+                      )}
+                    </div>
 
-                      const maxCost = Math.max(...list.map(c => c.costPerVote), 1);
+                    {/* Filtro 2 (Dropdown de Partidos) */}
+                    <div className="relative" id="filter-party-container">
+                      <button
+                        id="filter-party-btn"
+                        type="button"
+                        onClick={() => {
+                          setIsPartyDropdownOpen(!isPartyDropdownOpen);
+                          setIsNameDropdownOpen(false);
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-3 bg-[#141417] border border-[#2d2d35] rounded-xl text-xs font-semibold text-white hover:border-slate-600 focus:border-[#e50914] focus:outline-none transition-all cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="text-slate-400">🛡️</span>
+                          <span className="truncate">
+                            {selectedPartyFilter ? `Partido: ${selectedPartyFilter}` : "Todos os Partidos"}
+                          </span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isPartyDropdownOpen ? "rotate-180" : ""}`} />
+                      </button>
 
-                      return list.map((cand, idx) => {
-                        const rank = idx + 1;
-                        const pctOfMax = maxCost > 0 ? (cand.costPerVote / maxCost) * 100 : 0;
+                      {isPartyDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-40" onClick={() => setIsPartyDropdownOpen(false)} />
+                          <div id="filter-party-menu" className="absolute left-0 right-0 mt-1.5 max-h-60 overflow-y-auto bg-[#141417] border border-[#2d2d35] rounded-xl shadow-2xl z-50 py-1 font-sans text-xs scrollbar-thin scrollbar-thumb-slate-800">
+                            <button
+                              key="all-parties"
+                              type="button"
+                              onClick={() => {
+                                setSelectedPartyFilter("");
+                                setIsPartyDropdownOpen(false);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 hover:bg-[#1e1e24] transition-colors flex items-center justify-between font-bold ${
+                                !selectedPartyFilter ? "text-[#e50914] bg-[#1e1e24]/30" : "text-slate-300"
+                              }`}
+                            >
+                              <span>Todos os Partidos</span>
+                              {!selectedPartyFilter && <Check className="w-3.5 h-3.5" />}
+                            </button>
+                            {Array.from(new Set(candidates.map(c => c.partido)))
+                              .filter(Boolean)
+                              .sort()
+                              .map((party) => {
+                                const isSel = selectedPartyFilter === party;
+                                return (
+                                  <button
+                                    key={party}
+                                    type="button"
+                                    onClick={() => {
+                                      setSelectedPartyFilter(party);
+                                      if (selectedNameFilter) {
+                                        const hasCandidateInParty = candidates.some(c => c.nome_urna === selectedNameFilter && c.partido === party);
+                                        if (!hasCandidateInParty) {
+                                          setSelectedNameFilter("");
+                                        }
+                                      }
+                                      setIsPartyDropdownOpen(false);
+                                    }}
+                                    className={`w-full text-left px-4 py-2.5 hover:bg-[#1e1e24] transition-colors flex items-center justify-between font-semibold ${
+                                      isSel ? "text-[#e50914] bg-[#1e1e24]/30" : "text-slate-300"
+                                    }`}
+                                  >
+                                    <span>{party}</span>
+                                    {isSel && <Check className="w-3.5 h-3.5" />}
+                                  </button>
+                                );
+                              })}
+                          </div>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Filtro 3 (Pesquisa Solta) */}
+                    <div className="relative" id="filter-search-container">
+                      <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        id="search-candidates-free"
+                        type="text"
+                        placeholder="Pesquisa livre..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-10 py-3 bg-[#141417] border border-[#2d2d35] rounded-xl text-xs font-semibold placeholder-slate-500 text-white focus:outline-none focus:border-[#e50914] focus:bg-[#1c1c24] transition-all"
+                      />
+                      {searchQuery && (
+                        <button
+                          type="button"
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-white transition-colors cursor-pointer"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+
+                  </div>
+
+                  {/* Candidate Cards Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-12">
+                    {loadingList ? (
+                      <div className="col-span-full flex flex-col items-center justify-center py-20 gap-3">
+                        <div className="w-8 h-8 border-3 border-slate-700 border-t-[#e50914] rounded-full animate-spin"></div>
+                        <p className="text-xs text-slate-500 font-bold font-mono">Consolidando dados do SQLite corporativo...</p>
+                      </div>
+                    ) : filteredCandidates.length === 0 ? (
+                      <div className="col-span-full text-center py-20 text-xs text-slate-500 font-bold">
+                        Nenhum deputado localizado com o filtro inserido.
+                      </div>
+                    ) : (
+                      filteredCandidates.map((cand) => {
+                        const costPerVote = cand.total_votos > 0 ? cand.despesas_contratadas / cand.total_votos : 0;
                         return (
                           <div
                             key={cand.id_candidato}
-                            onClick={() => {
-                              fetchDossier(cand.nome_urna, selectedYear);
-                              setRepSubTab("candidato");
-                            }}
-                            className="p-3 border border-slate-150 bg-white hover:bg-pink-50/20 hover:border-pink-300 rounded-xl transition-all duration-150 cursor-pointer flex flex-col gap-2 shadow-xs group"
+                            onClick={() => fetchDossier(cand.nome_urna, selectedYear)}
+                            className="group relative bg-[#141417] hover:bg-[#1a1a22] border border-[#25252b] hover:border-[#e50914] rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all duration-300 cursor-pointer shadow-md hover:shadow-2xl hover:-translate-y-1"
                           >
-                            <div className="flex justify-between items-center gap-3 w-full min-w-0">
-                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <span className="text-xs font-black text-slate-400 font-mono w-5 shrink-0 flex-shrink-0">#{rank}</span>
-                                <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 group-hover:bg-pink-100 group-hover:text-pink-700 transition-colors shrink-0 flex-shrink-0 overflow-hidden">
-                                  <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <span className="font-extrabold text-xs text-slate-800 uppercase block truncate group-hover:text-pink-900 transition-colors whitespace-nowrap overflow-hidden text-overflow-ellipsis" title={cand.nome_urna}>
-                                    {cand.nome_urna}
-                                  </span>
-                                  <span className="text-[10px] font-semibold text-slate-400 uppercase block truncate whitespace-nowrap overflow-hidden text-overflow-ellipsis">
-                                    {cand.partido} • {cand.total_votos.toLocaleString("pt-BR")} votos
-                                  </span>
-                                </div>
-                              </div>
+                            {/* Card background styling accent */}
+                            <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-slate-800 to-slate-700 group-hover:from-[#e50914] group-hover:to-red-500 rounded-t-2xl transition-all duration-300"></div>
 
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpenReputationDossier(cand);
-                                  }}
-                                  className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 hover:text-indigo-800 text-[10px] font-black rounded-lg border border-indigo-100 flex items-center gap-1 transition-all shadow-2xs cursor-pointer shrink-0"
-                                >
-                                  <Brain className="w-3 h-3 text-indigo-600" />
-                                  <span>Dossiê IA</span>
-                                </button>
-
-                                <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
-                                  <span className="font-black text-sm text-pink-700 font-mono block">
-                                    R$ {cand.costPerVote.toFixed(2)}
-                                  </span>
-                                  <span className="text-[9px] text-slate-400 block font-medium uppercase">Por Eleitor</span>
-                                </div>
+                            {/* Party badge & Avatar row */}
+                            <div className="flex justify-between items-start mt-1">
+                              <span className="px-2.5 py-1 bg-slate-900 border border-[#2d2d35] text-[10px] font-black text-slate-300 tracking-wider font-mono rounded-lg uppercase">
+                                {cand.partido}
+                              </span>
+                              
+                              {/* Larger Circular Avatar with elegant frame */}
+                              <div className="w-14 h-14 rounded-full border-2 border-[#2d2d35] group-hover:border-[#e50914] bg-[#1a1a22] flex items-center justify-center shadow-md overflow-hidden transition-colors shrink-0">
+                                <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} variant="large" />
                               </div>
                             </div>
 
-                            {/* Progress bar representing inefficiency */}
-                            <div className="flex items-center gap-2">
-                              <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full transition-all duration-300 ${
-                                    pctOfMax < 33
-                                      ? "bg-emerald-500 group-hover:bg-emerald-600"
-                                      : pctOfMax < 66
-                                      ? "bg-amber-500 group-hover:bg-amber-600"
-                                      : "bg-rose-500 group-hover:bg-rose-600"
-                                  }`}
-                                  style={{ width: `${pctOfMax}%` }}
-                                ></div>
+                            {/* Candidate Identification */}
+                            <div className="text-left">
+                              <h3 className="font-black text-base sm:text-lg text-white group-hover:text-[#e50914] uppercase tracking-tight truncate transition-colors" title={cand.nome_urna}>
+                                {cand.nome_urna}
+                              </h3>
+                              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+                                Deputado Distrital
+                              </p>
+                            </div>
+
+                            {/* Stats Divider Line */}
+                            <div className="border-t border-[#25252b] my-1"></div>
+
+                            {/* Primary Election Stats */}
+                            <div className="grid grid-cols-2 gap-2 text-left">
+                              <div>
+                                <span className="text-[9px] font-black text-slate-500 uppercase block tracking-wider">Votos Recebidos</span>
+                                <span className="text-xs font-black text-slate-200 mt-0.5 block font-mono">
+                                  {cand.total_votos.toLocaleString("pt-BR")}
+                                </span>
                               </div>
-                              <span className="text-[9px] font-mono text-slate-400 font-bold w-12 text-right">
-                                {pctOfMax.toFixed(0)}%
-                              </span>
+                              <div>
+                                {selectedYear === 2026 ? (
+                                  <>
+                                    <span className="text-[9px] font-black text-slate-500 uppercase block tracking-wider">Situação</span>
+                                    <span className="text-xs font-black text-emerald-500 mt-0.5 block uppercase">Ativa</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="text-[9px] font-black text-slate-500 uppercase block tracking-wider">Custo Unitário</span>
+                                    <span className="text-xs font-black text-red-400 mt-0.5 block font-mono">
+                                      R$ {costPerVote.toFixed(2)}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Interactive Slide-up Hover Indicator Button */}
+                            <div className="w-full mt-2 py-2 bg-slate-900 border border-[#2d2d35] group-hover:bg-[#e50914] group-hover:border-[#e50914] text-center rounded-xl text-[10px] font-black uppercase text-slate-300 group-hover:text-white tracking-widest transition-all shadow-sm">
+                              Explorar Dossiê Técnico
                             </div>
                           </div>
                         );
-                      });
-                    })()}
+                      })
+                    )}
                   </div>
-                </div>
-              </motion.div>
-            ) : !selectedCandidate ? (
-              <motion.div
-                key="search-list"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex-1 flex flex-col gap-4"
-              >
-                <div className="text-center py-6">
-                  <p className="text-sm text-slate-500 font-medium">
-                    Busque e selecione um deputado eleito para detalhar a matriz acima.
-                  </p>
-                </div>
-                
-                {/* Search candidate list */}
-                <div className="relative mb-4">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    id="search-candidates"
-                    type="text"
-                    placeholder="Buscar por nome ou partido..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
-                  />
-                </div>
-
-                <div className="container-grid max-h-[380px] overflow-y-auto pr-1 scroll-hide">
-                  {loadingList ? (
-                    <div className="col-span-full flex flex-col items-center justify-center py-16 gap-2">
-                      <div className="w-6 h-6 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
-                      <p className="text-xs text-slate-500 font-medium font-mono">Carregando base SQLite...</p>
-                    </div>
-                  ) : filteredCandidates.length === 0 ? (
-                    <div className="col-span-full text-center py-12 text-xs text-slate-400 font-medium">
-                      Nenhum candidato localizado.
-                    </div>
-                  ) : (
-                    filteredCandidates.map((cand) => {
-                      const costPerVote = cand.total_votos > 0 ? cand.despesas_contratadas / cand.total_votos : 0;
-                      return (
-                        <div
-                          key={cand.id_candidato}
-                          onClick={() => fetchDossier(cand.nome_urna, selectedYear)}
-                          className="p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 min-w-0 w-full group"
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                            <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-700 overflow-hidden shrink-0 flex-shrink-0">
-                              <CandidateAvatar candidatoId={cand.id_candidato} nomeUrna={cand.nome_urna} fotoUrl={cand.foto_url} />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <h4 className="font-bold text-xs text-slate-900 truncate block w-full whitespace-nowrap overflow-hidden text-overflow-ellipsis" title={cand.nome_urna}>
-                                {cand.nome_urna}
-                              </h4>
-                              <p className="text-[10px] text-slate-500 font-semibold truncate block w-full whitespace-nowrap overflow-hidden text-overflow-ellipsis">
-                                {cand.partido} • {cand.total_votos.toLocaleString("pt-BR")} votos
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            {/* Intelligent Dossier Button directly on card */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenReputationDossier(cand);
-                              }}
-                              className="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 hover:text-indigo-800 text-[10px] font-black rounded-lg border border-indigo-100 flex items-center gap-1 transition-all shadow-2xs cursor-pointer shrink-0"
-                            >
-                              <Brain className="w-3 h-3 text-indigo-600" />
-                              <span>Dossiê IA</span>
-                            </button>
-
-                            {selectedYear === 2026 ? (
-                              <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
-                                <p className="text-[10px] text-purple-500 font-black uppercase leading-none">Campanha</p>
-                                <p className="text-xs font-black text-purple-600 mt-0.5">Ativa</p>
-                              </div>
-                            ) : (
-                              <div className="text-right shrink-0 flex-shrink-0 min-w-[70px]">
-                                <p className="text-[10px] text-slate-400 font-medium uppercase leading-none">Custo/Voto</p>
-                                <p className="text-xs font-extrabold text-slate-800 mt-0.5">R$ {costPerVote.toFixed(2)}</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </motion.div>
+                </motion.div>
             ) : selectedYear === 2026 ? (
               /* 2026 CANDIDATE FOCUS MODE - HIGH FIDELITY NETFLIX EXPERIENCE */
               <motion.div
@@ -3517,11 +3842,7 @@ export default function App() {
           {/* COLUMN 2: ASSISTENTE DE GABINETE INTELLIGENCE PANEL */}
           <section 
             id="assistant-panel" 
-            className={`border border-slate-200 rounded-2xl shadow-sm flex flex-col min-h-[500px] overflow-hidden ${
-              isMobileAssistantOpen 
-                ? "fixed inset-0 z-50 bg-[#16161a] p-4 animate-in fade-in slide-in-from-bottom duration-200" 
-                : "hidden lg:flex lg:w-full"
-            }`}
+            className="hidden"
           >
             
             {/* Assistant Header & Sub-labels */}
@@ -4491,6 +4812,13 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Floating Futuristic AI Assistant (OráculoPremium) */}
+      <OraculoPremium 
+        activeGuide={selectedYear === 2026 ? "campanhas" : activeMainCard} 
+        selectedCandidate={selectedCandidate}
+        selectedYear={selectedYear}
+      />
     </div>
   );
 }

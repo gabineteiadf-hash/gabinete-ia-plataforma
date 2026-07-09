@@ -1265,6 +1265,126 @@
     ]
   },
   {
+    "nome_urna": "Juarezão",
+    "nome_completo": "JUAREZ CARLOS DE LIMA OLIVEIRA",
+    "partido": "PRTB",
+    "ano_eleicao": 2014,
+    "total_votos": 15923,
+    "foto_url": "/assets/fotos/juarezao.jpg",
+    "cargo": "Deputado Distrital",
+    "situacao": "Eleito",
+    "financeiro": {
+      "total_receitas": 110000.0,
+      "despesas_contratadas": 102000.0,
+      "despesas_pagas": 98000.0,
+      "maior_fornecedor_nome": "Gráfica Sobradinho Comunicações",
+      "maior_fornecedor_valor": 22000.0,
+      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":18000}]"
+    },
+    "votos": [
+      {
+        "zona": 1,
+        "ra": "Asa Sul",
+        "votos": 55
+      },
+      {
+        "zona": 2,
+        "ra": "Itapoã / Lago Norte / Paranoá",
+        "votos": 45
+      },
+      {
+        "zona": 3,
+        "ra": "Taguatinga",
+        "votos": 200
+      },
+      {
+        "zona": 4,
+        "ra": "Gama / Santa Maria",
+        "votos": 72
+      },
+      {
+        "zona": 5,
+        "ra": "Sobradinho / Sobradinho II",
+        "votos": 44
+      },
+      {
+        "zona": 6,
+        "ra": "Planaltina",
+        "votos": 24
+      },
+      {
+        "zona": 8,
+        "ra": "Ceilândia",
+        "votos": 158
+      },
+      {
+        "zona": 9,
+        "ra": "Estrutural / Guará I / Guará II",
+        "votos": 127
+      },
+      {
+        "zona": 10,
+        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
+        "votos": 92
+      },
+      {
+        "zona": 11,
+        "ra": "Cruzeiro / Octogonal",
+        "votos": 64
+      },
+      {
+        "zona": 12,
+        "ra": "Zona não mapeada",
+        "votos": 68
+      },
+      {
+        "zona": 13,
+        "ra": "Samambaia",
+        "votos": 201
+      },
+      {
+        "zona": 14,
+        "ra": "Asa Norte",
+        "votos": 61
+      },
+      {
+        "zona": 15,
+        "ra": "Águas Claras / Taguatinga",
+        "votos": 285
+      },
+      {
+        "zona": 16,
+        "ra": "Ceilândia",
+        "votos": 13619
+      },
+      {
+        "zona": 17,
+        "ra": "Gama",
+        "votos": 48
+      },
+      {
+        "zona": 18,
+        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
+        "votos": 83
+      },
+      {
+        "zona": 19,
+        "ra": "Taguatinga / Vicente Pires",
+        "votos": 389
+      },
+      {
+        "zona": 20,
+        "ra": "Ceilândia",
+        "votos": 124
+      },
+      {
+        "zona": 21,
+        "ra": "Recanto das Emas",
+        "votos": 164
+      }
+    ]
+  },
+  {
     "nome_urna": "Chico Leite",
     "nome_completo": "Chico Leite",
     "partido": "PT",
@@ -2641,126 +2761,6 @@
         "zona": 21,
         "ra": "Recanto das Emas",
         "votos": 171
-      }
-    ]
-  },
-  {
-    "nome_urna": "Juarezão",
-    "nome_completo": "JUAREZ CARLOS DE LIMA OLIVEIRA",
-    "partido": "PRTB",
-    "ano_eleicao": 2014,
-    "total_votos": 15923,
-    "foto_url": "/assets/fotos/juarezao.jpg",
-    "cargo": "Deputado Distrital",
-    "situacao": "Eleito",
-    "financeiro": {
-      "total_receitas": 110000.0,
-      "despesas_contratadas": 102000.0,
-      "despesas_pagas": 98000.0,
-      "maior_fornecedor_nome": "Gráfica Sobradinho Comunicações",
-      "maior_fornecedor_valor": 22000.0,
-      "detalhe_despesas": "[{\"category\":\"Publicidade por Impressos\",\"value\":45000},{\"category\":\"Atividades de Militância\",\"value\":35000},{\"category\":\"Combustíveis\",\"value\":18000}]"
-    },
-    "votos": [
-      {
-        "zona": 1,
-        "ra": "Asa Sul",
-        "votos": 55
-      },
-      {
-        "zona": 2,
-        "ra": "Itapoã / Lago Norte / Paranoá",
-        "votos": 45
-      },
-      {
-        "zona": 3,
-        "ra": "Taguatinga",
-        "votos": 200
-      },
-      {
-        "zona": 4,
-        "ra": "Gama / Santa Maria",
-        "votos": 72
-      },
-      {
-        "zona": 5,
-        "ra": "Sobradinho / Sobradinho II",
-        "votos": 44
-      },
-      {
-        "zona": 6,
-        "ra": "Planaltina",
-        "votos": 24
-      },
-      {
-        "zona": 8,
-        "ra": "Ceilândia",
-        "votos": 158
-      },
-      {
-        "zona": 9,
-        "ra": "Estrutural / Guará I / Guará II",
-        "votos": 127
-      },
-      {
-        "zona": 10,
-        "ra": "Núcleo Bandeirante / Riacho Fundo I / Riacho Fundo II / Candangolândia",
-        "votos": 92
-      },
-      {
-        "zona": 11,
-        "ra": "Cruzeiro / Octogonal",
-        "votos": 64
-      },
-      {
-        "zona": 12,
-        "ra": "Zona não mapeada",
-        "votos": 68
-      },
-      {
-        "zona": 13,
-        "ra": "Samambaia",
-        "votos": 201
-      },
-      {
-        "zona": 14,
-        "ra": "Asa Norte",
-        "votos": 61
-      },
-      {
-        "zona": 15,
-        "ra": "Águas Claras / Taguatinga",
-        "votos": 285
-      },
-      {
-        "zona": 16,
-        "ra": "Ceilândia",
-        "votos": 13619
-      },
-      {
-        "zona": 17,
-        "ra": "Gama",
-        "votos": 48
-      },
-      {
-        "zona": 18,
-        "ra": "Lago Sul / São Sebastião / Jardim Botânico",
-        "votos": 83
-      },
-      {
-        "zona": 19,
-        "ra": "Taguatinga / Vicente Pires",
-        "votos": 389
-      },
-      {
-        "zona": 20,
-        "ra": "Ceilândia",
-        "votos": 124
-      },
-      {
-        "zona": 21,
-        "ra": "Recanto das Emas",
-        "votos": 164
       }
     ]
   }

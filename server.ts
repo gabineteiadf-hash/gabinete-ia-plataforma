@@ -469,7 +469,7 @@ async function generateContentWithFallback(params: {
   const ai = getAiClient();
   try {
     return await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-3.1-flash-lite",
       ...params,
     });
   } catch (err: any) {
@@ -479,7 +479,7 @@ async function generateContentWithFallback(params: {
         return generateContentWithFallback(params, retries - 1, delay * 2);
     }
     
-    console.warn("Primary model gemini-1.5-flash failed, attempting fallback to gemini-flash-latest:", err);
+    console.warn("Primary model gemini-3.1-flash-lite failed, attempting fallback to gemini-flash-latest:", err);
     try {
       return await ai.models.generateContent({
         model: "gemini-flash-latest",
@@ -1590,17 +1590,23 @@ const handleOraculoChat = async (req: express.Request, res: express.Response) =>
     }
 
     // 3. Configuração do Modelo: systemInstruction para estrategista político sênior do Distrito Federal
-    const systemInstruction = `Você é o "Oráculo do Gabinete IA", um consultor político sênior e estrategista de dados especialista na Câmara Legislativa do Distrito Federal (CLDF).
+    const selectedCandidate = req.body.selectedCandidate;
+    const selectedYear = req.body.selectedYear;
+
+    let systemInstruction = `Você é o "Oráculo do Gabinete IA", um consultor político sênior e estrategista de dados especialista na Câmara Legislativa do Distrito Federal (CLDF).
 Seu objetivo é responder perguntas de forma altamente analítica, estratégica, precisa e em português, usando o contexto fornecido abaixo (representando a base de dados SQLite consolidada de candidaturas distritais de 2014, 2018 e 2022) e considerando o histórico da conversa quando aplicável.
 
 Diretrizes Críticas de Resposta:
 1. Sempre priorize o valor das "Despesas Contratadas" como o gasto oficial e legal do candidato para análises financeiras e de custo por voto. Mencione isso de forma clara caso o usuário pergunte sobre gastos.
 2. Seja objetivo, pragmático e estratégico. Use formatação Markdown elegante com tabelas ou tópicos sempre que facilitar a leitura.
 3. Caso a resposta necessite de cálculos simples (como somas, médias de gastos por partido, custos por voto), realize-os com base nos dados fornecidos e exiba os passos ou resultados de forma transparente.
-4. Se o usuário fizer perguntas que não podem ser respondidas com os dados fornecidos ou fora do escopo, responda elegantemente informando os limites do seu escopo e oriente o usuário de forma construtiva.
+4. Se o usuário fizer perguntas que não podem ser respondidas com os dados fornecidos ou fora do escopo, responda elegantemente informando os limites do seu escopo e oriente o usuário de forma construtiva.`;
 
-Aqui está o contexto extraído em tempo real do banco SQLite:
-${contextText}`;
+    if (selectedCandidate) {
+      systemInstruction += `\n\nATENÇÃO: O usuário está atualmente analisando o perfil detalhado do candidato/deputado "${selectedCandidate}" na interface gráfica. O pleito de referência visual é o ano de ${selectedYear || '2022'}. Se as perguntas do usuário forem gerais ou específicas a ele, priorize trazer e analisar as informações de despesa, votos ou distribuição geográfica referentes a ele de forma de cruzamento direto.`;
+    }
+
+    systemInstruction += `\n\nAqui está o contexto extraído em tempo real do banco SQLite:\n${contextText}`;
 
     // Construct contents array with history
     const contents: any[] = [];
@@ -1636,9 +1642,9 @@ ${contextText}`;
     // Invoke Gemini model with fallback strategy (using modern generateContent method as per the official SDK)
     let responseText = "";
     try {
-      console.log(`[Oráculo] Enviando prompt para gemini-3.5-flash com ${contents.length} mensagens...`);
+      console.log(`[Oráculo] Enviando prompt para gemini-3.1-flash-lite com ${contents.length} mensagens...`);
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.1-flash-lite",
         contents: contents,
         config: {
           systemInstruction: systemInstruction,
@@ -1647,7 +1653,7 @@ ${contextText}`;
       });
       responseText = response.text || "";
     } catch (apiErr: any) {
-      console.warn(`[Oráculo] Erro com modelo principal gemini-3.5-flash (${apiErr.message}). Tentando fallback para gemini-flash-latest...`);
+      console.warn(`[Oráculo] Erro com modelo principal gemini-3.1-flash-lite (${apiErr.message}). Tentando fallback para gemini-flash-latest...`);
       try {
         const response = await ai.models.generateContent({
           model: "gemini-flash-latest",
